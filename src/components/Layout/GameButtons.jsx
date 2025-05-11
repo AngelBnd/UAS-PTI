@@ -33,7 +33,7 @@ function MoveButton({ defaultImg, hoverImg, pressedImg, alt }) {
 
 export default function MoveControls() {
     return (
-        <div id="movebuttons" className="container d-flex flex-column align-items-center">
+        <div id="movebuttons" className="d-flex flex-column align-items-center">
             <div>
                 <MoveButton defaultImg={up} hoverImg={upHovered} pressedImg={upPressed} alt="Up" />
             </div>
