@@ -1,0 +1,89 @@
+/* Stat bar menu */
+#statBar {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: start;
+    margin: auto;
+}
+
+progress {
+    width: 280px;
+    height: 30px;
+    appearance: none;
+    border: none;
+}
+
+/* Hunger */
+label[for="hungerBar"]{
+    color: #FAD493;
+}
+
+#hungerBar::-webkit-progress-bar {
+    background-color: #221959;
+    border-radius: 2px;
+}
+
+#hungerBar::-webkit-progress-value {
+    background-color: #FAD493;
+    border-radius: 2px;
+    transition: width 0.4s ease-in;
+}
+
+/* Energy */
+label[for="energyBar"]{
+    color: #FAD493;
+}
+
+#energyBar::-webkit-progress-bar {
+    background-color: #221959;
+    border-radius: 2px;
+}
+
+#energyBar::-webkit-progress-value {
+    background-color: #FAD493;
+    border-radius: 1.7px;
+    transition: width 0.4s ease-in;
+}
+
+/* Health */
+label[for="healthBar"]{
+    color: #FAD493;
+}
+
+#healthBar::-webkit-progress-bar {
+    background-color: #221959;
+    border-radius: 2px;
+}
+
+#healthBar::-webkit-progress-value {
+    background-color: #FAD493;  
+    border-radius: 2px;
+    transition: width 0.4s ease-in;
+}
+
+/* Oxygen */
+label[for="oxygenBar"]{
+    color: #FAD493;
+}
+
+#oxygenBar::-webkit-progress-bar {
+    background-color: #221959;
+    border-radius: 2px;
+}
+
+#oxygenBar::-webkit-progress-value {
+    background-color: #FAD493;
+    border-radius: 2px;
+    transition: width 0.4s ease-in;
+}
+
+#healthBar,#oxygenBar,#energyBar,#hungerBar{
+    margin: 5px 0;
+    height: 15px;
+    
+}
+
+.rowBars{
+    min-width: 700px;
+}

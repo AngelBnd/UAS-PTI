@@ -1,0 +1,16 @@
+#avatar{
+
+}
+
+.avatar-image {
+  width: 90px !important;
+  height: 90px !important;
+  background-color:#0D061F;
+  border-radius: 20px;
+  border: 1px solid #ffdba2;
+}
+
+.avatar-name{
+    text-align: center;
+    font-size:0.7em;
+}
