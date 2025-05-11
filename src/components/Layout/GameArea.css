@@ -8,5 +8,19 @@
 
 #game-area-background{
     position: absolute;
+    left : 0px;
+    bottom : 0px;
+    transform: scale(2);
+    object-fit: cover;
+}
+
+#player{
+    position: absolute;
+    top: 250px;
+    left: 50%;
+    transform: scale(2);
+}
+
+#plyayerimg{
     transform: scale(2);
 }
