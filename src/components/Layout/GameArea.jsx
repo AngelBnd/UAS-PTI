@@ -12,19 +12,20 @@ import planet4 from '../../assets/planet4.png';
 import mothership from '../../assets/mothership.png';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
-const planetImages = [planet1, planet2, planet3, planet4];
+const planetImages = [planet1, planet2, planet3, planet4, mothership];
+const classNames = ['planet1', 'planet2', 'planet3', 'planet4','mothership'];
 const planetOffsets = [
-  { left: 200, top: 100 },
-  { left: 800, top: 300 },
-  { left: 400, top: 50 },
-  { left: 1000, top: 400 }
+  { left: -300, top: 480 },
+  { left: 1450, top: 450 },
+  { left: -200, top: -20 },
+  { left: 1200, top: 20 },
+  { left: 600, top: 250},
 ];
 
 export default function GameArea() {
     const planetRefs = useRef([]);
     const cameraRef = useRef(null); 
     const playerRef = useRef(null);
-    const planet1Ref = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
 
     useEffect(()=>{
@@ -76,7 +77,6 @@ export default function GameArea() {
         const move = () => {
             const camera = cameraRef.current;
             const player = playerRef.current;
-            const planet1 = planet1Ref.current;
 
             const maxLeft = 583;
             const maxTop = 265;
@@ -114,11 +114,6 @@ export default function GameArea() {
                     player.style.left = newPlayerLeft + 'px';
                 } else {
                     camera.style.left = newCameraLeft + 'px';
-                    planetRefs.current.forEach((planet, i) => {
-                    if (planet) {
-                    planet.style.left = `${newCameraLeft + planetOffsets[i].left}px`;
-                    }
-          });
                 }
             } else {
                 if (canMovePlayerX) player.style.left = newPlayerLeft + 'px';
@@ -127,21 +122,15 @@ export default function GameArea() {
             if (canMoveCameraY) {
                 camera.style.top = newCameraTop + 'px';
                 player.style.top = player.offsetTop + (velocity.y * -0.35) + 'px';
-                planetRefs.current.forEach((planet, i) => {
-                if (planet) {
-                    planet.style.top = `${newCameraTop + planetOffsets[i].top}px`;
-                }
-        });
             } else {
                 if (canMovePlayerY) player.style.top = newPlayerTop + 'px';
             }
 
-            planetRefs.current.forEach((planet) => {
+            planetRefs.current.forEach((planet, i) => {
                 if (planet) {
-                    const offsetLeft = parseInt(planet.dataset.offsetLeft || 0, 10);
-                    const offsetTop = parseInt(planet.dataset.offsetTop || 0, 10);
-                    planet.style.left = `${newCameraLeft + offsetLeft}px`;
-                    planet.style.top = `${newCameraTop + offsetTop}px`;
+                    const planetOffset = planetOffsets[i];
+                    planet.style.left = `${planetOffset.left - (newCameraLeft*-1)}px`;
+                    planet.style.top = `${planetOffset.top - (newCameraTop*-1)}px`;
                 }
             });
 
@@ -173,11 +162,14 @@ export default function GameArea() {
                     ref={(el) => (planetRefs.current[i] = el)}
                     style={{
                         position: 'absolute',
+                        className : `${classNames[i]}`,
                         left: `${planetOffsets[i].left}px`,
                         top: `${planetOffsets[i].top}px`,
+                        transform : [`scale(6)`,`scale(5.5)`,`scale(5.3)`,`scale(4.6)`,`scale(3)`][i],
                     }}
                     />
-                ))}
+            ))}
+
 
             <div id="player" className='pixel-art' ref={playerRef}
             style ={{
