@@ -10,6 +10,8 @@ import planet2 from '../../assets/planet2.png';
 import planet3 from '../../assets/planet3.png';
 import planet4 from '../../assets/planet4.png';
 import mothership from '../../assets/mothership.png';
+import stars1 from '../../assets/starsbg.png';
+import stars2 from '../../assets/starsbg2.png';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 const planetImages = [planet1, planet2, planet3, planet4, mothership];
@@ -153,16 +155,26 @@ export default function GameArea() {
                 top : '0px',
             }}/>
 
+            {[stars1,stars2].map((img, i)=>{
+                <img
+                key={i}
+                src={img}
+                style={{
+                    position:'absolute',
+                    
+                }}
+                />
+            })}
+            
 
             {planetImages.map((img, i) => (
                     <img
                     key={i}
                     src={img}
-                    className="pixel-art"
+                    className={`pixel-art ${classNames[i]}`}
                     ref={(el) => (planetRefs.current[i] = el)}
                     style={{
                         position: 'absolute',
-                        className : `${classNames[i]}`,
                         left: `${planetOffsets[i].left}px`,
                         top: `${planetOffsets[i].top}px`,
                         transform : [`scale(6)`,`scale(5.5)`,`scale(5.3)`,`scale(4.6)`,`scale(3)`][i],
