@@ -12,6 +12,9 @@ import planet4 from '../../assets/planet4.png';
 import mothership from '../../assets/mothership.png';
 import stars1 from '../../assets/starsbg.png';
 import stars2 from '../../assets/starsbg2.png';
+import planetbg1 from '../../assets/planetbg1.png';
+import planetbg2 from '../../assets/planetbg2.png';
+import planetbg3 from '../../assets/planetbg3.png';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 const planetImages = [planet1, planet2, planet3, planet4, mothership];
@@ -23,9 +26,17 @@ const planetOffsets = [
   { left: 1200, top: 20 },
   { left: 600, top: 250},
 ];
+const bgObjectsSpeed = [
+    {x: 1.1, y: 1.1},
+    {x: 1.2, y:1.2},
+    {x: 1.05, y:1.05},
+    {x: 1.18, y:1},
+    {x: 1.1, y:1.1}
+]
 
 export default function GameArea() {
     const planetRefs = useRef([]);
+    const bgObjectsRefs = useRef([]);
     const cameraRef = useRef(null); 
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
@@ -136,6 +147,13 @@ export default function GameArea() {
                 }
             });
 
+            bgObjectsRefs.current.forEach((stars,i)=>{
+                if(stars){
+                    stars.style.left = `${newCameraLeft*bgObjectsSpeed[i].x}px`
+                    stars.style.top = `${newCameraTop*bgObjectsSpeed[i].y}px`
+                }
+            });
+
             
             animationFrameId = requestAnimationFrame(move);
         };
@@ -155,17 +173,22 @@ export default function GameArea() {
                 top : '0px',
             }}/>
 
-            {[stars1,stars2].map((img, i)=>{
+            {[stars1,stars2,planetbg1,planetbg2,planetbg3].map((img, i)=>(
                 <img
                 key={i}
-                src={img}
+                src={img}   
+                className='pixel-art'
+                ref={(el) => (bgObjectsRefs.current[i] = el)}
                 style={{
                     position:'absolute',
-                    
+                    left : '0px',
+                    top : '0px',
+                    transform :'scale(2)',
+                    objectFit : 'cover',
+                    zIndex :'5',
                 }}
                 />
-            })}
-            
+            ))}
 
             {planetImages.map((img, i) => (
                     <img
@@ -178,10 +201,10 @@ export default function GameArea() {
                         left: `${planetOffsets[i].left}px`,
                         top: `${planetOffsets[i].top}px`,
                         transform : [`scale(6)`,`scale(5.5)`,`scale(5.3)`,`scale(4.6)`,`scale(3)`][i],
+                        zIndex :'7',
                     }}
                     />
             ))}
-
 
             <div id="player" className='pixel-art' ref={playerRef}
             style ={{
