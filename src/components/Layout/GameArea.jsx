@@ -1,5 +1,6 @@
 import './GameArea.css';
 import './PixelArt.css';
+import { isColliding } from '../../utils/collision';
 import { useRef, useEffect, useState } from 'react';
 import gameBackground from '../../assets/playerareabg.png';
 import fullBod1 from '../../assets/fullbod1.png';
@@ -15,17 +16,101 @@ import stars2 from '../../assets/starsbg2.png';
 import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
+import oxygentabung from '../../assets/oxygentabung.png';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
-const planetImages = [planet1, planet2, planet3, planet4, mothership];
-const classNames = ['planet1', 'planet2', 'planet3', 'planet4','mothership'];
-const planetOffsets = [
-  { left: -300, top: 480 },
-  { left: 1450, top: 450 },
-  { left: -200, top: -20 },
-  { left: 1200, top: 20 },
-  { left: 600, top: 250},
+let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0;
+const collisionInfos = {cool, showed, holderofindexI, holderofindexJ};
+
+class planetInfo{
+    constructor(name, element, classNamee, widthImg, heightImg, buttons, {left, top}) {
+        this.name = name;
+        this.element = element;
+        this.classNamee = classNamee;
+        this.widthImg = widthImg;
+        this.heightImg = heightImg;
+        this.buttons = buttons;
+        this.offSets = {left, top};
+        // this.buttonFunc = buttonFunc;
+        // this.buttonName = buttonName;
+        // this.tooltips = tooltips;
+    }
+}
+
+class itemInfo{
+    constructor(name, element, classNamee, widthImg, heightImg, {left, top}) {
+        this.name = name; // nama
+        this.element = element; // imageny
+        this.classNamee = classNamee; // classname buat item
+        this.widthImg = widthImg; // ya taulah
+        this.heightImg = heightImg;
+        this.offSets = {left, top}; // ini biar gerak
+        // this.buttonFunc = buttonFunc;
+        // this.buttonName = buttonName;
+    }
+}
+
+const planetsLocations = [
+    new planetInfo(
+        "Ejwa",
+        planet1, 
+        "planet1",
+        500, 
+        500, 
+        3,
+        {left : -500, top : 280}
+    ),
+    new planetInfo(
+        "Solez",
+        planet2,
+        "planet2",
+        384, 
+        384, 
+        2,
+        {left : 1250, top : 370}
+    ),
+    new planetInfo(
+        "Sugma",
+        planet3,
+        "planet3",
+        384, 
+        354, 
+        2,
+        {left : -200, top : -220}
+    ),
+    new planetInfo(
+        "Kaati",
+        planet4,
+        "planet4",
+        160, 
+        160, 
+        2,
+        {left : 1200, top : -150}
+    ),
+        new planetInfo(
+        "Mothership",
+        mothership, 
+        "mothership",
+        200, 
+        190, 
+        2,
+        {left : 500, top : 200}
+    )
 ];
+
+const items = [
+    new itemInfo(
+        "item1",
+        oxygentabung,
+        "item",
+        100,
+        100,
+        {left : 200, top : 200}
+    ),
+]
+
+const collidableObjects = [planetsLocations,items];
+
 const bgObjectsSpeed = [
     {x: 1.1, y: 1.1},
     {x: 1.2, y:1.2},
@@ -37,9 +122,12 @@ const bgObjectsSpeed = [
 export default function GameArea() {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
+    const itemRefs = useRef([]);
     const cameraRef = useRef(null); 
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
+
+    const collidableObjectsRefs = [planetRefs, itemRefs];
 
     useEffect(()=>{
         const handleKeyDown = (e)=>{
@@ -72,7 +160,7 @@ export default function GameArea() {
                         return prev;
                 }
             });
-        };
+        };  
 
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('keyup', handleKeyUp);
@@ -87,7 +175,7 @@ export default function GameArea() {
     useEffect(()=>{
         let animationFrameId;
 
-        const move = () => {
+        const update = () => {
             const camera = cameraRef.current;
             const player = playerRef.current;
 
@@ -141,7 +229,7 @@ export default function GameArea() {
 
             planetRefs.current.forEach((planet, i) => {
                 if (planet) {
-                    const planetOffset = planetOffsets[i];
+                    const planetOffset = planetsLocations[i].offSets;
                     planet.style.left = `${planetOffset.left - (newCameraLeft*-1)}px`;
                     planet.style.top = `${planetOffset.top - (newCameraTop*-1)}px`;
                 }
@@ -154,10 +242,18 @@ export default function GameArea() {
                 }
             });
 
-            
-            animationFrameId = requestAnimationFrame(move);
+            itemRefs.current.forEach((item,i)=>{
+                if(item){
+                    const itemOffset = items[i].offSets;
+                    item.style.left = `${itemOffset.left - (newCameraLeft*-1)}px`;
+                    item.style.top = `${itemOffset.top -  (newCameraTop*-1)}px`;
+                }
+            });
+
+            isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
+            animationFrameId = requestAnimationFrame(update);
         };
-        animationFrameId = requestAnimationFrame(move);
+        animationFrameId = requestAnimationFrame(update);
 
         return()=> cancelAnimationFrame(animationFrameId);
     },[velocity]);
@@ -190,20 +286,34 @@ export default function GameArea() {
                 />
             ))}
 
-            {planetImages.map((img, i) => (
+            {planetsLocations.map((planet, i) => (
                     <img
                     key={i}
-                    src={img}
-                    className={`pixel-art ${classNames[i]}`}
+                    src={planet.element}
+                    className={`pixel-art ${planet.classNamee}`}
                     ref={(el) => (planetRefs.current[i] = el)}
                     style={{
                         position: 'absolute',
-                        left: `${planetOffsets[i].left}px`,
-                        top: `${planetOffsets[i].top}px`,
-                        transform : [`scale(6)`,`scale(5.5)`,`scale(5.3)`,`scale(4.6)`,`scale(3)`][i],
+                        left: `${planet.offSets.left}px`,
+                        top: `${planet.offSets.top}px`,
+                        width : `${planet.widthImg}px`,
+                        height : `${planet.heightImg}px`,
                         zIndex :'7',
                     }}
                     />
+            ))}
+
+            {items.map((item, i)=>(
+                <img
+                key = {i}
+                src = {item.element}
+                ref = {(el) => (itemRefs.current[i] = el)}
+                style={{
+                    position : 'absolute',
+                    left : `${item.offSets.left}px`,
+                    top : `${item.offSets.top}px`,
+                }}
+                />
             ))}
 
             <div id="player" className='pixel-art' ref={playerRef}
