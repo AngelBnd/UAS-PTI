@@ -1,10 +1,18 @@
 import './App.css';
 import GameLayout from './components/Layout/GameLayout'; 
+import MenuLayout from './components/Layout/MenuLayout';
 
-function App() {
+export function MainGameLayout() {
   return (
     <GameLayout />
   );
 }
 
-export default App;
+export function Menu() {
+  return (
+    <MenuLayout />
+  );
+}
+
+
+
