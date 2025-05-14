@@ -16,6 +16,7 @@ import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
 import { items } from '../../data/items';
 
+
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedPlanet, collidedItem;
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedPlanet, collidedItem};
@@ -29,7 +30,7 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea() {
+export default function GameArea({ setLocation }) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
@@ -201,7 +202,7 @@ export default function GameArea() {
                         padding : '5px',
                         zIndex :'10000000',
                         }}
-                        onClick={() => handleLocationChange(planet.name)}
+                        onClick={() => setLocation(planet.name)}
                         >
                          Go to {planet.name}
                          

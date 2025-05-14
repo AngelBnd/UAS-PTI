@@ -1,3 +1,3 @@
-export default function handleLocationChange(locationName){
+export default function handleLocationChange(setLocation){
 
 }
