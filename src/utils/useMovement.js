@@ -5,13 +5,13 @@ export function useMovement(setVelocity) {
     const handleKeyDown = (e) => {
       setVelocity((prev) => {
         switch (e.key) {
-          case 'ArrowRight':
+          case 'ArrowRight': case 'd':
             return { ...prev, x: -2 };
-          case 'ArrowLeft':
+          case 'ArrowLeft': case 'a':
             return { ...prev, x: 2 };
-          case 'ArrowUp':
+          case 'ArrowUp': case 'w':
             return { ...prev, y: 2 };
-          case 'ArrowDown':
+          case 'ArrowDown': case 's':
             return { ...prev, y: -2 };
           default:
             return prev;
@@ -22,11 +22,11 @@ export function useMovement(setVelocity) {
     const handleKeyUp = (e) => {
       setVelocity((prev) => {
         switch (e.key) {
-          case 'ArrowRight':
-          case 'ArrowLeft':
+          case 'ArrowRight': case 'd':
+          case 'ArrowLeft': case 'a':
             return { ...prev, x: 0 };
-          case 'ArrowUp':
-          case 'ArrowDown':
+          case 'ArrowUp': case 'w':
+          case 'ArrowDown': case 's':
             return { ...prev, y: 0 };
           default:
             return prev;
