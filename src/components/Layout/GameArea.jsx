@@ -1,5 +1,6 @@
 import './GameArea.css';
 import './PixelArt.css';
+import { isColliding } from '../../utils/collision';
 import { useRef, useEffect, useState } from 'react';
 import gameBackground from '../../assets/playerareabg.png';
 import fullBod1 from '../../assets/fullbod1.png';
@@ -15,6 +16,7 @@ import stars2 from '../../assets/starsbg2.png';
 import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
+import oxygentabung from '../../assets/oxygentabung.png';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 const classNames = ['planet1', 'planet2', 'planet3', 'planet4','mothership'];
@@ -31,6 +33,19 @@ class planetInfo{
         // this.buttonFunc = buttonFunc;
         // this.buttonName = buttonName;
         // this.tooltips = tooltips;
+    }
+}
+
+class itemInfo{
+    constructor(name, element, classNamee, widthImg, heightImg, {left, top}) {
+        this.name = name; // nama
+        this.element = element; // imageny
+        this.classNamee = classNamee; // classname buat item
+        this.widthImg = widthImg; // ya taulah
+        this.heightImg = heightImg;
+        this.offSets = {left, top}; // ini biar gerak
+        // this.buttonFunc = buttonFunc;
+        // this.buttonName = buttonName;
     }
 }
 
@@ -82,6 +97,19 @@ const planetsLocations = [
     )
 ];
 
+const items = [
+    new itemInfo(
+        "item1",
+        oxygentabung,
+        "item",
+        100,
+        100,
+        {left : 200, top : 200}
+    ),
+]
+
+const collidableObjects = [items,planetsLocations];
+
 const bgObjectsSpeed = [
     {x: 1.1, y: 1.1},
     {x: 1.2, y:1.2},
@@ -93,6 +121,7 @@ const bgObjectsSpeed = [
 export default function GameArea() {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
+    const itemRefs = useRef([]);
     const cameraRef = useRef(null); 
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
@@ -128,7 +157,7 @@ export default function GameArea() {
                         return prev;
                 }
             });
-        };
+        };  
 
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('keyup', handleKeyUp);
@@ -143,7 +172,7 @@ export default function GameArea() {
     useEffect(()=>{
         let animationFrameId;
 
-        const move = () => {
+        const update = () => {
             const camera = cameraRef.current;
             const player = playerRef.current;
 
@@ -210,10 +239,18 @@ export default function GameArea() {
                 }
             });
 
-            
-            animationFrameId = requestAnimationFrame(move);
+            itemRefs.current.forEach((item,i)=>{
+                if(item){
+                    const itemOffset = items[i].offSets;
+                    item.style.left = `${itemOffset.left - (newCameraLeft*-1)}px`;
+                    item.style.top = `${itemOffset.top -  (newCameraTop*-1)}px`;
+                }
+            });
+
+            isColliding(playerRef, collidableObjects);
+            animationFrameId = requestAnimationFrame(update);
         };
-        animationFrameId = requestAnimationFrame(move);
+        animationFrameId = requestAnimationFrame(update);
 
         return()=> cancelAnimationFrame(animationFrameId);
     },[velocity]);
@@ -261,6 +298,19 @@ export default function GameArea() {
                         zIndex :'7',
                     }}
                     />
+            ))}
+
+            {items.map((item, i)=>(
+                <img
+                key = {i}
+                src = {item.element}
+                ref = {(el) => (itemRefs.current[i] = el)}
+                style={{
+                    position : 'absolute',
+                    left : `${item.offSets.left}px`,
+                    top : `${item.offSets.top}px`,
+                }}
+                />
             ))}
 
             <div id="player" className='pixel-art' ref={playerRef}
