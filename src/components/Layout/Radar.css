@@ -4,7 +4,7 @@
   border-radius: 50%;
   background: radial-gradient(circle, rgb(40, 255, 123) 2px, transparent 3px),
               repeating-conic-gradient(rgb(40, 255, 123) 0deg 1deg, transparent 1deg 360deg);
-  border: 2px solid #FAD493;
+  border: 2px solid;
   position: relative;
   overflow: hidden;
   background-color: black;
