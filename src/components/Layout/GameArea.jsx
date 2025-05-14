@@ -108,7 +108,7 @@ const items = [
     ),
 ]
 
-const collidableObjects = [items,planetsLocations];
+const collidableObjects = [planetsLocations,items];
 
 const bgObjectsSpeed = [
     {x: 1.1, y: 1.1},
@@ -125,6 +125,8 @@ export default function GameArea() {
     const cameraRef = useRef(null); 
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
+
+    const collidableObjectsRefs = [planetRefs, itemRefs];
 
     useEffect(()=>{
         const handleKeyDown = (e)=>{
@@ -247,7 +249,7 @@ export default function GameArea() {
                 }
             });
 
-            isColliding(playerRef, collidableObjects);
+            isColliding(playerRef, collidableObjects, collidableObjectsRefs);
             animationFrameId = requestAnimationFrame(update);
         };
         animationFrameId = requestAnimationFrame(update);
