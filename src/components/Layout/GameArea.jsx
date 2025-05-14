@@ -1,115 +1,26 @@
 import './GameArea.css';
 import './PixelArt.css';
 import { isColliding } from '../../utils/collision';
+import { useMovement } from '../../utils/useMovement';
 import { useRef, useEffect, useState } from 'react';
 import gameBackground from '../../assets/playerareabg.png';
 import fullBod1 from '../../assets/fullbod1.png';
 import fullBod2 from '../../assets/fullbod2.png';
 import fullBod3 from '../../assets/fullbod3.png';
-import planet1 from '../../assets/planet1.png';
-import planet2 from '../../assets/planet2.png';
-import planet3 from '../../assets/planet3.png';
-import planet4 from '../../assets/planet4.png';
-import mothership from '../../assets/mothership.png';
 import stars1 from '../../assets/starsbg.png';
 import stars2 from '../../assets/starsbg2.png';
 import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
-import oxygentabung from '../../assets/oxygentabung.png';
+import { LocationInfosMain } from '../../data/locationsMain';
+import { items } from '../../data/items';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0;
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ};
 
-class planetInfo{
-    constructor(name, element, classNamee, widthImg, heightImg, buttons, {left, top}) {
-        this.name = name;
-        this.element = element;
-        this.classNamee = classNamee;
-        this.widthImg = widthImg;
-        this.heightImg = heightImg;
-        this.buttons = buttons;
-        this.offSets = {left, top};
-        // this.buttonFunc = buttonFunc;
-        // this.buttonName = buttonName;
-        // this.tooltips = tooltips;
-    }
-}
 
-class itemInfo{
-    constructor(name, element, classNamee, widthImg, heightImg, {left, top}) {
-        this.name = name; // nama
-        this.element = element; // imageny
-        this.classNamee = classNamee; // classname buat item
-        this.widthImg = widthImg; // ya taulah
-        this.heightImg = heightImg;
-        this.offSets = {left, top}; // ini biar gerak
-        // this.buttonFunc = buttonFunc;
-        // this.buttonName = buttonName;
-    }
-}
-
-const planetsLocations = [
-    new planetInfo(
-        "Ejwa",
-        planet1, 
-        "planet1",
-        500, 
-        500, 
-        3,
-        {left : -500, top : 280}
-    ),
-    new planetInfo(
-        "Solez",
-        planet2,
-        "planet2",
-        384, 
-        384, 
-        2,
-        {left : 1250, top : 370}
-    ),
-    new planetInfo(
-        "Sugma",
-        planet3,
-        "planet3",
-        384, 
-        354, 
-        2,
-        {left : -200, top : -220}
-    ),
-    new planetInfo(
-        "Kaati",
-        planet4,
-        "planet4",
-        160, 
-        160, 
-        2,
-        {left : 1200, top : -150}
-    ),
-        new planetInfo(
-        "Mothership",
-        mothership, 
-        "mothership",
-        200, 
-        190, 
-        2,
-        {left : 500, top : 200}
-    )
-];
-
-const items = [
-    new itemInfo(
-        "item1",
-        oxygentabung,
-        "item",
-        100,
-        100,
-        {left : 200, top : 200}
-    ),
-]
-
-const collidableObjects = [planetsLocations,items];
+const collidableObjects = [LocationInfosMain,items];
 
 const bgObjectsSpeed = [
     {x: 1.1, y: 1.1},
@@ -129,48 +40,8 @@ export default function GameArea() {
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
 
-    useEffect(()=>{
-        const handleKeyDown = (e)=>{
-            setVelocity((prev)=>{
-                switch(e .key){
-                case 'ArrowRight':
-                    return { ...prev, x: -2 };
-                case 'ArrowLeft':
-                    return { ...prev, x: 2 };
-                case 'ArrowUp':
-                    return { ...prev, y: 2 };
-                case 'ArrowDown':
-                    return { ...prev, y: -2 };
-                default:
-                    return prev;
-                }
-            }); 
-        };
-
-        const handleKeyUp = (e)=> {
-            setVelocity((prev)=>{
-                switch(e.key){
-                    case 'ArrowRight' :
-                    case 'ArrowLeft' :
-                        return{...prev, x: 0 };
-                    case 'ArrowUp' :
-                    case 'ArrowDown' :
-                        return{...prev, y: 0};
-                    default:
-                        return prev;
-                }
-            });
-        };  
-
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('keyup', handleKeyUp);
-
-        return()=>{
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('keyup', handleKeyUp);
-        }
-
-    }, []);
+  
+    useMovement(setVelocity);
 
     useEffect(()=>{
         let animationFrameId;
@@ -229,7 +100,7 @@ export default function GameArea() {
 
             planetRefs.current.forEach((planet, i) => {
                 if (planet) {
-                    const planetOffset = planetsLocations[i].offSets;
+                    const planetOffset = LocationInfosMain[i].offSets;
                     planet.style.left = `${planetOffset.left - (newCameraLeft*-1)}px`;
                     planet.style.top = `${planetOffset.top - (newCameraTop*-1)}px`;
                 }
@@ -286,7 +157,7 @@ export default function GameArea() {
                 />
             ))}
 
-            {planetsLocations.map((planet, i) => (
+            {LocationInfosMain.map((planet, i) => (
                     <img
                     key={i}
                     src={planet.element}
