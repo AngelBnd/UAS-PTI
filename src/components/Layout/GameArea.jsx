@@ -19,7 +19,8 @@ import planetbg3 from '../../assets/planetbg3.png';
 import oxygentabung from '../../assets/oxygentabung.png';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
-const classNames = ['planet1', 'planet2', 'planet3', 'planet4','mothership'];
+let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0;
+const collisionInfos = {cool, showed, holderofindexI, holderofindexJ};
 
 class planetInfo{
     constructor(name, element, classNamee, widthImg, heightImg, buttons, {left, top}) {
@@ -249,7 +250,7 @@ export default function GameArea() {
                 }
             });
 
-            isColliding(playerRef, collidableObjects, collidableObjectsRefs);
+            isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
             animationFrameId = requestAnimationFrame(update);
         };
         animationFrameId = requestAnimationFrame(update);
