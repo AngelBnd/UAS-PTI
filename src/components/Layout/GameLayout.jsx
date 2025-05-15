@@ -14,8 +14,8 @@ export default function GameLayout() {
     const [Location, setLocation] = useState('MainArea');
 
     return (
-        <div className="d-flex" style={{ zIndex: 0 }}>
-            <div style={{ flex: '1 1 85%', zIndex: 0 }}>
+        <div className="d-flex">
+            <div style={{ flex: '1 1 85%', zIndex :'0' }}>
                 <TopPanel/>
                 {Location === 'MainArea' && <GameArea setLocation={setLocation}/>}
                 {Location === 'Ejwa' && <EjwaArena setLocation={setLocation}/>}
@@ -24,9 +24,10 @@ export default function GameLayout() {
                 {Location === 'Kaati' && <KaatiArena setLocation={setLocation}/>}
                 {Location === 'Mothership' && <MothershipArena setLocation={setLocation}/>}
             </div>
-            <div style={{ flex: '1 1 18%', zIndex: 0 }}>
+            <div style={{ flex: '1 1 18%' }}>
                 <SidePanel/>
             </div>
         </div>
     )
 }
+
