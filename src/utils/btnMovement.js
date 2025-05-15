@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
+import { MoveButton } from '../components/Layout/GameButtons';
 
-export function useMovement(setVelocity) {
+export function btnMovement(setVelocity) {
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const mouseBtnDown = (e) => {
       setVelocity((prev) => {
-        switch (e.key) {
+        switch (e.btn) {
           case 'ArrowRight': case 'd':
             return { ...prev, x: -2 };
           case 'ArrowLeft': case 'a':

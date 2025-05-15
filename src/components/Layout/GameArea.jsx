@@ -40,7 +40,6 @@ export default function GameArea({ setLocation }) {
     const [showButton, setShowButton] = useState(false);
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
-
   
     useMovement(setVelocity);
 
