@@ -27,6 +27,7 @@
                         if(collisionInfos.holderofindexJ === j && collisionInfos.holderofindexI === i){
                             collisionInfos.cool = 0;
                             collisionInfos.showed = 0;
+                            collisionInfos.collidedPlanet = 0;
                         }
                     } else {
                         collisionInfos.cool = 1;
@@ -43,7 +44,7 @@
                     collisionInfos.collidedPlanet = obj.name;
 
                     if(i===1){
-                        console.log(`${obj.name}`);
+                        collisionInfos.collidedItem = obj.name;
                     }
                 }
         }

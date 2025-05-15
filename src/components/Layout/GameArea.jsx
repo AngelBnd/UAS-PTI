@@ -3,6 +3,7 @@ import './PixelArt.css';
 import { isColliding } from '../../utils/collision';
 import { useMovement } from '../../utils/useMovement';
 import handleLocationChange from '../../utils/handleLocationChange';
+import handlePickUpItem from '../../utils/pickUp';
 import { useRef, useEffect, useState } from 'react';
 import gameBackground from '../../assets/playerareabg.png';
 import fullBod1 from '../../assets/fullbod1.png';
@@ -125,6 +126,8 @@ export default function GameArea({ setLocation }) {
             
             if(collisionInfos.cool) setShowButton(true);
             else setShowButton(false);
+
+
             animationFrameId = requestAnimationFrame(update);
         };
         animationFrameId = requestAnimationFrame(update);
@@ -186,28 +189,8 @@ export default function GameArea({ setLocation }) {
                         zIndex :'1',
                     }}
                     />
+                    
 
-
-                    {showButton && collisionInfos.collidedPlanet === planet.name && (
-                         <button
-                        style={{
-                        position: 'absolute',
-                        width : '200px',
-                        left : '65%',
-                        top : '60%',
-                        backgroundColor : '#0D061F',
-                        color : '#ffdba2',
-                        border : 'solid 1px #ffdba2',
-                        padding : '5px',
-                        zIndex :'10000000',
-                        }}
-                        onClick={() => setLocation(planet.name)}
-                        >
-                         Go to {planet.name}
-                         
-                    </button>
-
-                    )}
                     
                 </div>
             ))}
@@ -227,14 +210,53 @@ export default function GameArea({ setLocation }) {
 
             <div id="player" className='pixel-art' ref={playerRef}
             style ={{
+                position : 'relative',
+                zIndex : '100',
                 top: '250px',
                 left: '600px',
                 width: '50px',
                 height: '50px',
+                overflow: 'visible',
+                pointerEvents: 'none'
+                
             }}>
-                <img id="playerimg" src={fullbods[1]}/>
-            </div>
 
+            <img
+            onClick={()=>{}}
+             style={{
+                position :'absolute',
+                top: '0',   
+                left : '0',
+                zIndex : '1',
+                
+            }} id="playerimg" src={fullbods[1]}/>
+
+            {showButton && (
+                <button
+                    style={{
+                    position: 'absolute',
+                    width : '80px',
+                    left : '50%',
+                    top : '-20%',
+                    backgroundColor : '#0D061F',
+                    color : '#ffdba2',
+                    border : 'solid 1.5px #ffdba2',
+                    padding : '5px',
+                    zIndex :'10000',
+                    fontSize : '0.37em',
+                    pointerEvents: 'auto'
+                    }}
+                    onClick={() => {collisionInfos.holderofindexI === 0 ? setLocation(collisionInfos.collidedPlanet) : handlePickUpItem()}}
+                    >
+                    {collisionInfos.holderofindexI === 0 
+                        ? `Go to ${collisionInfos.collidedPlanet}`
+                        : `Pick up ${collisionInfos.collidedItem}` 
+                    }
+                </button>
+
+            )}
+            </div>
+            
         </div>
     );
 }
