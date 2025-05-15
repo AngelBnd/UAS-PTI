@@ -41,10 +41,10 @@
                     console.log(`${obj.name}`);
                     collisionInfos.showed = 1;
                     collisionInfos.collidedPlanet = obj.name;
-                }
 
-                if(i===0){
-
+                    if(i===1){
+                        console.log(`${obj.name}`);
+                    }
                 }
         }
         
