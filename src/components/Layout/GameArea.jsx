@@ -1,7 +1,7 @@
 import './GameArea.css';
 import './PixelArt.css';
 import { isColliding } from '../../utils/collision';
-import { useMovement } from '../../utils/useMovement';
+import { useMovementMain } from '../../utils/useMovementMain';
 import handleLocationChange from '../../utils/handleLocationChange';
 import handlePickUpItem from '../../utils/pickUp';
 import { useRef, useEffect, useState } from 'react';
@@ -42,7 +42,7 @@ export default function GameArea({ setLocation }) {
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
   
-    useMovement(setVelocity);
+    useMovementMain(setVelocity);
 
     useEffect(()=>{
         let animationFrameId;

@@ -1,10 +1,14 @@
 import './App.css';
 import GameLayout from './components/Layout/GameLayout'; 
 import MenuLayout from './components/Layout/MenuLayout';
+import { TimeProvider } from './utils/timeContext';
 
 export function MainGameLayout() {
   return (
-    <GameLayout />
+    <TimeProvider> 
+      <GameLayout/>
+    </TimeProvider>
+    
   );
 }
 
