@@ -43,7 +43,7 @@
                     collisionInfos.collidedPlanet = obj.name;
                 }
 
-                if(i===0){
+                if(i===1){
 
                 }
         }

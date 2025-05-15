@@ -7,4 +7,8 @@ export class LocationInfo {
         this.heightImg = heightImg;
         this.offSets = { left, top };
    }
+
+   buttonGoTo(){
+        
+   }
 }
