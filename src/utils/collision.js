@@ -40,6 +40,11 @@
                     const obj = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
                     console.log(`${obj.name}`);
                     collisionInfos.showed = 1;
+                    collisionInfos.collidedPlanet = obj.name;
+                }
+
+                if(i===0){
+
                 }
         }
         

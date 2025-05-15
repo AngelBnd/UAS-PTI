@@ -2,6 +2,7 @@ import './GameArea.css';
 import './PixelArt.css';
 import { isColliding } from '../../utils/collision';
 import { useMovement } from '../../utils/useMovement';
+import handleLocationChange from '../../utils/handleLocationChange';
 import { useRef, useEffect, useState } from 'react';
 import gameBackground from '../../assets/playerareabg.png';
 import fullBod1 from '../../assets/fullbod1.png';
@@ -15,11 +16,10 @@ import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
 import { items } from '../../data/items';
 
+
 const fullbods = [fullBod1, fullBod2, fullBod3];
-let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0;
-const collisionInfos = {cool, showed, holderofindexI, holderofindexJ};
-
-
+let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedPlanet, collidedItem;
+const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedPlanet, collidedItem};
 const collidableObjects = [LocationInfosMain,items];
 
 const bgObjectsSpeed = [
@@ -30,13 +30,14 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea() {
+export default function GameArea({ setLocation }) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
     const cameraRef = useRef(null); 
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
+    const [showButton, setShowButton] = useState(false);
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
   
@@ -121,6 +122,9 @@ export default function GameArea() {
             });
 
             isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
+            
+            if(collisionInfos.cool) setShowButton(true);
+            else setShowButton(false);
             animationFrameId = requestAnimationFrame(update);
         };
         animationFrameId = requestAnimationFrame(update);
@@ -156,23 +160,58 @@ export default function GameArea() {
                 />
             ))}
 
+
             {LocationInfosMain.map((planet, i) => (
+                <div className='d-flex flex-column'
+                ref={(el) => (planetRefs.current[i] = el)}
+                style={{
+                    position: 'absolute',
+                    left: `${planet.offSets.left}px`,
+                    top: `${planet.offSets.top}px`,
+                    zIndex :'7',
+                    width: `${planet.widthImg*0.9}px`,
+                    height: `${planet.heightImg*0.9}px`,
+
+                    backgroundColor : 'red',
+                }}>
+
                     <img
                     key={i}
                     src={planet.element}
                     className={`pixel-art ${planet.classNamee}`}
-                    ref={(el) => (planetRefs.current[i] = el)}
                     style={{
-                        position: 'absolute',
-                        left: `${planet.offSets.left}px`,
-                        top: `${planet.offSets.top}px`,
+                        position: 'relative',
                         width : `${planet.widthImg}px`,
                         height : `${planet.heightImg}px`,
-                        zIndex :'7',
+                        zIndex :'1',
                     }}
                     />
-            ))}
 
+
+                    {showButton && collisionInfos.collidedPlanet === planet.name && (
+                         <button
+                        style={{
+                        position: 'absolute',
+                        width : '200px',
+                        left : '65%',
+                        top : '60%',
+                        backgroundColor : '#0D061F',
+                        color : '#ffdba2',
+                        border : 'solid 1px #ffdba2',
+                        padding : '5px',
+                        zIndex :'10000000',
+                        }}
+                        onClick={() => setLocation(planet.name)}
+                        >
+                         Go to {planet.name}
+                         
+                    </button>
+
+                    )}
+                    
+                </div>
+            ))}
+    
             {items.map((item, i)=>(
                 <img
                 key = {i}

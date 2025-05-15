@@ -11,10 +11,9 @@ export const LocationInfosMain = [
         "Ejwa",
         planet1, 
         "planet1",
-        500, 
-        500, 
-        3,
-        {left : -500, top : 280}
+        330, 
+        330, 
+        {left : -400, top : 350},
     ),
     new LocationInfo(
         "Solez",
@@ -22,8 +21,7 @@ export const LocationInfosMain = [
         "planet2",
         384, 
         384, 
-        2,
-        {left : 1250, top : 370}
+        {left : 1000, top : 370}
     ),
     new LocationInfo(
         "Sugma",
@@ -31,7 +29,6 @@ export const LocationInfosMain = [
         "planet3",
         384, 
         354, 
-        2,
         {left : -200, top : -220}
     ),
     new LocationInfo(
@@ -40,7 +37,6 @@ export const LocationInfosMain = [
         "planet4",
         160, 
         160, 
-        2,
         {left : 1200, top : -150}
     ),
         new LocationInfo(
@@ -49,7 +45,6 @@ export const LocationInfosMain = [
         "mothership",
         200, 
         190, 
-        2,
         {left : 500, top : 200}
     )
 ];
