@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export function useMovement(setVelocity) {
+export function useMovementMain(setVelocity) {
   useEffect(() => {
     const handleKeyDown = (e) => {
       setVelocity((prev) => {
