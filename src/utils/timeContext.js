@@ -4,9 +4,8 @@ const TimeContext = createContext();
 
 
 export function TimeProvider({ children }) {
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(100);
   const [day, setDay] = useState(0);
-
 
   useEffect(() => {
     const timer = setInterval(() => {

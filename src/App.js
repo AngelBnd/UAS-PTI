@@ -8,10 +8,10 @@ export function MainGameLayout() {
   return (
     <TimeProvider> 
       <StatsProvider initialStats={{
-        healthBar: 70,
-        oxygenBar: 100,
+        healthBar: 90,
+        oxygenBar: 50,
         hungerBar: 80,
-        energyBar: 90,
+        energyBar: 50,
       }}>
          <GameLayout/>
       </StatsProvider>

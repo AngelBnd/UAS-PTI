@@ -3,8 +3,8 @@ export function handleStats(setStats, time) {
     setStats(prev => ({
         ...prev,
         hungerBar: Math.max(prev.hungerBar - 1.5, 0),
-        oxygenBar: Math.max(prev.hungerBar - 1.5, 0),
-        energyBar: Math.max(prev.hungerBar - 2.5, 0),
+        oxygenBar: Math.max(prev.oxygenBar - 1.5, 0),
+        energyBar: Math.max(prev.energyBar - 2.5, 0),
     }));
 
 }
