@@ -1,7 +1,7 @@
 import './Bars.css';
 import { useEffect, useRef, useState } from 'react';
 import { useTime } from '../../utils/timeContext';
-import { handleStats } from '../../utils/handleStats';
+import { useStats } from '../../utils/statsContext';
 
 const stats = [
   { id: 'healthBar', label: 'Health', idx:1 },
@@ -13,19 +13,7 @@ const stats = [
 const rows = [1,2];
 
 export default function Bars(){
-    const barRefs = useRef({});
-    const {time} = useTime();
-    const [playerStats, setPlayerStats] = useState({
-        healthBar: 100,
-        oxygenBar: 100,
-        hungerBar: 100,
-        energyBar: 100,
-    });
-
-    
-    useEffect(()=>{
-        handleStats(setPlayerStats);
-    },[time]);
+    const{playerStats} = useStats();
 
     return(
         <div id="bars">     
