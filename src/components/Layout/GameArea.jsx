@@ -19,8 +19,8 @@ import { items } from '../../data/items';
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
-let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedPlanet, collidedItem;
-const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedPlanet, collidedItem};
+let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
+const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosMain,items];
 
 const bgObjectsSpeed = [
@@ -246,11 +246,17 @@ export default function GameArea({ setLocation }) {
                     fontSize : '0.37em',
                     pointerEvents: 'auto'
                     }}
-                    onClick={() => {collisionInfos.holderofindexI === 0 ? setLocation(collisionInfos.collidedPlanet) : handlePickUpItem()}}
+                    onClick={() => {
+                        if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
+                            setLocation(collisionInfos.collidedLocation.name);
+                        } else {
+                            handlePickUpItem();
+                        }
+                    }}
                     >
                     {collisionInfos.holderofindexI === 0 
-                        ? `Go to ${collisionInfos.collidedPlanet}`
-                        : `Pick up ${collisionInfos.collidedItem}` 
+                        ? `Go to ${collisionInfos.collidedLocation?.name}`
+                        : `Pick up ${collisionInfos.collidedItem?.name}` 
                     }
                 </button>
 

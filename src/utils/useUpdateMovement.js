@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
+import { isColliding } from './collision';
 
-export function useUpdateMovement(setVelocity, playerRef, velocity, mothership){
+export function useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos){
         useEffect(()=>{
             let animationFrameId;
     
@@ -33,7 +34,7 @@ export function useUpdateMovement(setVelocity, playerRef, velocity, mothership){
                 }
                 
     
-                // isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
+                isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
                 
                 // if(collisionInfos.cool) setShowButton(true);
                 // else setShowButton(false);

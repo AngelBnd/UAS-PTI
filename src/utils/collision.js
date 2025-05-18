@@ -25,12 +25,12 @@
                     let locationRect = colObjRef.current[j].getBoundingClientRect();
                     if(playerRect.left > locationRect.left + locationRect.width || locationRect.left > playerRect.left + playerRect.width || playerRect.top > locationRect.height + locationRect.top || locationRect.top > playerRect.top + playerRect.height){
                         if(collisionInfos.holderofindexJ === j && collisionInfos.holderofindexI === i){
-                            collisionInfos.cool = 0;
+                            collisionInfos.cool = false;
                             collisionInfos.showed = 0;
-                            collisionInfos.collidedPlanet = 0;
+                            collisionInfos.collidedLocation = 0;
                         }
                     } else {
-                        collisionInfos.cool = 1;
+                        collisionInfos.cool = true;
                         collisionInfos.holderofindexJ = j;
                         collisionInfos.holderofindexI = i;
                         break;
@@ -38,15 +38,21 @@
                 }
                     
                 if(collisionInfos.cool && !collisionInfos.showed){
-                    const obj = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
-                    console.log(`${obj.name}`);
+                    collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    console.log(`${collisionInfos.collidedLocation.name}`);
                     collisionInfos.showed = 1;
-                    collisionInfos.collidedPlanet = obj.name;
 
-                    if(i===1){
-                        collisionInfos.collidedItem = obj.name;
-                    }
+                    if(collisionInfos.holderofindexI === 1){
+                    collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
                 }
+
+                }
+
+                if (collisionInfos.cool === 0) {
+                    collisionInfos.collidedLocation = null;
+                    collisionInfos.collidedItem = null;
+                }
+
         }
         
     }
