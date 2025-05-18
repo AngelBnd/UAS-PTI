@@ -6,6 +6,7 @@ import sugma3image from '../assets/sugma3.png';
 import sugma4image from '../assets/sugma4.png';
 import homerocket from '../assets/rocketTOHOME.png';
 import { sugma1,sugma2,sugma3 } from "../locationFunctions/sugma";
+import { goback } from "../locationFunctions/rockethome";
 
 //name, element, classNamee, functions, activities, widthImg, heightImg, { left, top }
 
@@ -54,8 +55,8 @@ export const LocationInfosSugma = [
         "Rockethome",
         homerocket, 
         "rockethome",
-        [],
-        [],
+        [goback],
+        ["Go back"],
         120, 
         120, 
         {left : 550, top : 370}

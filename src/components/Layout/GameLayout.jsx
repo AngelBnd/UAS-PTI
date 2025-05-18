@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import GameArea from './GameArea';
 import TopPanel from './TopPanel';
 import SidePanel from './SidePanel';
@@ -9,16 +9,32 @@ import SolezArena from './SolezArena';
 import SugmaArena from './SugmaArena';
 import KaatiArena from './KaatiArena';
 import MothershipArena from './MothershipArena';
+import { LocationInfosMain } from '../../data/locationsMain';
 
 export default function GameLayout() {
     const [Location, setLocation] = useState('MainArea');
+    const savePlayerLocationRef = useRef({ playerTop: 250, playerLeft: 600, cameraTop:0, cameraLeft:0 });
+    const planetPositionsRef = useRef([
+        { left: LocationInfosMain[0].offSets.left, top: LocationInfosMain[0].offSets.top },
+        { left: LocationInfosMain[1].offSets.left, top: LocationInfosMain[1].offSets.top },
+        { left: LocationInfosMain[2].offSets.left, top: LocationInfosMain[2].offSets.top },
+        { left: LocationInfosMain[3].offSets.left, top: LocationInfosMain[3].offSets.top },
+        { left: LocationInfosMain[4].offSets.left, top: LocationInfosMain[4].offSets.top },
+    ]);
+    const bgObjectsPositionsRef = useRef([
+        { left: 0, top: 0 },
+        { left: 0, top: 0 }, 
+        { left: 0, top: 0 }, 
+        { left: 0, top: 0 },
+        { left: 0, top: 0 }, 
+    ]);
 
     return (
         <div className="d-flex">
             <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
                 <TopPanel/>
-                {Location === 'MainArea' && <GameArea setLocation={setLocation}/>}
-                {Location === 'Ejwa' && <EjwaArena setLocation={setLocation}/>}
+                {Location === 'MainArea' && <GameArea setLocation={setLocation} saveplayerLocation={savePlayerLocationRef} saveplanetLocation={planetPositionsRef} saveBGObjectLocation={bgObjectsPositionsRef} />}
+                {Location === 'Ejwa' && <EjwaArena setLocation={setLocation} />}
                 {Location === 'Solez' && <SolezArena setLocation={setLocation}/>}
                 {Location === 'Sugma' && <SugmaArena setLocation={setLocation}/>}
                 {Location === 'Kaati' && <KaatiArena setLocation={setLocation}/>}

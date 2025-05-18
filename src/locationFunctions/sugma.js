@@ -1,5 +1,3 @@
-import { useStats } from "../utils/statsContext";
-
 export function sugma1(setStats) {
     setStats((prev)=>({
         ...prev,
@@ -10,4 +8,4 @@ export function sugma1(setStats) {
 
 export function sugma2(setStats) {
     console.log("Sugma2 button");
-}
+}   

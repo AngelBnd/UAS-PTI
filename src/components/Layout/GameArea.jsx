@@ -31,7 +31,7 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea({ setLocation }) {
+export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation }) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
@@ -41,6 +41,37 @@ export default function GameArea({ setLocation }) {
     const [showButton, setShowButton] = useState(false);
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
+
+    useEffect(() => {
+        const camera = cameraRef.current;
+        const player = playerRef.current;
+
+        if (camera) {
+            camera.style.left = `${saveplayerLocation.current.cameraLeft}px`;
+            camera.style.top = `${saveplayerLocation.current.cameraTop}px`;
+        }
+
+        if (player) {
+            player.style.left = `${saveplayerLocation.current.playerLeft}px`;
+            player.style.top = `${saveplayerLocation.current.playerTop}px`;
+        }
+
+        planetRefs.current.forEach((planet, i) => {
+            const saved = saveplanetLocation.current[i];
+            if (planet && saved) {
+            planet.style.left = saved.left;
+            planet.style.top = saved.top;
+            }
+        });
+
+        bgObjectsRefs.current.forEach((obj, i) => {
+            const saved = saveBGObjectLocation.current[i];
+            if (obj && saved) {
+            obj.style.left = saved.left;
+            obj.style.top = saved.top;
+            }
+        });
+    }, []);
   
     useMovementMain(setVelocity);
 
@@ -142,8 +173,6 @@ export default function GameArea({ setLocation }) {
             <img id="game-area-background" className="pixel-art" src={gameBackground} ref={cameraRef}
             style ={{
                 position: 'absolute',
-                left : '0px',
-                top : '0px',
             }}/>
 
             {[stars1,stars2,planetbg1,planetbg2,planetbg3].map((img, i)=>(
@@ -154,8 +183,6 @@ export default function GameArea({ setLocation }) {
                 ref={(el) => (bgObjectsRefs.current[i] = el)}
                 style={{
                     position:'absolute',
-                    left : '0px',
-                    top : '0px',
                     transform :'scale(2)',
                     objectFit : 'cover',
                     zIndex :'5',
@@ -169,8 +196,6 @@ export default function GameArea({ setLocation }) {
                 ref={(el) => (planetRefs.current[i] = el)}
                 style={{
                     position: 'absolute',
-                    left: `${planet.offSets.left}px`,
-                    top: `${planet.offSets.top}px`,
                     zIndex :'7',
                     width: `${planet.widthImg*0.9}px`,
                     height: `${planet.heightImg*0.9}px`,
@@ -212,8 +237,6 @@ export default function GameArea({ setLocation }) {
             style ={{
                 position : 'relative',
                 zIndex : '100',
-                top: '250px',
-                left: '600px',
                 width: '50px',
                 height: '50px',
                 overflow: 'visible',
@@ -221,47 +244,72 @@ export default function GameArea({ setLocation }) {
                 
             }}>
 
-            <img
-            onClick={()=>{}}
-             style={{
-                position :'absolute',
-                top: '0',   
-                left : '0',
-                zIndex : '1',
-                
-            }} id="playerimg" src={fullbods[1]}/>
+                <img
+                onClick={()=>{}}
+                style={{
+                    position :'absolute',
+                    top: '0',   
+                    left : '0',
+                    zIndex : '1',
+                    
+                }} id="playerimg" src={fullbods[1]}/>
 
-            {showButton && (
-                <button
-                    style={{
-                    position: 'absolute',
-                    width : '80px',
-                    left : '50%',
-                    top : '-20%',
-                    backgroundColor : '#0D061F',
-                    color : '#ffdba2',
-                    border : 'solid 1.5px #ffdba2',
-                    padding : '5px',
-                    zIndex :'10000',
-                    fontSize : '0.37em',
-                    pointerEvents: 'auto'
-                    }}
-                    onClick={() => {
-                        if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
-                            setLocation(collisionInfos.collidedLocation.name);
-                        } else {
-                            handlePickUpItem();
+                {showButton && (
+                    <button
+                        style={{
+                        position: 'absolute',
+                        width : '80px',
+                        left : '50%',
+                        top : '-20%',
+                        backgroundColor : '#0D061F',
+                        color : '#ffdba2',
+                        border : 'solid 1.5px #ffdba2',
+                        padding : '5px',
+                        zIndex :'10000',
+                        fontSize : '0.37em',
+                        pointerEvents: 'auto'
+                        }}
+                        onClick={() => {
+                            saveplayerLocation.current.playerLeft = parseInt(playerRef.current.style.left);
+                            saveplayerLocation.current.playerTop  = parseInt(playerRef.current.style.top);
+                            saveplayerLocation.current.cameraLeft = parseInt(cameraRef.current.style.left);
+                            saveplayerLocation.current.cameraTop  = parseInt(cameraRef.current.style.top);
+
+                            planetRefs.current.forEach((planet, i)=>{
+                                if(planet){
+                                    saveplanetLocation.current[i] = {
+                                        left : planet.style.left,
+                                        top : planet.style.top
+                                    };
+                                }
+                            });
+
+                            bgObjectsRefs.current.forEach((bgObj, i)=>{
+                                if(bgObj){
+                                    saveBGObjectLocation.current[i] = {
+                                        left : bgObj.style.left,
+                                        top : bgObj.style.top
+                                    };
+                                }
+                            });
+
+
+
+                            if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
+                                setLocation(collisionInfos.collidedLocation.name);
+                            } else {
+                                handlePickUpItem();
+                            }
+                        }}
+                        >
+                        {collisionInfos.holderofindexI === 0 
+                            ? `Go to ${collisionInfos.collidedLocation?.name}`
+                            : `Pick up ${collisionInfos.collidedItem?.name}` 
                         }
-                    }}
-                    >
-                    {collisionInfos.holderofindexI === 0 
-                        ? `Go to ${collisionInfos.collidedLocation?.name}`
-                        : `Pick up ${collisionInfos.collidedItem?.name}` 
-                    }
-                </button>
+                    </button>
 
-            )}
-            </div>
+                )}
+                </div>
             
         </div>
     );

@@ -16,7 +16,7 @@ let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocat
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosSugma,items];
 
-export default function SugmaArena(){
+export default function SugmaArena({setLocation}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -77,7 +77,17 @@ export default function SugmaArena(){
                         fontSize : '0.3em',
                         pointerEvents: 'auto'
                         }}
-                        onClick={() => {collisionInfos.holderofindexI === 0 ? func(setStats): handlePickUpItem()}}
+                        onClick={() => {
+                            if (collisionInfos.holderofindexI === 0) {
+                                if (collisionInfos.collidedLocation.name === "Rockethome") {
+                                func(setLocation); 
+                                } else {
+                                func(setStats); 
+                                }
+                            } else {
+                                handlePickUpItem();
+                            }
+                            }}
                         >
                         {
                         collisionInfos.holderofindexI === 1
