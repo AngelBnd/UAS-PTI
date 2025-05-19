@@ -3,7 +3,7 @@ import './PixelArt.css';
 import { isColliding } from '../../utils/collision';
 import { useMovementMain } from '../../utils/useMovementMain';
 import handleLocationChange from '../../utils/handleLocationChange';
-import handlePickUpItem from '../../utils/pickUp';
+// import handlePickUpItem from '../../utils/pickUp';
 import { useRef, useEffect, useState } from 'react';
 import gameBackground from '../../assets/playerareabg.png';
 import fullBod1 from '../../assets/fullbod1.png';
@@ -15,13 +15,13 @@ import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
-import { items } from '../../data/items';
+import { initialItems } from '../../data/items';
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedPlanet, collidedItem;
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedPlanet, collidedItem};
-const collidableObjects = [LocationInfosMain,items];
+const collidableObjects = [LocationInfosMain, initialItems];
 
 const bgObjectsSpeed = [
     {x: 1.1, y: 1.1},
@@ -39,10 +39,35 @@ export default function GameArea({ setLocation }) {
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
     const [showButton, setShowButton] = useState(false);
+    const [items, setItems] = useState(initialItems);
+    // const [invItems, setInvItems] = useState([]);
+
+
+    useEffect(() => {
+            console.log("item updated:", items);
+            console.log("item updated REF:", itemRefs.current);
+        }, [items]);
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
   
     useMovementMain(setVelocity);
+
+    function handlePickUpItem(itemCol, itemRefs){
+        const itemIndex = prev => prev.filter(item => item?.name !== itemCol);
+        if (itemIndex !== -1) {
+            setItems(prev => {
+                const updated = prev.filter(item => item.name !== itemCol);
+                itemRefs.current = [];
+                return updated;
+            });
+            itemRefs.current = itemRefs.current.filter((ref, i) => items[i].name !== itemCol);
+
+            // Resetting collision
+            collisionInfos.collidedItem = null;
+            collisionInfos.cool = 0;
+            collisionInfos.showed = 0;
+        }
+    }
 
     useEffect(()=>{
         let animationFrameId;
@@ -114,11 +139,12 @@ export default function GameArea({ setLocation }) {
                 }
             });
 
-            itemRefs.current.forEach((item,i)=>{
-                if(item){
-                    const itemOffset = items[i].offSets;
-                    item.style.left = `${itemOffset.left - (newCameraLeft*-1)}px`;
-                    item.style.top = `${itemOffset.top -  (newCameraTop*-1)}px`;
+            items.forEach((itemData, i) => {
+                const item = itemRefs.current[i];
+                if (item && itemData) {
+                    const { left, top } = itemData.offSets;
+                    item.style.left = `${left - (newCameraLeft * -1)}px`;
+                    item.style.top = `${top - (newCameraTop * -1)}px`;
                 }
             });
 
@@ -196,16 +222,21 @@ export default function GameArea({ setLocation }) {
             ))}
     
             {items.map((item, i)=>(
-                <img
-                key = {i}
-                src = {item.element}
-                ref = {(el) => (itemRefs.current[i] = el)}
-                style={{
-                    position : 'absolute',
-                    left : `${item.offSets.left}px`,
-                    top : `${item.offSets.top}px`,
-                }}
-                />
+                // !item.pickedUp ? (
+                    <img
+                    key = {i}
+                    src = {item.element}
+                    ref={el => {
+                            if (el) itemRefs.current[i] = el; // Checks if item exists to Ref
+                            else delete itemRefs.current[i];  // Deletes ref if not exist
+                        }}
+                    style={{
+                        position : 'absolute',
+                        left : `${item.offSets.left}px`,
+                        top : `${item.offSets.top}px`,
+                    }}
+                    />
+                // ) : null
             ))}
 
             <div id="player" className='pixel-art' ref={playerRef}
@@ -246,7 +277,7 @@ export default function GameArea({ setLocation }) {
                     fontSize : '0.37em',
                     pointerEvents: 'auto'
                     }}
-                    onClick={() => {collisionInfos.holderofindexI === 0 ? setLocation(collisionInfos.collidedPlanet) : handlePickUpItem()}}
+                    onClick={() => {collisionInfos.holderofindexI === 0 ? setLocation(collisionInfos.collidedPlanet) : handlePickUpItem(collisionInfos.collidedItem, itemRefs)}}
                     >
                     {collisionInfos.holderofindexI === 0 
                         ? `Go to ${collisionInfos.collidedPlanet}`
