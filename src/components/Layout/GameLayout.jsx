@@ -10,6 +10,7 @@ import SugmaArena from './SugmaArena';
 import KaatiArena from './KaatiArena';
 import MothershipArena from './MothershipArena';
 import { LocationInfosMain } from '../../data/locationsMain';
+import { items } from '../../data/itemsOnMap';
 
 export default function GameLayout() {
     const [Location, setLocation] = useState('MainArea');
@@ -29,11 +30,35 @@ export default function GameLayout() {
         { left: 0, top: 0 }, 
     ]);
 
+    const [itemsOnMap, setItemsOnMap] = useState(() =>
+    items.map(item => ({
+        id: item.id,
+        name: item.name,
+        element: item.element,
+        className: item.classNamee,
+        func : item.func,
+        widthImg: item.widthImg,
+        heightImg: item.heightImg,
+        offSets: { ...item.offSets } 
+    }))
+    );
+
+    const[ItemsInInventory, setItemsInInventory] = useState([]);
+
     return (
         <div className="d-flex">
             <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
                 <TopPanel/>
-                {Location === 'MainArea' && <GameArea setLocation={setLocation} saveplayerLocation={savePlayerLocationRef} saveplanetLocation={planetPositionsRef} saveBGObjectLocation={bgObjectsPositionsRef} />}
+                {Location === 'MainArea' && <GameArea 
+                setLocation={setLocation} 
+                saveplayerLocation={savePlayerLocationRef} 
+                saveplanetLocation={planetPositionsRef} 
+                saveBGObjectLocation={bgObjectsPositionsRef} 
+                itemsOnMap={itemsOnMap}
+                setItemsOnMap={setItemsOnMap}
+                ItemsInInventory={ItemsInInventory}
+                setItemsInInventory={setItemsInInventory}
+                />}
                 {Location === 'Ejwa' && <EjwaArena setLocation={setLocation} />}
                 {Location === 'Solez' && <SolezArena setLocation={setLocation}/>}
                 {Location === 'Sugma' && <SugmaArena setLocation={setLocation}/>}
@@ -41,7 +66,10 @@ export default function GameLayout() {
                 {Location === 'Mothership' && <MothershipArena setLocation={setLocation}/>}
             </div>
             <div style={{ flex: '1 1 18%', zIndex :'1' }}>
-                <SidePanel/>
+                <SidePanel
+                ItemsInInventory={ItemsInInventory}
+                setItemsInInventory={setItemsInInventory}
+                />
             </div>
         </div>
     )

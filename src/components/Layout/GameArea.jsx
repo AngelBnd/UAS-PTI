@@ -15,13 +15,11 @@ import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
-import { items } from '../../data/items';
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
-const collidableObjects = [LocationInfosMain,items];
 
 const bgObjectsSpeed = [
     {x: 1.1, y: 1.1},
@@ -31,7 +29,7 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation }) {
+export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setItemsInInventory, ItemsInInventory}) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
@@ -39,6 +37,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
     const [showButton, setShowButton] = useState(false);
+    const collidableObjects = [LocationInfosMain,itemsOnMap];
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
 
@@ -70,6 +69,14 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             obj.style.left = saved.left;
             obj.style.top = saved.top;
             }
+        });
+
+        itemsOnMap.forEach((itemData, i) => {
+        const el = itemRefs.current[i];
+        if (el && itemData && itemData.offSets) {
+            el.style.left = `${itemData.offSets.left + saveplayerLocation.current.cameraLeft}px`;
+            el.style.top = `${itemData.offSets.top + saveplayerLocation.current.cameraTop}px`;
+        }
         });
     }, []);
   
@@ -145,19 +152,18 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 }
             });
 
-            itemRefs.current.forEach((item,i)=>{
-                if(item){
-                    const itemOffset = items[i].offSets;
-                    item.style.left = `${itemOffset.left - (newCameraLeft*-1)}px`;
-                    item.style.top = `${itemOffset.top -  (newCameraTop*-1)}px`;
-                }
+            itemsOnMap.forEach((itemData, i) => {
+            const el = itemRefs.current[i];
+            if (el && itemData.offSets) {
+                el.style.left = `${itemData.offSets.left + newCameraLeft}px`;
+                el.style.top = `${itemData.offSets.top + newCameraTop}px`;
+            }
             });
 
             isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
             
             if(collisionInfos.cool) setShowButton(true);
             else setShowButton(false);
-
 
             animationFrameId = requestAnimationFrame(update);
         };
@@ -220,27 +226,33 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 </div>
             ))}
     
-            {items.map((item, i)=>(
-                <img
-                key = {i}
-                src = {item.element}
-                ref = {(el) => (itemRefs.current[i] = el)}
-                style={{
-                    position : 'absolute',
-                    left : `${item.offSets.left}px`,
-                    top : `${item.offSets.top}px`,
-                }}
-                />
+            {itemsOnMap.map((item, i)=>(
+                <>
+                    {item !== "" && <img
+                    id={i}
+                    key={item.id}
+                    src = {item.element}
+                    ref={(el) => {
+                        itemRefs.current[i] = el;
+                    }}
+                    style={{
+                        position : 'absolute',
+                    }}
+                    />}
+                
+                </>
+                
             ))}
 
             <div id="player" className='pixel-art' ref={playerRef}
             style ={{
                 position : 'relative',
                 zIndex : '100',
-                width: '50px',
-                height: '50px',
+                width: '28px',
+                height: '45px',
                 overflow: 'visible',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                backgroundColor: 'red',
                 
             }}>
 
@@ -249,7 +261,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 style={{
                     position :'absolute',
                     top: '0',   
-                    left : '0',
+                    left : '0', 
                     zIndex : '1',
                     
                 }} id="playerimg" src={fullbods[1]}/>
@@ -259,7 +271,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                         style={{
                         position: 'absolute',
                         width : '80px',
-                        left : '50%',
+                        left : '90%',
                         top : '-20%',
                         backgroundColor : '#0D061F',
                         color : '#ffdba2',
@@ -298,14 +310,44 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                             if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
                                 setLocation(collisionInfos.collidedLocation.name);
                             } else {
-                                handlePickUpItem();
+                                if(ItemsInInventory.length == 6) return;
+                                else {
+                                    const targetItem = collisionInfos.collidedItem;
+                            
+                                    if(!targetItem)return;
+
+                                    setItemsInInventory(prevItemsInv => [...prevItemsInv, targetItem]);
+                                    const targetId = targetItem?.id;
+
+
+                                    collisionInfos.cool = false;   
+                                    collisionInfos.collidedItem = null;
+                                    collisionInfos.showed = 0;
+                                    
+
+                                    if (targetId !== undefined) {
+                                        setItemsOnMap((prevItems) => {
+                                            const itemIndex = prevItems.findIndex((item) => item.id === targetId);
+                                            prevItems[itemIndex] = "";
+                                            itemRefs.current[itemIndex] = "";
+                                            return prevItems;
+                                        });
+                                    }
+                                }
+
+        
+                        
                             }
+                            
                         }}
                         >
-                        {collisionInfos.holderofindexI === 0 
-                            ? `Go to ${collisionInfos.collidedLocation?.name}`
-                            : `Pick up ${collisionInfos.collidedItem?.name}` 
-                        }
+                        {(() => {
+                            if (collisionInfos.collidedLocation) {
+                                return `Go to ${collisionInfos.collidedLocation.name}`;
+                            } else if (collisionInfos.collidedItem) {
+                                return `Pick up ${collisionInfos.collidedItem.name}`;
+                            }
+                        })()}
                     </button>
 
                 )}

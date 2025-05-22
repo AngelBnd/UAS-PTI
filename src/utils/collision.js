@@ -1,4 +1,5 @@
     export function isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos){
+        if (!playerRef.current) return;
         const playerRect = playerRef.current.getBoundingClientRect();
         let n, colObjRef;
 
@@ -15,19 +16,22 @@
                     break;
 
                 default:
-
-                    break;
-
-                
-                    
+                    continue;                    
                 }
                 for(let j = 0 ; j < n ; j++){
-                    let locationRect = colObjRef.current[j].getBoundingClientRect();
+                    const ref = colObjRef?.current?.[j];
+
+                    if (!ref) continue; 
+                    const locationRect = ref.getBoundingClientRect();
+
                     if(playerRect.left > locationRect.left + locationRect.width || locationRect.left > playerRect.left + playerRect.width || playerRect.top > locationRect.height + locationRect.top || locationRect.top > playerRect.top + playerRect.height){
                         if(collisionInfos.holderofindexJ === j && collisionInfos.holderofindexI === i){
                             collisionInfos.cool = false;
                             collisionInfos.showed = 0;
-                            collisionInfos.collidedLocation = 0;
+                            collisionInfos.collidedLocation = null;
+                            collisionInfos.collidedItem = null;
+                            collisionInfos.holderofindexI = -1;
+                            collisionInfos.holderofindexJ = -1;
                         }
                     } else {
                         collisionInfos.cool = true;
@@ -38,20 +42,20 @@
                 }
                     
                 if(collisionInfos.cool && !collisionInfos.showed){
-                    collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
-                    console.log(`${collisionInfos.collidedLocation.name}`);
+                     if(collisionInfos.holderofindexI === 0){
+                        collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                     } else {
+                        collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                     }
                     collisionInfos.showed = 1;
+                    // collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    // collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    // collisionInfos.showed = 1;
 
-                    if(collisionInfos.holderofindexI === 1){
-                    collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    // if(collisionInfos.holderofindexI === 1){
+                    // collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
                 }
 
-                }
-
-                if (collisionInfos.cool === 0) {
-                    collisionInfos.collidedLocation = null;
-                    collisionInfos.collidedItem = null;
-                }
 
         }
         
