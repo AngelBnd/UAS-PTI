@@ -42,8 +42,12 @@ export default function GameLayout() {
         offSets: { ...item.offSets } 
     }))
     );
-
     const[ItemsInInventory, setItemsInInventory] = useState([]);
+    const[showMessage, setShowMessage] = useState(false);
+    const[messageContent, setMessageContent] = useState("Good morning, player name!");
+    const [messageTrigger, setMessageTrigger] = useState(0);
+
+    
 
     return (
         <div className="d-flex">
@@ -58,6 +62,12 @@ export default function GameLayout() {
                 setItemsOnMap={setItemsOnMap}
                 ItemsInInventory={ItemsInInventory}
                 setItemsInInventory={setItemsInInventory}
+                setShowMessage={setShowMessage}
+                showMessage={showMessage}
+                setMessageContent={setMessageContent}
+                messageContent={messageContent}
+                setMessageTrigger={setMessageTrigger}
+                messageTrigger={messageTrigger}
                 />}
                 {Location === 'Ejwa' && <EjwaArena setLocation={setLocation} />}
                 {Location === 'Solez' && <SolezArena setLocation={setLocation}/>}
@@ -69,6 +79,8 @@ export default function GameLayout() {
                 <SidePanel
                 ItemsInInventory={ItemsInInventory}
                 setItemsInInventory={setItemsInInventory}
+                setShowMessage={setShowMessage}
+                setMessageContent={setMessageContent}
                 />
             </div>
         </div>

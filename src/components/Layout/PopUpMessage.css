@@ -1,0 +1,35 @@
+#greetingMsg{
+    position: absolute;
+    left : 34%;
+    width: fit-content;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 14px;
+    color: #FAD493;
+    border: 1px solid #FAD493;
+    background-color:  #080917;   
+    border-radius: 15px;
+    z-index: 100;
+}
+
+.greet-apply {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: greeting-animate 3.4s steps(12, jump-end);
+}
+
+@keyframes greeting-animate {
+    20% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
