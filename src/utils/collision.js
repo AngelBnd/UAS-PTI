@@ -1,6 +1,7 @@
-export function isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos){
-    const playerRect = playerRef.current.getBoundingClientRect();
-    let n, colObjRef;
+    export function isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos){
+        if (!playerRef.current) return;
+        const playerRect = playerRef.current.getBoundingClientRect();
+        let n, colObjRef;
 
     for(let i = 0 ; i < collidableObjects.length; i++){
         switch (i) {
@@ -14,41 +15,48 @@ export function isColliding(playerRef, collidableObjects, collidableObjectsRefs,
                 colObjRef = collidableObjectsRefs[i];
                 break;
 
-            default:
+                default:
+                    continue;                    
+                }
+                for(let j = 0 ; j < n ; j++){
+                    const ref = colObjRef?.current?.[j];
 
-                break;
+                    if (!ref) continue; 
+                    const locationRect = ref.getBoundingClientRect();
 
-            
-                
-            }
-            for(let j = 0 ; j < n ; j++){
-                let locationRect = colObjRef.current[j]?.getBoundingClientRect?.();
-                if (!locationRect) continue;
-
-                if(playerRect.left > locationRect.left + locationRect.width || locationRect.left > playerRect.left + playerRect.width || playerRect.top > locationRect.height + locationRect.top || locationRect.top > playerRect.top + playerRect.height){
-                    if(collisionInfos.holderofindexJ === j && collisionInfos.holderofindexI === i){
-                        collisionInfos.cool = 0;
-                        collisionInfos.showed = 0;
-                        collisionInfos.collidedPlanet = 0;
+                    if(playerRect.left > locationRect.left + locationRect.width || locationRect.left > playerRect.left + playerRect.width || playerRect.top > locationRect.height + locationRect.top || locationRect.top > playerRect.top + playerRect.height){
+                        if(collisionInfos.holderofindexJ === j && collisionInfos.holderofindexI === i){
+                            collisionInfos.cool = false;
+                            collisionInfos.showed = 0;
+                            collisionInfos.collidedLocation = null;
+                            collisionInfos.collidedItem = null;
+                            collisionInfos.holderofindexI = -1;
+                            collisionInfos.holderofindexJ = -1;
+                        }
+                    } else {
+                        collisionInfos.cool = true;
+                        collisionInfos.holderofindexJ = j;
+                        collisionInfos.holderofindexI = i;
+                        break;
                     }
-                } else {
-                    collisionInfos.cool = 1;
-                    collisionInfos.holderofindexJ = j;
-                    collisionInfos.holderofindexI = i;
-                    break;
                 }
-            }
-                
-            if(collisionInfos.cool && !collisionInfos.showed){
-                const obj = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
-                console.log(`${obj.name}`);
-                collisionInfos.showed = 1;
-                collisionInfos.collidedPlanet = obj.name;
+                    
+                if(collisionInfos.cool && !collisionInfos.showed){
+                     if(collisionInfos.holderofindexI === 0){
+                        collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                     } else {
+                        collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                     }
+                    collisionInfos.showed = 1;
+                    // collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    // collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    // collisionInfos.showed = 1;
 
-                if(i===1){
-                    collisionInfos.collidedItem = obj.name;
+                    // if(collisionInfos.holderofindexI === 1){
+                    // collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
                 }
-            }
+
+
         }
         
     }

@@ -15,13 +15,11 @@ import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
-import { initialItems } from '../../data/items';
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
-let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedPlanet, collidedItem;
-const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedPlanet, collidedItem};
-const collidableObjects = [LocationInfosMain, initialItems];
+let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
+const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 
 const bgObjectsSpeed = [
     {x: 1.1, y: 1.1},
@@ -31,7 +29,7 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea({ setLocation }) {
+export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setItemsInInventory, ItemsInInventory}) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
@@ -39,16 +37,48 @@ export default function GameArea({ setLocation }) {
     const playerRef = useRef(null);
     const[velocity, setVelocity] = useState({x:0,y:0});
     const [showButton, setShowButton] = useState(false);
-    const [items, setItems] = useState(initialItems);
-    // const [invItems, setInvItems] = useState([]);
-
-
-    useEffect(() => {
-            console.log("item updated:", items);
-            console.log("item updated REF:", itemRefs.current);
-        }, [items]);
+    const collidableObjects = [LocationInfosMain,itemsOnMap];
 
     const collidableObjectsRefs = [planetRefs, itemRefs];
+
+    useEffect(() => {
+        const camera = cameraRef.current;
+        const player = playerRef.current;
+
+        if (camera) {
+            camera.style.left = `${saveplayerLocation.current.cameraLeft}px`;
+            camera.style.top = `${saveplayerLocation.current.cameraTop}px`;
+        }
+
+        if (player) {
+            player.style.left = `${saveplayerLocation.current.playerLeft}px`;
+            player.style.top = `${saveplayerLocation.current.playerTop}px`;
+        }
+
+        planetRefs.current.forEach((planet, i) => {
+            const saved = saveplanetLocation.current[i];
+            if (planet && saved) {
+            planet.style.left = saved.left;
+            planet.style.top = saved.top;
+            }
+        });
+
+        bgObjectsRefs.current.forEach((obj, i) => {
+            const saved = saveBGObjectLocation.current[i];
+            if (obj && saved) {
+            obj.style.left = saved.left;
+            obj.style.top = saved.top;
+            }
+        });
+
+        itemsOnMap.forEach((itemData, i) => {
+        const el = itemRefs.current[i];
+        if (el && itemData && itemData.offSets) {
+            el.style.left = `${itemData.offSets.left + saveplayerLocation.current.cameraLeft}px`;
+            el.style.top = `${itemData.offSets.top + saveplayerLocation.current.cameraTop}px`;
+        }
+        });
+    }, []);
   
     useMovementMain(setVelocity);
 
@@ -139,20 +169,18 @@ export default function GameArea({ setLocation }) {
                 }
             });
 
-            items.forEach((itemData, i) => {
-                const item = itemRefs.current[i];
-                if (item && itemData) {
-                    const { left, top } = itemData.offSets;
-                    item.style.left = `${left - (newCameraLeft * -1)}px`;
-                    item.style.top = `${top - (newCameraTop * -1)}px`;
-                }
+            itemsOnMap.forEach((itemData, i) => {
+            const el = itemRefs.current[i];
+            if (el && itemData.offSets) {
+                el.style.left = `${itemData.offSets.left + newCameraLeft}px`;
+                el.style.top = `${itemData.offSets.top + newCameraTop}px`;
+            }
             });
 
             isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
             
             if(collisionInfos.cool) setShowButton(true);
             else setShowButton(false);
-
 
             animationFrameId = requestAnimationFrame(update);
         };
@@ -168,8 +196,6 @@ export default function GameArea({ setLocation }) {
             <img id="game-area-background" className="pixel-art" src={gameBackground} ref={cameraRef}
             style ={{
                 position: 'absolute',
-                left : '0px',
-                top : '0px',
             }}/>
 
             {[stars1,stars2,planetbg1,planetbg2,planetbg3].map((img, i)=>(
@@ -180,8 +206,6 @@ export default function GameArea({ setLocation }) {
                 ref={(el) => (bgObjectsRefs.current[i] = el)}
                 style={{
                     position:'absolute',
-                    left : '0px',
-                    top : '0px',
                     transform :'scale(2)',
                     objectFit : 'cover',
                     zIndex :'5',
@@ -195,8 +219,6 @@ export default function GameArea({ setLocation }) {
                 ref={(el) => (planetRefs.current[i] = el)}
                 style={{
                     position: 'absolute',
-                    left: `${planet.offSets.left}px`,
-                    top: `${planet.offSets.top}px`,
                     zIndex :'7',
                     width: `${planet.widthImg*0.9}px`,
                     height: `${planet.heightImg*0.9}px`,
@@ -221,72 +243,132 @@ export default function GameArea({ setLocation }) {
                 </div>
             ))}
     
-            {items.map((item, i)=>(
-                // !item.pickedUp ? (
-                    <img
-                    key = {i}
+            {itemsOnMap.map((item, i)=>(
+                <>
+                    {item !== "" && <img
+                    id={i}
+                    key={item.id}
                     src = {item.element}
-                    ref={el => {
-                            if (el) itemRefs.current[i] = el; // Checks if item exists to Ref
-                            else delete itemRefs.current[i];  // Deletes ref if not exist
-                        }}
+                    ref={(el) => {
+                        itemRefs.current[i] = el;
+                    }}
                     style={{
                         position : 'absolute',
-                        left : `${item.offSets.left}px`,
-                        top : `${item.offSets.top}px`,
                     }}
-                    />
-                // ) : null
+                    />}
+                
+                </>
+                
             ))}
 
             <div id="player" className='pixel-art' ref={playerRef}
             style ={{
                 position : 'relative',
                 zIndex : '100',
-                top: '250px',
-                left: '600px',
-                width: '50px',
-                height: '50px',
+                width: '28px',
+                height: '45px',
                 overflow: 'visible',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                backgroundColor: 'red',
                 
             }}>
 
-            <img
-            onClick={()=>{}}
-             style={{
-                position :'absolute',
-                top: '0',   
-                left : '0',
-                zIndex : '1',
-                
-            }} id="playerimg" src={fullbods[1]}/>
+                <img
+                onClick={()=>{}}
+                style={{
+                    position :'absolute',
+                    top: '0',   
+                    left : '0', 
+                    zIndex : '1',
+                    
+                }} id="playerimg" src={fullbods[1]}/>
 
-            {showButton && (
-                <button
-                    style={{
-                    position: 'absolute',
-                    width : '80px',
-                    left : '50%',
-                    top : '-20%',
-                    backgroundColor : '#0D061F',
-                    color : '#ffdba2',
-                    border : 'solid 1.5px #ffdba2',
-                    padding : '5px',
-                    zIndex :'10000',
-                    fontSize : '0.37em',
-                    pointerEvents: 'auto'
-                    }}
-                    onClick={() => {collisionInfos.holderofindexI === 0 ? setLocation(collisionInfos.collidedPlanet) : handlePickUpItem(collisionInfos.collidedItem, itemRefs)}}
-                    >
-                    {collisionInfos.holderofindexI === 0 
-                        ? `Go to ${collisionInfos.collidedPlanet}`
-                        : `Pick up ${collisionInfos.collidedItem}` 
-                    }
-                </button>
+                {showButton && (
+                    <button
+                        style={{
+                        position: 'absolute',
+                        width : '80px',
+                        left : '90%',
+                        top : '-20%',
+                        backgroundColor : '#0D061F',
+                        color : '#ffdba2',
+                        border : 'solid 1.5px #ffdba2',
+                        padding : '5px',
+                        zIndex :'10000',
+                        fontSize : '0.37em',
+                        pointerEvents: 'auto'
+                        }}
+                        onClick={() => {
+                            saveplayerLocation.current.playerLeft = parseInt(playerRef.current.style.left);
+                            saveplayerLocation.current.playerTop  = parseInt(playerRef.current.style.top);
+                            saveplayerLocation.current.cameraLeft = parseInt(cameraRef.current.style.left);
+                            saveplayerLocation.current.cameraTop  = parseInt(cameraRef.current.style.top);
 
-            )}
-            </div>
+                            planetRefs.current.forEach((planet, i)=>{
+                                if(planet){
+                                    saveplanetLocation.current[i] = {
+                                        left : planet.style.left,
+                                        top : planet.style.top
+                                    };
+                                }
+                            });
+
+                            bgObjectsRefs.current.forEach((bgObj, i)=>{
+                                if(bgObj){
+                                    saveBGObjectLocation.current[i] = {
+                                        left : bgObj.style.left,
+                                        top : bgObj.style.top
+                                    };
+                                }
+                            });
+
+
+
+                            if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
+                                setLocation(collisionInfos.collidedLocation.name);
+                            } else {
+                                if(ItemsInInventory.length == 6) return;
+                                else {
+                                    const targetItem = collisionInfos.collidedItem;
+                            
+                                    if(!targetItem)return;
+
+                                    setItemsInInventory(prevItemsInv => [...prevItemsInv, targetItem]);
+                                    const targetId = targetItem?.id;
+
+
+                                    collisionInfos.cool = false;   
+                                    collisionInfos.collidedItem = null;
+                                    collisionInfos.showed = 0;
+                                    
+
+                                    if (targetId !== undefined) {
+                                        setItemsOnMap((prevItems) => {
+                                            const itemIndex = prevItems.findIndex((item) => item.id === targetId);
+                                            prevItems[itemIndex] = "";
+                                            itemRefs.current[itemIndex] = "";
+                                            return prevItems;
+                                        });
+                                    }
+                                }
+
+        
+                        
+                            }
+                            
+                        }}
+                        >
+                        {(() => {
+                            if (collisionInfos.collidedLocation) {
+                                return `Go to ${collisionInfos.collidedLocation.name}`;
+                            } else if (collisionInfos.collidedItem) {
+                                return `Pick up ${collisionInfos.collidedItem.name}`;
+                            }
+                        })()}
+                    </button>
+
+                )}
+                </div>
             
         </div>
     );
