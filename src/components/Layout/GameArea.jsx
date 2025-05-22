@@ -16,6 +16,8 @@ import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
 import { items } from '../../data/items';
+import Deathbar from './Deathbar'; 
+
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];

@@ -1,4 +1,3 @@
-/* Stat bar menu */
 #statBar {
     display: flex;
     flex-direction: column !important;
@@ -14,7 +13,6 @@ progress {
     border: none;
 }
 
-/* Hunger */
 label[for="hungerBar"]{
     color: #FAD493;
 }
@@ -30,7 +28,6 @@ label[for="hungerBar"]{
     transition: width 0.4s ease-in;
 }
 
-/* Energy */
 label[for="energyBar"]{
     color: #FAD493;
 }
@@ -46,7 +43,6 @@ label[for="energyBar"]{
     transition: width 0.4s ease-in;
 }
 
-/* Health */
 label[for="healthBar"]{
     color: #FAD493;
 }
@@ -62,7 +58,6 @@ label[for="healthBar"]{
     transition: width 0.4s ease-in;
 }
 
-/* Oxygen */
 label[for="oxygenBar"]{
     color: #FAD493;
 }
