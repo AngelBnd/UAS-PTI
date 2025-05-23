@@ -6,11 +6,15 @@ import planet3 from '../assets/planet3.png';
 import planet4 from '../assets/planet4.png';
 import mothership from '../assets/mothership.png';
 
+//name, element, classNamee, functions, activities, widthImg, heightImg, { left, top }
+
 export const LocationInfosMain = [
     new LocationInfo(
         "Ejwa",
         planet1, 
         "planet1",
+        [],
+        [],
         330, 
         330, 
         {left : -400, top : 350},
@@ -19,6 +23,8 @@ export const LocationInfosMain = [
         "Solez",
         planet2,
         "planet2",
+        [],
+        [],
         384, 
         384, 
         {left : 1000, top : 370}
@@ -27,6 +33,8 @@ export const LocationInfosMain = [
         "Sugma",
         planet3,
         "planet3",
+        [],
+        [],
         384, 
         354, 
         {left : -200, top : -220}
@@ -35,6 +43,8 @@ export const LocationInfosMain = [
         "Kaati",
         planet4,
         "planet4",
+        [],
+        [],
         160, 
         160, 
         {left : 1200, top : -150}
@@ -43,6 +53,8 @@ export const LocationInfosMain = [
         "Mothership",
         mothership, 
         "mothership",
+        [],
+        [],
         200, 
         190, 
         {left : 500, top : 200}

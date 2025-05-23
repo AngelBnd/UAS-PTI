@@ -7,7 +7,6 @@ export function TimeProvider({ children }) {
   const [time, setTime] = useState(0);
   const [day, setDay] = useState(0);
 
-
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(prev => {
@@ -17,7 +16,7 @@ export function TimeProvider({ children }) {
         }
         return prev + 10;
       });
-    }, 2000);
+    }, 1500);
 
     return () => clearInterval(timer);
   }, []);

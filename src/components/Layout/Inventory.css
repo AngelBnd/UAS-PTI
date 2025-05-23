@@ -2,5 +2,18 @@
     height: 300px;
     width: 220px;
     border-radius: 20px;
-    background-color:#0D061F ;
+    background-color:#0D061F;
+    padding-top:10px
+}
+
+#itemInInventory{
+    background-color: #0E0A38;   
+    width: 200px;
+    height: 35px;
+    margin : 5px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 0.8em;
+    pointer-events: auto;
+    cursor: pointer;
 }

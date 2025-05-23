@@ -1,4 +1,5 @@
     export function isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos){
+        if (!playerRef.current) return;
         const playerRect = playerRef.current.getBoundingClientRect();
         let n, colObjRef;
 
@@ -15,22 +16,25 @@
                     break;
 
                 default:
-
-                    break;
-
-                
-                    
+                    continue;                    
                 }
                 for(let j = 0 ; j < n ; j++){
-                    let locationRect = colObjRef.current[j].getBoundingClientRect();
+                    const ref = colObjRef?.current?.[j];
+
+                    if (!ref) continue; 
+                    const locationRect = ref.getBoundingClientRect();
+
                     if(playerRect.left > locationRect.left + locationRect.width || locationRect.left > playerRect.left + playerRect.width || playerRect.top > locationRect.height + locationRect.top || locationRect.top > playerRect.top + playerRect.height){
                         if(collisionInfos.holderofindexJ === j && collisionInfos.holderofindexI === i){
-                            collisionInfos.cool = 0;
+                            collisionInfos.cool = false;
                             collisionInfos.showed = 0;
-                            collisionInfos.collidedPlanet = 0;
+                            collisionInfos.collidedLocation = null;
+                            collisionInfos.collidedItem = null;
+                            collisionInfos.holderofindexI = -1;
+                            collisionInfos.holderofindexJ = -1;
                         }
                     } else {
-                        collisionInfos.cool = 1;
+                        collisionInfos.cool = true;
                         collisionInfos.holderofindexJ = j;
                         collisionInfos.holderofindexI = i;
                         break;
@@ -38,15 +42,21 @@
                 }
                     
                 if(collisionInfos.cool && !collisionInfos.showed){
-                    const obj = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
-                    console.log(`${obj.name}`);
+                     if(collisionInfos.holderofindexI === 0){
+                        collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                     } else {
+                        collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                     }
                     collisionInfos.showed = 1;
-                    collisionInfos.collidedPlanet = obj.name;
+                    // collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    // collisionInfos.collidedLocation = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
+                    // collisionInfos.showed = 1;
 
-                    if(i===1){
-                        collisionInfos.collidedItem = obj.name;
-                    }
+                    // if(collisionInfos.holderofindexI === 1){
+                    // collisionInfos.collidedItem = collidableObjects[collisionInfos.holderofindexI][collisionInfos.holderofindexJ];
                 }
+
+
         }
         
     }
