@@ -15,6 +15,8 @@ import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
+import PopUpMessage from './PopUpMessage';
+import { useTime } from '../../utils/timeContext';
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
@@ -29,7 +31,7 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setItemsInInventory, ItemsInInventory}) {
+export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setItemsInInventory, ItemsInInventory, setShowMessage, showMessage, setMessageContent, messageContent, setMessageTrigger, messageTrigger}) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
@@ -38,7 +40,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const[velocity, setVelocity] = useState({x:0,y:0});
     const [showButton, setShowButton] = useState(false);
     const collidableObjects = [LocationInfosMain,itemsOnMap];
-
+    const{time} = useTime();
     const collidableObjectsRefs = [planetRefs, itemRefs];
 
     useEffect(() => {
@@ -98,6 +100,29 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             collisionInfos.showed = 0;
         }
     }
+
+    useEffect(()=>{
+        if (time === 0) {
+            setMessageContent("Good Morning playername!");
+            setMessageTrigger(prev=>prev+1);  
+        } else if (time === 720) {
+            setMessageContent("Good Afternoon playername!");
+            setMessageTrigger(prev=>prev+1);
+        } else if (time === 1080) {
+            setMessageContent("Good Night playername!");
+            setMessageTrigger(prev=>prev+1);
+        }
+
+    },[time])
+
+    useEffect(()=>{
+        setShowMessage(true);
+        const timeoutId = setTimeout(() => {
+                setShowMessage(false);
+        }, 3400);
+
+        return () => clearTimeout(timeoutId); 
+    },[messageTrigger])
 
     useEffect(()=>{
         let animationFrameId;
@@ -182,9 +207,11 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             if(collisionInfos.cool) setShowButton(true);
             else setShowButton(false);
 
+            console.log(showMessage);
             animationFrameId = requestAnimationFrame(update);
         };
         animationFrameId = requestAnimationFrame(update);
+        
 
         return()=> cancelAnimationFrame(animationFrameId);
     },[velocity]);
@@ -192,7 +219,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     return (
         
         <div id="game-area">
-            
             <img id="game-area-background" className="pixel-art" src={gameBackground} ref={cameraRef}
             style ={{
                 position: 'absolute',
@@ -213,7 +239,8 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 />
             ))}
 
-
+            {showMessage && <PopUpMessage message={messageContent}/>}
+            
             {LocationInfosMain.map((planet, i) => (
                 <div className='d-flex flex-column'
                 ref={(el) => (planetRefs.current[i] = el)}
@@ -327,36 +354,15 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                             if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
                                 setLocation(collisionInfos.collidedLocation.name);
                             } else {
-                                if(ItemsInInventory.length == 6) return;
-                                else {
-                                    const targetItem = collisionInfos.collidedItem;
-                            
-                                    if(!targetItem)return;
-
-                                    setItemsInInventory(prevItemsInv => [...prevItemsInv, targetItem]);
-                                    const targetId = targetItem?.id;
-
-
-                                    collisionInfos.cool = false;   
-                                    collisionInfos.collidedItem = null;
-                                    collisionInfos.showed = 0;
-                                    
-
-                                    if (targetId !== undefined) {
-                                        setItemsOnMap((prevItems) => {
-                                            const itemIndex = prevItems.findIndex((item) => item.id === targetId);
-                                            prevItems[itemIndex] = "";
-                                            itemRefs.current[itemIndex] = "";
-                                            return prevItems;
-                                        });
-                                    }
+                                if(ItemsInInventory.length == 6){
+                                    setMessageContent("Your inventory is full!");
+                                    setMessageTrigger(prev=>prev+1);   
+                                    return;
+                                }   else {
+                                    handlePickUpItem(collisionInfos.collidedItem, collisionInfos, itemRefs, setItemsInInventory, setItemsOnMap, ItemsInInventory);            
                                 }
-
-        
-                        
-                            }
                             
-                        }}
+                        }}}
                         >
                         {(() => {
                             if (collisionInfos.collidedLocation) {

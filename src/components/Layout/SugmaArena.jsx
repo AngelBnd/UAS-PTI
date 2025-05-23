@@ -59,8 +59,8 @@ export default function SugmaArena({setLocation}){
                 height: '50px',
             }}>
                 <img id="playerimg" src={fullbods[1]}/>
-
-                {showButton && collisionInfos.collidedLocation.functions?.map((func,i) => (
+                
+                {showButton && collisionInfos.collidedLocation && collisionInfos.collidedLocation.functions?.map((func,i) => (
                     <button
                     key={i}
                         style={{
