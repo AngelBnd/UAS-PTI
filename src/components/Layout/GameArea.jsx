@@ -15,8 +15,14 @@ import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
+<<<<<<< HEAD
+import { items } from '../../data/items';
+import Deathbar from './Deathbar'; 
+
+=======
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
+>>>>>>> 7085435f7995ecf106b20b8bda5e86ed6309524c
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
