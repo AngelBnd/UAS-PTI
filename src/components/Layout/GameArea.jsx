@@ -3,7 +3,7 @@ import './PixelArt.css';
 import { isColliding } from '../../utils/collision';
 import { useMovementMain } from '../../utils/useMovementMain';
 import handleLocationChange from '../../utils/handleLocationChange';
-// import handlePickUpItem from '../../utils/pickUp';
+import handlePickUpItem from '../../utils/pickUp';
 import { useRef, useEffect, useState } from 'react';
 import gameBackground from '../../assets/playerareabg.png';
 import fullBod1 from '../../assets/fullbod1.png';
@@ -15,14 +15,10 @@ import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
-<<<<<<< HEAD
-import { items } from '../../data/items';
+import { itemsOnMap } from '../../data/itemsOnMap';
 import Deathbar from './Deathbar'; 
-
-=======
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
->>>>>>> 7085435f7995ecf106b20b8bda5e86ed6309524c
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
@@ -82,6 +78,8 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         itemsOnMap.forEach((itemData, i) => {
         const el = itemRefs.current[i];
         if (el && itemData && itemData.offSets) {
+            el.style.width = `${itemData.widthImg}px`;
+            el.style.height = `${itemData.heightImg}px`;
             el.style.left = `${itemData.offSets.left + saveplayerLocation.current.cameraLeft}px`;
             el.style.top = `${itemData.offSets.top + saveplayerLocation.current.cameraTop}px`;
         }
@@ -89,23 +87,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     }, []);
   
     useMovementMain(setVelocity);
-
-    function handlePickUpItem(itemCol, itemRefs){
-        const itemIndex = prev => prev.filter(item => item?.name !== itemCol);
-        if (itemIndex !== -1) {
-            setItems(prev => {
-                const updated = prev.filter(item => item.name !== itemCol);
-                itemRefs.current = [];
-                return updated;
-            });
-            itemRefs.current = itemRefs.current.filter((ref, i) => items[i].name !== itemCol);
-
-            // Resetting collision
-            collisionInfos.collidedItem = null;
-            collisionInfos.cool = 0;
-            collisionInfos.showed = 0;
-        }
-    }
 
     useEffect(()=>{
         if (time === 0) {
@@ -362,7 +343,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                             } else {
                                 if(ItemsInInventory.length == 6){
                                     setMessageContent("Your inventory is full!");
-                                    setMessageTrigger(prev=>prev+1);   
+                                    setMessageTrigger(prev => prev + 1);   
                                     return;
                                 }   else {
                                     handlePickUpItem(collisionInfos.collidedItem, collisionInfos, itemRefs, setItemsInInventory, setItemsOnMap, ItemsInInventory);            
