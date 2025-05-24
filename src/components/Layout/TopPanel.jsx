@@ -5,11 +5,13 @@ import Avatar from './Avatar';
 import ResourcesTime from './ResourcesTime';
 import Radar from './Radar';
 
-export default function TopPanel(){
+export default function TopPanel({setIsDead}){
     return(
         <div className="top-panel d-flex justify-content-center align-items-center p-2 gap-4 ">   
             <Avatar/>
-            <Bars/>
+            <Bars 
+            setIsDead={setIsDead}
+            />
             <ResourcesTime/>
             <Radar/>
         </div>

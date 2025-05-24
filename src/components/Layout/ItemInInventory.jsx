@@ -9,7 +9,7 @@ export default function ItemInInventory({item, setItemsInInventory}){
         id='itemInInventory' 
         className='d-flex justify-content-start align-items-center'
         onClick={(e) => {
-            item.func(setStats)
+            item.func(setStats);
             const clickedItem = item;
             console.log(clickedItem);
             setItemsInInventory((prevItems)=> prevItems.filter((items)=>items.id !== clickedItem.id))

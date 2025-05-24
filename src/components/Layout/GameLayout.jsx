@@ -11,6 +11,7 @@ import KaatiArena from './KaatiArena';
 import MothershipArena from './MothershipArena';
 import { LocationInfosMain } from '../../data/locationsMain';
 import { items } from '../../data/itemsOnMap';
+import DeathBar from './Deathbar';
 
 export default function GameLayout() {
     const [Location, setLocation] = useState('MainArea');
@@ -46,13 +47,16 @@ export default function GameLayout() {
     const[showMessage, setShowMessage] = useState(false);
     const[messageContent, setMessageContent] = useState("Good morning, player name!");
     const [messageTrigger, setMessageTrigger] = useState(0);
-
+    const[isDead,setIsDead] = useState(false);
     
 
     return (
         <div className="d-flex">
+            {isDead && <DeathBar/>} 
             <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
-                <TopPanel/>
+                <TopPanel 
+                setIsDead = {setIsDead}
+                />
                 {Location === 'MainArea' && <GameArea 
                 setLocation={setLocation} 
                 saveplayerLocation={savePlayerLocationRef} 
@@ -74,6 +78,8 @@ export default function GameLayout() {
                 {Location === 'Sugma' && <SugmaArena setLocation={setLocation}/>}
                 {Location === 'Kaati' && <KaatiArena setLocation={setLocation}/>}
                 {Location === 'Mothership' && <MothershipArena setLocation={setLocation}/>}
+                
+
             </div>
             <div style={{ flex: '1 1 18%', zIndex :'1' }}>
                 <SidePanel

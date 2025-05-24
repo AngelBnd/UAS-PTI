@@ -4,7 +4,7 @@ export function handleStats(setStats, time) {
         ...prev,
         hungerBar: Math.max(prev.hungerBar - 1.5, 0),
         oxygenBar: Math.max(prev.oxygenBar - 1.5, 0),
-        energyBar: Math.max(prev.energyBar - 2.5, 0),
+        energyBar: Math.max(prev.energyBar - 1.5, 0),
     }));
 
 }

@@ -1,12 +1,12 @@
 import React from 'react';
 import './Deathbar.css';
 
-export default function DeathBar({ onRestart }) {
+export default function DeathBar() {
   return (
-    <div className="game-over">
-      <h1 className="title">💀 Game Over 💀</h1>
+    <div className="gameOver">
+      <h1 className="title">Game Over</h1>
       <p className="description">Your journey has ended. Better luck next time!</p>
-      <button className="button" onClick={onRestart}>
+      <button className="button">
         Restart
       </button>
     </div>
