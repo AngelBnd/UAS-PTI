@@ -52,7 +52,7 @@ export default function GameLayout() {
 
     return (
         <div className="d-flex">
-            {isDead && <DeathBar/>} 
+            {/* {isDead && <DeathBar/>}  */}
             <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
                 <TopPanel 
                 setIsDead = {setIsDead}
