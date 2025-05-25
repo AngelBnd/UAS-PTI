@@ -1,19 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import {MainGameLayout, Menu} from './App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
-import  {createBrowserRouter, RouterProvider} from "react-router-dom";
 
-const router = createBrowserRouter([
-  {path : "/", element : <MainGameLayout/>},
-  {path : "/", element : <Menu/>},
-]);
+// UNUSED, TRANSFERED TO APP JSX FOR SIMPLER IMPORT
+
+// import './index.css';
+// import {MainGameLayout, Menu} from './App';
+// import  {createBrowserRouter, RouterProvider} from "react-router-dom";
+
+// const router = createBrowserRouter([
+//   {path : "/", element : <MainGameLayout/>},
+//   {path : "/", element : <Menu/>},
+// ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <App />
   </React.StrictMode>
 );
 
