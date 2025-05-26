@@ -19,8 +19,10 @@ const Cutscene = () => {
   return (
     <div ref={sceneRef} className="cutscene-container">
       <div className="cutscene-text">
-        <p>Dalam dunia yang penuh misteri...</p>
-        <p>Seorang pahlawan akan bangkit</p>
+        <p>The skies burned, the oceans swallowed cities, and the land turned to dust. </p>
+        <p>Humanity's only choice was to leave, to search for a new home among the stars. But something went wrong.</p>
+        <p>The ship was hit, systems failed, and now you drift alone among the stars.</p>
+        <p>You are humanity's last hope.</p>
       </div>
     </div>
   );

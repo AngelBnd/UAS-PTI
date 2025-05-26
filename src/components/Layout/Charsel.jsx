@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import char1 from '../../assets/char1.png';
+import char2 from '../../assets/char2.png';
+import char3 from '../../assets/char3.png';
 
 const CharacterSelection = () => {
   const [selectedChar, setSelectedChar] = useState(1);
@@ -10,24 +13,24 @@ const CharacterSelection = () => {
   const characters = [
     {
       id: 1,
-      name: "Knight",
-      stats: "STR: 10 | AGI: 5 | INT: 3",
-      desc: "Berkat pelatihan keras, memiliki pertahanan yang kuat.",
-      image: "/assets/knight.png"
+      name: "[REDACTED]",
+      stats: "Higher starting stats",
+      desc: "All muscle, no momentum.",
+      image: char1
     },
     {
       id: 2,
-      name: "Mage",
-      stats: "STR: 3 | AGI: 4 | INT: 10",
-      desc: "Menguasai elemen sihir yang mematikan.",
-      image: "/assets/mage.png"
+      name: "[REDACTED]",
+      stats: "None",
+      desc: "Just an ordinary dude.",
+      image: char2
     },
     {
       id: 3,
-      name: "Rogue", 
-      stats: "STR: 5 | AGI: 10 | INT: 4",
-      desc: "Gerakan cepat dan serangan mematikan.",
-      image: "/assets/rogue.png"
+      name: "[REDACTED]", 
+      stats: "Agility",
+      desc: "Always hungry and tired..",
+      image: char3
     }
   ];
 
@@ -44,7 +47,7 @@ const CharacterSelection = () => {
 
   return (
     <div ref={containerRef} className="character-selection">
-      <h2>Select your character</h2>
+      <h2>Your Story Begins Here. Who Will You Be?</h2>
       
       <div className="characters-grid">
         {characters.map(char => (
@@ -66,7 +69,7 @@ const CharacterSelection = () => {
           type="text"
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
-          placeholder="Masukkan nama kamu"
+          placeholder="Enter your name"
         />
       </div>
 
