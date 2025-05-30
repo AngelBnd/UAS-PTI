@@ -1,12 +1,16 @@
-// import React, { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TitleScreen.css';
 import title from "../../assets/title.png";
 
 const TitleScreen = () => {
   const navigate = useNavigate();
+  const hasFaded = useRef(false); // Using useRef so it can detect if the title screen has been faded yet
 
   function fade(element) {
+    if (hasFaded.current) return;
+    hasFaded.current = true;
+
     var opacity = 1;
     var timer = setInterval(function () {
         if (opacity <= 0.1) {
