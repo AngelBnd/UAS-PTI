@@ -10,8 +10,9 @@ import SugmaArena from './SugmaArena';
 import KaatiArena from './KaatiArena';
 import MothershipArena from './MothershipArena';
 import { LocationInfosMain } from '../../data/locationsMain';
-import { items } from '../../data/itemsOnMap';
 import DeathBar from './Deathbar';
+import { items } from '../../data/itemsOnMap';
+
 
 export default function GameLayout() {
     const [Location, setLocation] = useState('MainArea');
