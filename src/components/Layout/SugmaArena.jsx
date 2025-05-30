@@ -27,8 +27,18 @@ export default function SugmaArena({setLocation}){
     const[showButton, setShowButton] = useState(false);
     const { playerStats, setStats } = useStats();
 
+    const [activityMsg, updActivityMsg] = useState('');
+
     useMovementMain(setVelocity);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
+
+    useEffect(() => {
+        if (activityMsg) {
+            const timer = setTimeout(() => updActivityMsg(''), 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [activityMsg]);
+
 
     useEffect(() => {
         setShowButton(collisionInfos.cool);
@@ -82,7 +92,7 @@ export default function SugmaArena({setLocation}){
                                 if (collisionInfos.collidedLocation.name === "Rockethome") {
                                 func(setLocation); 
                                 } else {
-                                func(setStats); 
+                                func(setStats, updActivityMsg); 
                                 }
                             } else {
                                 handlePickUpItem();
@@ -95,8 +105,26 @@ export default function SugmaArena({setLocation}){
                             : `${collisionInfos.collidedLocation.activities?.[i]}`
                         }
                     </button>
-
                 ))}
+
+                {activityMsg && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '60px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        backgroundColor: '#0D061F',
+                        color: '#ffdba2',
+                        padding: '3px 6px',
+                        fontSize: '0.4em',
+                        border: '1px solid #ffdba2',
+                        zIndex: '9999',
+                        whiteSpace: 'nowrap'
+                    }}>
+                        {activityMsg}
+                    </div>
+                )}
+
             </div>
 
             {LocationInfosSugma.map((location, i) => (

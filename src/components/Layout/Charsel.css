@@ -1,0 +1,119 @@
+@keyframes typing {
+    from {
+        width: 0;
+    }
+}
+
+@keyframes cursor {
+    50% {
+        border-color: transparent;
+    }
+}
+
+#blackScreen {
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+}
+
+.charsel {
+    height: 100vh;
+    background-image: url(../../assets/charselbackground.png);
+    background-size: cover;
+    cursor:url(../../assets/cursor.png),auto;
+}
+
+.monitor {
+    background-image: url("../../assets/monitor.png");
+    background-size: cover;
+    min-height: 90%;
+}
+
+.charsel-text {
+    text-align: center;
+    font-size: 24px;
+    max-width: max-content;
+    height: auto;
+    color: #F7F7FF;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 5px solid;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.charsel-text:active {
+    animation: typing 1.7s steps(30),
+    cursor .4s step-end infinite alternate;
+}
+
+.main-info {
+    display: flex;
+    width: 300px;
+    width: 100%;
+    flex-direction: row;
+    margin: 2rem auto 2rem auto;
+    padding: 1rem;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.div-btn {
+    width: 100px;
+}
+
+.btn-img {
+    width: 100%;
+}
+
+.btn {
+    width: 100px;
+    height: 100px;
+    background-color: transparent;
+    border: none;
+    padding: 0%;
+}
+
+#btn1, #btn2 {
+    cursor:url(../../assets/cursorclick.png),auto;
+}
+
+.btn:active {
+    transform: scale(0.99);
+}
+
+#character {
+    background-color: #3C483C;
+}
+
+.char-info {
+    font-size: 16px;
+    text-shadow: 2px 2px #F7F7FF; 
+    background: oldlace; 
+    height: 188px;
+    width: 42%;
+    max-width: auto; 
+    padding: 1rem;
+    color: black;
+}
+
+#select-button {
+    width: 200px;
+    height: 70px;
+    cursor:url(../../assets/cursorclick.png),auto;
+}
+
+input::placeholder {
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.5;
+    color: rgb(64, 64, 64);
+}
+
+.name-input {
+    width: 400px; 
+    height: 50px;
+    text-align: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}

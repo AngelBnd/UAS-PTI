@@ -19,6 +19,7 @@ import { itemsOnMap } from '../../data/itemsOnMap';
 import Deathbar from './Deathbar'; 
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
+import { useChar } from '../../utils/charContext';
 
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
@@ -44,6 +45,9 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const collidableObjects = [LocationInfosMain,itemsOnMap];
     const{time} = useTime();
     const collidableObjectsRefs = [planetRefs, itemRefs];
+    const { selectedChar, playerName } = useChar();
+
+    const charFullbody = selectedChar - 1;
 
     useEffect(() => {
         const camera = cameraRef.current;
@@ -90,17 +94,17 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
 
     useEffect(()=>{
         if (time === 0) {
-            setMessageContent("Good Morning playername!");
+            setMessageContent("Good Morning " + playerName + "!");
             setMessageTrigger(prev=>prev+1);  
         } else if (time === 720) {
-            setMessageContent("Good Afternoon playername!");
+            setMessageContent("Good Afternoon " + playerName + "!");
             setMessageTrigger(prev=>prev+1);
         } else if (time === 1080) {
-            setMessageContent("Good Night playername!");
+            setMessageContent("Good Night " + playerName + "!");
             setMessageTrigger(prev=>prev+1);
         }
 
-    },[time])
+    }, [time])
 
     useEffect(()=>{
         setShowMessage(true);
@@ -109,7 +113,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         }, 3400);
 
         return () => clearTimeout(timeoutId); 
-    },[messageTrigger])
+    }, [messageTrigger])
 
     useEffect(()=>{
         let animationFrameId;
@@ -194,7 +198,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             if(collisionInfos.cool) setShowButton(true);
             else setShowButton(false);
 
-            console.log(showMessage);
             animationFrameId = requestAnimationFrame(update);
         };
         animationFrameId = requestAnimationFrame(update);
@@ -251,9 +254,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                         zIndex :'1',
                     }}
                     />
-                    
-
-                    
                 </div>
             ))}
     
@@ -288,14 +288,13 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             }}>
 
                 <img
-                onClick={()=>{}}
                 style={{
                     position :'absolute',
                     top: '0',   
                     left : '0', 
                     zIndex : '1',
                     
-                }} id="playerimg" src={fullbods[1]}/>
+                }} id="playerimg" src={fullbods[charFullbody]}/>
 
                 {showButton && (
                     <button
