@@ -21,6 +21,7 @@ import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
 import { useChar } from '../../utils/charContext';
 
+import GameComponent from './Items';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -230,6 +231,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             ))}
 
             {showMessage && <PopUpMessage message={messageContent}/>}
+
             
             {LocationInfosMain.map((planet, i) => (
                 <div className='d-flex flex-column'
@@ -274,7 +276,8 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 </>
                 
             ))}
-
+            {/* <GameComponent/> */}
+            
             <div id="player" className='pixel-art' ref={playerRef}
             style ={{
                 position : 'relative',
@@ -365,3 +368,4 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         </div>
     );
 }
+
