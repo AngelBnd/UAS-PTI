@@ -39,8 +39,6 @@ export const items = [
     new ItemInfo("water", 11, water, waterFunc,"item", 40, 57, { left: 420, top: 60 }),
 ];
 
-
-
 // const [itemInMap, setItemMap] = useState([{
 //     name: "smapah", image: "", x, y}])
 
