@@ -8,7 +8,7 @@ export default function ResourcesTime(){
     const { time, day } = useTime();
 
     const hourNow = String(Math.trunc(time / 60)).padStart(2, "0");
-    const minuteNow = String(time % 60).padStart(2, "0");
+    const minuteNow = String(Math.floor(time % 60)).padStart(2, "0");
 
     return(
         <div id="resourcesTime" className="d-flex gap-4 align-items-center">

@@ -9,6 +9,9 @@ import fullBod3 from '../../assets/fullbod3.png';
 import { LocationInfosSugma } from '../../data/locationsSugma';
 import handlePickUpItem from '../../utils/pickUp';
 import { useStats } from '../../utils/statsContext';
+import { useTime } from '../../utils/timeContext';
+import activityFunc from '../../utils/activityFunc';
+import ActiProgressBar from './ActiProgressBar';
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];
@@ -28,6 +31,16 @@ export default function SugmaArena({setLocation}){
     const { playerStats, setStats } = useStats();
 
     const [activityMsg, updActivityMsg] = useState('');
+    const { time, timeSpeed, setTime, setDay } = useTime();
+    const [ActivityFunc, setActivityFunc] = useState(() => () => {});
+    const [doingActivity, setDoingActivity] = useState(false);
+    const [actiProgress, setActiProgress] = useState(0);
+
+    const intervalRef = useRef(null);
+    const timeoutRef = useRef(null);
+    const didMountRef = useRef(false); // this is to prevent the useeffect from the first render
+    const skipActivityRef = useRef(false);
+
 
     useMovementMain(setVelocity);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
@@ -43,6 +56,18 @@ export default function SugmaArena({setLocation}){
     useEffect(() => {
         setShowButton(collisionInfos.cool);
     }, [collisionInfos.cool]);
+
+    useEffect(() => {
+        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress);
+        return()=>{
+            clearInterval(intervalRef.current);
+            clearTimeout(timeoutRef.current);
+
+        };
+
+    }, [ActivityFunc]);
+
+
 
     return(
         <div>
@@ -70,42 +95,84 @@ export default function SugmaArena({setLocation}){
             }}>
                 <img id="playerimg" src={fullbods[1]}/>
                 
-                {showButton && collisionInfos.collidedLocation && collisionInfos.collidedLocation.functions?.map((func,i) => (
+            <>
+            {showButton && collisionInfos.collidedLocation && (
+                <>
+                {collisionInfos.collidedLocation.functions?.map((func, i) => (
                     <button
                     key={i}
-                        style={{
+                    style={{
                         position: 'absolute',
-                        width : '50px',
-                        height : '13px',
-                        left : '50%',
+                        width: '50px',
+                        height: '13px',
+                        left: '55%',
                         top: `${-35 + i * 30}%`,
-                        backgroundColor : '#0D061F',
-                        color : '#ffdba2',
-                        border : 'solid 1.5px #ffdba2',
-                        padding : '1px',
-                        zIndex :'10000',
-                        fontSize : '0.3em',
-                        pointerEvents: 'auto'
-                        }}
-                        onClick={() => {
-                            if (collisionInfos.holderofindexI === 0) {
-                                if (collisionInfos.collidedLocation.name === "Rockethome") {
-                                func(setLocation); 
-                                } else {
-                                func(setStats, updActivityMsg); 
-                                }
+                        backgroundColor: '#0D061F',
+                        color: '#ffdba2',
+                        border: 'solid 1.5px #ffdba2',
+                        padding: '1px',
+                        zIndex: '10000',
+                        fontSize: '0.3em',
+                        pointerEvents: 'auto',
+                    }}
+                    onClick={() => {
+                        if (collisionInfos.holderofindexI === 0) {
+                            if (collisionInfos.collidedLocation.name === 'Rockethome') {
+                                func(setLocation);
                             } else {
-                                handlePickUpItem();
+                                setDoingActivity(true);
+                                setActivityFunc(() => () => func(setStats));
                             }
-                            }}
-                        >
-                        {
-                        collisionInfos.holderofindexI === 1
-                            ? `Pick up ${collisionInfos.collidedItem.name}`
-                            : `${collisionInfos.collidedLocation.activities?.[i]}`
+                        } else {
+                        handlePickUpItem();
                         }
+                    }}
+                    >
+                    {collisionInfos.holderofindexI === 1
+                        ? `Pick up ${collisionInfos.collidedItem.name}`
+                        : `${collisionInfos.collidedLocation.activities?.[i]}`}
                     </button>
                 ))}
+                
+                {doingActivity && 
+                    <div>
+                        <ActiProgressBar progressPercentage={actiProgress} />
+                    </div>
+                }
+                
+                
+                {collisionInfos.holderofindexI===0 ? (
+                    collisionInfos.collidedLocation.name != 'Rockethome' ? (
+                        <button
+                            style={{
+                            position: 'absolute',
+                            top: '55%',
+                            left: '55%',
+                            backgroundColor: '#0D061F',
+                            color: '#ffdba2',
+                            padding: '2px 5px',
+                            fontSize: '0.3em',
+                            border: 'solid 1.5px #ffdba2',
+                            zIndex: '10006',
+                            pointerEvents: 'auto',
+                            }}
+                            onClick={() => {
+                                if(doingActivity){
+                                    skipActivityRef.current = true
+                                }                    
+                            }}
+                        >
+                        Skip
+                        </button>
+                    ) : <> </>
+                ) : <> </>
+                }
+
+                
+                </>
+            
+            )}
+            </>
 
                 {activityMsg && (
                     <div style={{

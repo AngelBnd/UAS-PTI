@@ -1,0 +1,17 @@
+.progress-bar-container {
+  width: 7px; 
+  height: 60px; 
+  background-color: #0D061F; 
+  border: 1px solid #ffdba2;
+  position: relative;
+  overflow: hidden;
+  transform: translate(-120%, -100%);
+  display: flex;
+  align-items: flex-end; 
+}
+
+.progress-bar-filled {
+  width: 100%;
+  background-color: #ffdba2;
+  transition: height 0.3s ease; 
+}

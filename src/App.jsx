@@ -19,7 +19,7 @@ export function MainGameLayout() {
       <StatsProvider initialStats={{
         healthBar: 90,
         oxygenBar: 50,
-        hungerBar: 80,
+        hungerBar: 20,
         energyBar: 50,
       }}>
          <GameLayout/>
