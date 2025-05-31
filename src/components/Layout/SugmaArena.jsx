@@ -9,6 +9,7 @@ import fullBod3 from '../../assets/fullbod3.png';
 import { LocationInfosSugma } from '../../data/locationsSugma';
 import handlePickUpItem from '../../utils/pickUp';
 import { useStats } from '../../utils/statsContext';
+import { useTime } from '../../utils/timeContext';
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];
@@ -26,6 +27,9 @@ export default function SugmaArena({setLocation}){
     const collidableObjectsRefs = [locationRefs, itemRefs];
     const[showButton, setShowButton] = useState(false);
     const { playerStats, setStats } = useStats();
+    const { time, timeSpeed, setTime } = useTime();
+    const [doingActivity, setDoingActivity] = useState(false);
+    const [ActivityFunc, setActivityFunc] = useState(null);
 
     useMovementMain(setVelocity);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
@@ -33,6 +37,31 @@ export default function SugmaArena({setLocation}){
     useEffect(() => {
         setShowButton(collisionInfos.cool);
     }, [collisionInfos.cool]);
+
+    useEffect(() => {
+        if(!doingActivity) return;
+
+        let timer1, timer2, stopTimer2;
+            
+        timer2 = setInterval(()=>{
+            ActivityFunc?.();
+        }, 1000);
+
+        timer1 = setTimeout(()=>{
+            stopTimer2 = setTimeout(()=>{
+                clearInterval(timer2);
+                setDoingActivity(false);
+            },3000);
+        },3000);
+
+        return()=>{
+            clearInterval(timer1);
+            clearTimeout(stopTimer2);
+            clearInterval(timer2);
+
+        };
+
+    }, [doingActivity]);
 
     return(
         <div>
@@ -80,9 +109,10 @@ export default function SugmaArena({setLocation}){
                         onClick={() => {
                             if (collisionInfos.holderofindexI === 0) {
                                 if (collisionInfos.collidedLocation.name === "Rockethome") {
-                                func(setLocation); 
+                                    func(setLocation); 
                                 } else {
-                                func(setStats); 
+                                    setDoingActivity(true);
+                                    setActivityFunc(func(setStats));
                                 }
                             } else {
                                 handlePickUpItem();

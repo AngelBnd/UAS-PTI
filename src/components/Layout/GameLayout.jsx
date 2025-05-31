@@ -45,7 +45,7 @@ export default function GameLayout() {
     );
     const[ItemsInInventory, setItemsInInventory] = useState([]);
     const[showMessage, setShowMessage] = useState(false);
-    const[messageContent, setMessageContent] = useState("Good morning, player name!");
+    const[messageContent, setMessageContent] = useState("");
     const [messageTrigger, setMessageTrigger] = useState(0);
     const[isDead,setIsDead] = useState(false);
     
