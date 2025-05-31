@@ -6,7 +6,7 @@ const TimeContext = createContext();
 export function TimeProvider({ children }) {
   const [time, setTime] = useState(0);
   const [day, setDay] = useState(0);
-  const [timeSpeed, setTimeSpeed] = useState(2000);
+  const [timeSpeed, setTimeSpeed] = useState(1200);
 
   useEffect(() => {
     const timer = setInterval(() => {

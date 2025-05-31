@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 
-export function sugma1(setStats, updActivityMsg) {
+export function sugma1(setStats) {
     setStats((prev)=>({
         ...prev,
-        hungerBar: prev.hungerBar + 9,
+        hungerBar: prev.hungerBar + 3,
     }))
-    updActivityMsg("AMONG USSSS");
+  
     console.log("Sugma1 button");
 }
 
