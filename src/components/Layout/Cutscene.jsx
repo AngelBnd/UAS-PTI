@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import cutscene from '../../assets/cutscene.mp4';
+import cutscene from '../../assets/cutsceneNew.mp4';
 import './Cutscene.css';
 
 const Cutscene = () => {
