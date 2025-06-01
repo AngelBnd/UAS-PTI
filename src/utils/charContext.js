@@ -1,43 +1,52 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useState, useContext } from 'react';
 
-const CharacterContext = createContext();
+const CharContext = createContext();
 
-export const useChar = () => useContext(CharacterContext);
+export const useChar = () => useContext(CharContext);
 
 export const CharacterProvider = ({ children }) => {
-    const [selectedChar, updateSelectedChar] = useState(1);
-    const [playerName, setPlayerName] = useState('');
+  const [position, setPosition] = useState({ x: 100, y: 100 });
 
-    // Minimap state
-    const [playerPosition, setPlayerPosition] = useState({ x: 50, y: 50 });
-    const [currentLocation, setCurrentLocation] = useState('MainArea');
+  const locations = [
+    {
+      name: 'Mothership',
+      image: '/assets/mothership.png',
+      x: 100,
+      y: 100,
+    },
+    {
+      name: 'Planet 1',
+      image: '/assets/planet1.png',
+      x: 500,
+      y: 150,
+    },
+    {
+      name: 'Planet 2',
+      image: '/assets/planet2.png',
+      x: 900,
+      y: 300,
+    },
+    {
+      name: 'Planet 3',
+      image: '/assets/planet3.png',
+      x: 300,
+      y: 600,
+    },
+    {
+      name: 'Planet 4',
+      image: '/assets/planet4.png',
+      x: 700,
+      y: 700,
+    },
+  ];
 
-    const [planets] = useState([
-        { id: 1, x: 20, y: 30, name: "Planet A", location: "Ejwa" },
-        { id: 2, x: 40, y: 50, name: "Planet B", location: "Solez" },
-        { id: 3, x: 60, y: 60, name: "Kaati", location: "Kaati" },
-        { id: 4, x: 80, y: 40, name: "Sugma", location: "Sugma" },
-        { id: 5, x: 50, y: 20, name: "Mothership", location: "Mothership" }
-    ]);
+  const teleportTo = (x, y) => {
+    setPosition({ x, y });
+  };
 
-    // Items state (sync with your existing itemsOnMap)
-    const [items, setItems] = useState([]);
-
-    return (
-        <CharacterContext.Provider value={{
-            selectedChar,
-            updateSelectedChar,
-            playerName,
-            setPlayerName,
-            playerPosition,
-            setPlayerPosition,
-            planets,
-            items,
-            setItems,
-            currentLocation,
-            setCurrentLocation
-        }}>
-            {children}
-        </CharacterContext.Provider>
-    );
+  return (
+    <CharContext.Provider value={{ position, teleportTo, locations }}>
+      {children}
+    </CharContext.Provider>
+  );
 };
