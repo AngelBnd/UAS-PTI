@@ -19,6 +19,7 @@ import { itemsOnMap } from '../../data/itemsOnMap';
 import Deathbar from './Deathbar'; 
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
+import { useChar } from '../../utils/charContext';
 import GameComponent from './Items';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
@@ -46,6 +47,9 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const collidableObjects = [LocationInfosMain,itemsOnMap];
     const { time } = useTime();
     const collidableObjectsRefs = [planetRefs, itemRefs];
+    const { selectedChar, playerName } = useChar();
+
+    const charFullbody = selectedChar - 1;
 
     useEffect(() => {
         const camera = cameraRef.current;
@@ -94,27 +98,28 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     useEffect(() => {
         if (time === 0) {
             setMessageContent("Good Morning playername!");
-            setMessageTrigger(prev => prev + 1);  
+            setMessageTrigger(prev=>prev+1);  
         } else if (time === 720) {
             setMessageContent("Good Afternoon playername!");
-            setMessageTrigger(prev => prev + 1);
+            setMessageTrigger(prev=>prev+1);
         } else if (time === 1080) {
             setMessageContent("Good Night playername!");
-            setMessageTrigger(prev => prev + 1);
+            setMessageTrigger(prev=>prev+1);
         }
     }, [time]);
 
-    useEffect(() => {
+    },[time])
+
+    useEffect(()=>{
         setShowMessage(true);
         const timeoutId = setTimeout(() => {
             setShowMessage(false);
         }, 3400);
 
         return () => clearTimeout(timeoutId); 
-    }, [messageTrigger]);
-    
+    },[messageTrigger])
 
-    useEffect(() => {
+    useEffect(()=>{
         let animationFrameId;
 
         const update = () => {
@@ -290,13 +295,14 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 }}>
 
                 <img
-                    onClick={() => { }}
-                    style={{
-                        position: 'absolute',
-                        top: '0',
-                        left: '0',
-                        zIndex: '1',
-                    }} id="playerimg" src={fullbods[1]} />
+                onClick={()=>{}}
+                style={{
+                    position :'absolute',
+                    top: '0',   
+                    left : '0', 
+                    zIndex : '1',
+                    
+                }} id="playerimg" src={fullbods[1]}/>
 
                 {showButton && (
                     <button
