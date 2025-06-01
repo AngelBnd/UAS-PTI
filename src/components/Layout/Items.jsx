@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { items } from '../../data/itemsOnMap';
 
+
 const maxWidth = 1000;
 const maxHeight = 600;
 const padding = 10;
@@ -28,13 +29,14 @@ function getRandomPositionNonOverlapping(items, maxWidth, maxHeight, padding) {
       };
       attempt++;
     } while (
-      positions.some((p, idx) =>
-        isOverlapping(
-          pos,
-          { width: item.width, height: item.height },
-          p,
-          { width: items[idx].width, height: items[idx].height }
-        )
+      positions.some(
+        (p, idx) =>
+          isOverlapping(
+            pos,
+            { width: item.width, height: item.height },
+            p,
+            { width: items[idx].width, height: items[idx].height }
+          )
       ) && attempt < maxAttempts
     );
     positions.push(pos);
@@ -43,9 +45,14 @@ function getRandomPositionNonOverlapping(items, maxWidth, maxHeight, padding) {
   return positions;
 }
 
-const GameComponent = () => {
+const GameComponent = ({ style }) => {
   const [activeItems, setActiveItems] = useState(() => {
-    const positions = getRandomPositionNonOverlapping(items, maxWidth, maxHeight, padding);
+    const positions = getRandomPositionNonOverlapping(
+      items,
+      maxWidth,
+      maxHeight,
+      padding
+    );
     return items.map((item, idx) => ({
       ...item,
       position: positions[idx],
@@ -67,7 +74,12 @@ const GameComponent = () => {
         const usedItems = prevItems.filter((i) => i.used);
         if (usedItems.length === 0) return prevItems;
 
-        const positions = getRandomPositionNonOverlapping(usedItems, maxWidth, maxHeight, padding);
+        const positions = getRandomPositionNonOverlapping(
+          usedItems,
+          maxWidth,
+          maxHeight,
+          padding
+        );
         const respawnedItems = usedItems.map((item, idx) => ({
           ...item,
           used: false,
@@ -83,7 +95,7 @@ const GameComponent = () => {
   }, []);
 
   return (
-    <div style={{ position: 'relative', width: maxWidth, height: maxHeight, border: '1px solid black' }}>
+    <div style={{ ...style, width: maxWidth, height: maxHeight }}>
       {activeItems.map(
         (item) =>
           !item.used &&
