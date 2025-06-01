@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import GameArea from './GameArea';
 import TopPanel from './TopPanel';
 import SidePanel from './SidePanel';
@@ -12,11 +12,11 @@ import MothershipArena from './MothershipArena';
 import { LocationInfosMain } from '../../data/locationsMain';
 import DeathBar from './Deathbar';
 import { items } from '../../data/itemsOnMap';
-
+import Minimap from './Minimap'; // ✅ tambahkan ini
 
 export default function GameLayout() {
     const [Location, setLocation] = useState('MainArea');
-    const savePlayerLocationRef = useRef({ playerTop: 250, playerLeft: 600, cameraTop:0, cameraLeft:0 });
+    const savePlayerLocationRef = useRef({ playerTop: 250, playerLeft: 600, cameraTop: 0, cameraLeft: 0 });
     const planetPositionsRef = useRef([
         { left: LocationInfosMain[0].offSets.left, top: LocationInfosMain[0].offSets.top },
         { left: LocationInfosMain[1].offSets.left, top: LocationInfosMain[1].offSets.top },
@@ -26,71 +26,67 @@ export default function GameLayout() {
     ]);
     const bgObjectsPositionsRef = useRef([
         { left: 0, top: 0 },
-        { left: 0, top: 0 }, 
-        { left: 0, top: 0 }, 
         { left: 0, top: 0 },
-        { left: 0, top: 0 }, 
+        { left: 0, top: 0 },
+        { left: 0, top: 0 },
+        { left: 0, top: 0 },
     ]);
 
     const [itemsOnMap, setItemsOnMap] = useState(() =>
-    items.map(item => ({
-        id: item.id,
-        name: item.name,
-        element: item.element,
-        className: item.classNamee,
-        func : item.func,
-        widthImg: item.widthImg,
-        heightImg: item.heightImg,
-        offSets: { ...item.offSets } 
-    }))
+        items.map(item => ({
+            id: item.id,
+            name: item.name,
+            element: item.element,
+            className: item.classNamee,
+            func: item.func,
+            widthImg: item.widthImg,
+            heightImg: item.heightImg,
+            offSets: { ...item.offSets }
+        }))
     );
-    const[ItemsInInventory, setItemsInInventory] = useState([]);
-    const[showMessage, setShowMessage] = useState(false);
-    const[messageContent, setMessageContent] = useState("");
+
+    const [ItemsInInventory, setItemsInInventory] = useState([]);
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageContent, setMessageContent] = useState("");
     const [messageTrigger, setMessageTrigger] = useState(0);
-    const[isDead,setIsDead] = useState(false);
-    
+    const [isDead, setIsDead] = useState(false);
 
     return (
         <div className="d-flex">
-            {/* {isDead && <DeathBar/>}  */}
-            <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
-                <TopPanel 
-                setIsDead = {setIsDead}
-                />
-                {Location === 'MainArea' && <GameArea 
-                setLocation={setLocation} 
-                saveplayerLocation={savePlayerLocationRef} 
-                saveplanetLocation={planetPositionsRef} 
-                saveBGObjectLocation={bgObjectsPositionsRef} 
-                itemsOnMap={itemsOnMap}
-                setItemsOnMap={setItemsOnMap}
-                ItemsInInventory={ItemsInInventory}
-                setItemsInInventory={setItemsInInventory}
-                setShowMessage={setShowMessage}
-                showMessage={showMessage}
-                setMessageContent={setMessageContent}
-                messageContent={messageContent}
-                setMessageTrigger={setMessageTrigger}
-                messageTrigger={messageTrigger}
+            {/* {isDead && <DeathBar/>} */}
+            <div style={{ flex: '1 1 85%', zIndex: '0', overflow: 'hidden', position: 'relative' }}>
+                <Minimap /> {/* ✅ Tambahkan ini agar Minimap tampil */}
+                <TopPanel setIsDead={setIsDead} />
+                {Location === 'MainArea' && <GameArea
+                    setLocation={setLocation}
+                    saveplayerLocation={savePlayerLocationRef}
+                    saveplanetLocation={planetPositionsRef}
+                    saveBGObjectLocation={bgObjectsPositionsRef}
+                    itemsOnMap={itemsOnMap}
+                    setItemsOnMap={setItemsOnMap}
+                    ItemsInInventory={ItemsInInventory}
+                    setItemsInInventory={setItemsInInventory}
+                    setShowMessage={setShowMessage}
+                    showMessage={showMessage}
+                    setMessageContent={setMessageContent}
+                    messageContent={messageContent}
+                    setMessageTrigger={setMessageTrigger}
+                    messageTrigger={messageTrigger}
                 />}
                 {Location === 'Ejwa' && <EjwaArena setLocation={setLocation} />}
-                {Location === 'Solez' && <SolezArena setLocation={setLocation}/>}
-                {Location === 'Sugma' && <SugmaArena setLocation={setLocation}/>}
-                {Location === 'Kaati' && <KaatiArena setLocation={setLocation}/>}
-                {Location === 'Mothership' && <MothershipArena setLocation={setLocation}/>}
-                
-
+                {Location === 'Solez' && <SolezArena setLocation={setLocation} />}
+                {Location === 'Sugma' && <SugmaArena setLocation={setLocation} />}
+                {Location === 'Kaati' && <KaatiArena setLocation={setLocation} />}
+                {Location === 'Mothership' && <MothershipArena setLocation={setLocation} />}
             </div>
-            <div style={{ flex: '1 1 18%', zIndex :'1' }}>
+            <div style={{ flex: '1 1 18%', zIndex: '1' }}>
                 <SidePanel
-                ItemsInInventory={ItemsInInventory}
-                setItemsInInventory={setItemsInInventory}
-                setShowMessage={setShowMessage}
-                setMessageContent={setMessageContent}
+                    ItemsInInventory={ItemsInInventory}
+                    setItemsInInventory={setItemsInInventory}
+                    setShowMessage={setShowMessage}
+                    setMessageContent={setMessageContent}
                 />
             </div>
         </div>
-    )
+    );
 }
-
