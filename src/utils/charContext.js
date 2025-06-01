@@ -1,52 +1,57 @@
-import React, { createContext, useState, useContext } from 'react';
+import { createContext, useContext, useState, useRef } from "react";
 
-const CharContext = createContext();
+const CharacterContext = createContext();
 
-export const useChar = () => useContext(CharContext);
+export const useChar = () => useContext(CharacterContext);
 
 export const CharacterProvider = ({ children }) => {
-  const [position, setPosition] = useState({ x: 100, y: 100 });
+    const [selectedChar, updateSelectedChar] = useState(1);
+    const [playerName, setPlayerName] = useState('');
+    
+    const [playerPosition, setPlayerPosition] = useState({ x: 50, y: 50 });
+    
+    const playerPositionRef = useRef({
+        x: 600,  
+        screenX: 600, 
+        screenY: 250
+    });
 
-  const locations = [
-    {
-      name: 'Mothership',
-      image: '/assets/mothership.png',
-      x: 100,
-      y: 100,
-    },
-    {
-      name: 'Planet 1',
-      image: '/assets/planet1.png',
-      x: 500,
-      y: 150,
-    },
-    {
-      name: 'Planet 2',
-      image: '/assets/planet2.png',
-      x: 900,
-      y: 300,
-    },
-    {
-      name: 'Planet 3',
-      image: '/assets/planet3.png',
-      x: 300,
-      y: 600,
-    },
-    {
-      name: 'Planet 4',
-      image: '/assets/planet4.png',
-      x: 700,
-      y: 700,
-    },
-  ];
+    const [planets] = useState([
+        { id: 1, x: 30, y: 20, name: "Planet A" },
+        { id: 2, x: 70, y: 60, name: "Planet B" },
+    ]);
 
-  const teleportTo = (x, y) => {
-    setPosition({ x, y });
-  };
+    const [items, setItems] = useState([
+        { id: 1, x: 40, y: 50, type: "cola" },
+        { id: 2, x: 60, y: 30, type: "medkit" },
+    ]);
 
-  return (
-    <CharContext.Provider value={{ position, teleportTo, locations }}>
-      {children}
-    </CharContext.Provider>
-  );
+    const updatePlayerPosition = (pixelPos) => {
+        const percentagePos = {
+            x: (pixelPos.x / 1200) * 100,
+            y: (pixelPos.y / 600) * 100
+        };
+        
+        playerPositionRef.current = { ...pixelPos };
+        setPlayerPosition(percentagePos);
+    };
+
+    return (
+        <CharacterContext.Provider value={{
+            selectedChar,
+            updateSelectedChar,
+            playerName,
+            setPlayerName,
+            
+            playerPosition,
+            playerPositionRef,
+            updatePlayerPosition,
+            
+            planets,
+            items,
+            setItems
+        }}>
+            {children}
+        </CharacterContext.Provider>
+    );
 };
