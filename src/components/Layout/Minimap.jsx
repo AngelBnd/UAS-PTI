@@ -1,6 +1,12 @@
 import React from 'react';
-import { useChar } from '../../utils/charContext';
 import styled from 'styled-components';
+import { useChar } from '../../utils/charContext';
+import { useEffect } from 'react';
+import planet1Img from '../../assets/planet1.png';
+import planet2Img from '../../assets/planet2.png';
+import planet3Img from '../../assets/planet3.png';
+import planet4Img from '../../assets/planet4.png';
+import mothershipImg from '../../assets/mothership.png';
 
 const MinimapContainer = styled.div`
     position: fixed;
@@ -13,6 +19,8 @@ const MinimapContainer = styled.div`
     border-radius: 8px;
     padding: 10px;
     z-index: 1000;
+    color: #ffdba2;
+    font-size: 10px;
 `;
 
 const MapArea = styled.div`
@@ -24,21 +32,21 @@ const MapArea = styled.div`
 
 const PlayerDot = styled.div`
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     background-color: #ff0000;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     z-index: 3;
+    box-shadow: 0 0 5px 2px #ff0000;
 `;
 
-const PlanetDot = styled.div`
+const PlanetIcon = styled.img`
     position: absolute;
-    width: 12px;
-    height: 12px;
-    background-color: #3498db;
-    border-radius: 50%;
+    width: 14px;
+    height: 14px;
     transform: translate(-50%, -50%);
+    cursor: pointer;
     z-index: 2;
 `;
 
@@ -52,40 +60,66 @@ const ItemDot = styled.div`
     z-index: 1;
 `;
 
-const Minimap = ({ currentLocation }) => {
-    const { playerPosition, planets, items } = useChar();
+const imageMap = {
+    'Planet A': planet1Img,
+    'Planet B': planet2Img,
+    'Kaati': planet3Img,
+    'Sugma': planet4Img,
+    'Mothership': mothershipImg
+};
+
+const Minimap = () => {
+    const {
+        playerPosition,
+        planets,
+        items,
+        setCurrentLocation,
+        currentLocation
+    } = useChar();
+
+    const handleTeleport = (location) => {
+        setCurrentLocation(location);
+    };
 
     return (
         <MinimapContainer>
-            <h3 style={{ fontSize: '10px', color: '#ffdba2', margin: '0 0 5px 0' }}>
+            <div style={{ marginBottom: '4px' }}>
                 MINIMAP - {currentLocation}
-            </h3>
+            </div>
             <MapArea>
-                {/* Player */}
-                <PlayerDot style={{
-                    left: `${playerPosition.x}%`,
-                    top: `${playerPosition.y}%`
-                }} />
+                <PlayerDot
+                    style={{
+                        left: `${playerPosition.x}%`,
+                        top: `${playerPosition.y}%`
+                    }}
+                />
 
-                {/* Only show planets in MainArea */}
-                {currentLocation === 'MainArea' && planets.map(planet => (
-                    <PlanetDot key={`planet-${planet.id}`} style={{
-                        left: `${planet.x}%`,
-                        top: `${planet.y}%`
-                    }} />
+                {planets.map((planet) => (
+                    <PlanetIcon
+                        key={`planet-${planet.id}`}
+                        src={imageMap[planet.name]}
+                        style={{
+                            left: `${planet.x}%`,
+                            top: `${planet.y}%`
+                        }}
+                        title={`Go to ${planet.name}`}
+                        onClick={() => handleTeleport(planet.location)}
+                    />
                 ))}
 
-                {/* Items */}
-                {items.map(item => (
-                    <ItemDot key={`item-${item.id}`} style={{
-                        left: `${item.x}%`,
-                        top: `${item.y}%`
-                    }} />
+                {items.map((item) => (
+                    <ItemDot
+                        key={`item-${item.id}`}
+                        style={{
+                            left: `${item.x}%`,
+                            top: `${item.y}%`
+                        }}
+                    />
                 ))}
             </MapArea>
-            <div style={{ fontSize: '8px', color: '#ffdba2', marginTop: '5px' }}>
-                <span style={{ color: '#ff0000' }}>■</span> Player • 
-                <span style={{ color: '#3498db' }}>■</span> Planet • 
+            <div style={{ fontSize: '8px', marginTop: '5px' }}>
+                <span style={{ color: '#ff0000' }}>■</span> Player •
+                <span style={{ color: '#3498db' }}> 🪐</span> Planet •
                 <span style={{ color: '#f1c40f' }}>■</span> Item
             </div>
         </MinimapContainer>

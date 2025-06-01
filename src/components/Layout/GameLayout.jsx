@@ -12,25 +12,20 @@ import MothershipArena from './MothershipArena';
 import { LocationInfosMain } from '../../data/locationsMain';
 import DeathBar from './Deathbar';
 import { items } from '../../data/itemsOnMap';
-import Minimap from './Minimap'; // ✅ tambahkan ini
+import Minimap from './Minimap';
+import { useChar } from '../../utils/charContext';
 
 export default function GameLayout() {
+    const { setCurrentLocation } = useChar();
     const [Location, setLocation] = useState('MainArea');
+
+    useEffect(() => {
+        setCurrentLocation(Location);
+    }, [Location, setCurrentLocation]);
+
     const savePlayerLocationRef = useRef({ playerTop: 250, playerLeft: 600, cameraTop: 0, cameraLeft: 0 });
-    const planetPositionsRef = useRef([
-        { left: LocationInfosMain[0].offSets.left, top: LocationInfosMain[0].offSets.top },
-        { left: LocationInfosMain[1].offSets.left, top: LocationInfosMain[1].offSets.top },
-        { left: LocationInfosMain[2].offSets.left, top: LocationInfosMain[2].offSets.top },
-        { left: LocationInfosMain[3].offSets.left, top: LocationInfosMain[3].offSets.top },
-        { left: LocationInfosMain[4].offSets.left, top: LocationInfosMain[4].offSets.top },
-    ]);
-    const bgObjectsPositionsRef = useRef([
-        { left: 0, top: 0 },
-        { left: 0, top: 0 },
-        { left: 0, top: 0 },
-        { left: 0, top: 0 },
-        { left: 0, top: 0 },
-    ]);
+    const planetPositionsRef = useRef([ /* ... */ ]);
+    const bgObjectsPositionsRef = useRef([ /* ... */ ]);
 
     const [itemsOnMap, setItemsOnMap] = useState(() =>
         items.map(item => ({
@@ -53,10 +48,10 @@ export default function GameLayout() {
 
     return (
         <div className="d-flex">
-            {/* {isDead && <DeathBar/>} */}
             <div style={{ flex: '1 1 85%', zIndex: '0', overflow: 'hidden', position: 'relative' }}>
-                <Minimap /> {/* ✅ Tambahkan ini agar Minimap tampil */}
+                <Minimap onTeleport={setLocation} />
                 <TopPanel setIsDead={setIsDead} />
+
                 {Location === 'MainArea' && <GameArea
                     setLocation={setLocation}
                     saveplayerLocation={savePlayerLocationRef}
