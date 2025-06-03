@@ -18,6 +18,14 @@ import { useTime } from '../../utils/timeContext';
 export default function GameLayout() {
     const { time } = useTime();
     const [Location, setLocation] = useState('MainArea');
+    const [direction, setDirection] = useState({
+        up: false,
+        down: false,
+        left: false,
+        right: false,
+    });
+
+
     const savePlayerLocationRef = useRef({ playerTop: 250, playerLeft: 600, cameraTop:0, cameraLeft:0 });
     const planetPositionsRef = useRef([
         { left: LocationInfosMain[0].offSets.left, top: LocationInfosMain[0].offSets.top },
@@ -100,12 +108,28 @@ export default function GameLayout() {
                 messageContent={messageContent}
                 setMessageTrigger={setMessageTrigger}
                 messageTrigger={messageTrigger}
+                direction = {direction}
                 />}
-                {Location === 'Ejwa' && <EjwaArena setLocation={setLocation} />}
-                {Location === 'Solez' && <SolezArena setLocation={setLocation}/>}
-                {Location === 'Sugma' && <SugmaArena setLocation={setLocation}/>}
-                {Location === 'Kaati' && <KaatiArena setLocation={setLocation}/>}
-                {Location === 'Mothership' && <MothershipArena setLocation={setLocation}/>}
+                {Location === 'Ejwa' && <EjwaArena 
+                setLocation={setLocation} 
+                direction = {direction}
+                />}
+                {Location === 'Solez' && <SolezArena 
+                setLocation={setLocation}
+                direction = {direction}
+                />}
+                {Location === 'Sugma' && <SugmaArena 
+                setLocation={setLocation}
+                direction = {direction}
+                />}
+                {Location === 'Kaati' && <KaatiArena 
+                setLocation={setLocation}
+                direction = {direction}
+                />}
+                {Location === 'Mothership' && <MothershipArena
+                setLocation={setLocation}
+                direction = {direction}
+                 />}
                 
 
             </div>
@@ -115,6 +139,7 @@ export default function GameLayout() {
                 setItemsInInventory={setItemsInInventory}
                 setShowMessage={setShowMessage}
                 setMessageContent={setMessageContent}
+                setDirection={setDirection}
                 />
             </div>
         </div>

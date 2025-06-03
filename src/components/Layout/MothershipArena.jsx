@@ -2,14 +2,14 @@ import mothershipBG from '../../assets/MothershipBG.png';
 import { useMovementMain } from '../../utils/useMovementMain';
 import { useUpdateMovement } from '../../utils/useUpdateMovement';
 import './PixelArt.css'
-import { useRef, useState } from 'react';
+import { useRef, useState,useEffect } from 'react';
 import fullBod1 from '../../assets/fullbod1.png';
 import fullBod2 from '../../assets/fullbod2.png';
 import fullBod3 from '../../assets/fullbod3.png';
 import { LocationInfosMothership } from '../../data/locationsMothership';
 import { useStats } from '../../utils/statsContext';
 import handlePickUpItem from '../../utils/pickUp';
-import { useEffect } from 'react';
+
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];

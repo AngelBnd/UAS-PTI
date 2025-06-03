@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export function useMovementMain(setVelocity) {
+export function useMovementMain(setVelocity,direction) {
   useEffect(() => {
     const handleKeyDown = (e) => {
       setVelocity((prev) => {
@@ -42,4 +42,13 @@ export function useMovementMain(setVelocity) {
       window.removeEventListener('keyup', handleKeyUp);
     };
   }, [setVelocity]);
+
+  useEffect(()=>{
+    const vel = { x: 0, y: 0 };
+    if (direction.left) vel.x = 2;
+    if (direction.right) vel.x = -2;
+    if (direction.up) vel.y = 2;
+    if (direction.down) vel.y = -2;
+    setVelocity(vel);
+  },[direction,setVelocity])
 }
