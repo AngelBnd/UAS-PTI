@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import GameArea from './GameArea';
 import TopPanel from './TopPanel';
 import SidePanel from './SidePanel';
@@ -12,9 +12,11 @@ import MothershipArena from './MothershipArena';
 import { LocationInfosMain } from '../../data/locationsMain';
 import DeathBar from './Deathbar';
 import { items } from '../../data/itemsOnMap';
-
+import PopUpMessage from './PopUpMessage';
+import { useTime } from '../../utils/timeContext';
 
 export default function GameLayout() {
+    const { time } = useTime();
     const [Location, setLocation] = useState('MainArea');
     const savePlayerLocationRef = useRef({ playerTop: 250, playerLeft: 600, cameraTop:0, cameraLeft:0 });
     const planetPositionsRef = useRef([
@@ -50,10 +52,35 @@ export default function GameLayout() {
     const [messageTrigger, setMessageTrigger] = useState(0);
     const[isDead,setIsDead] = useState(false);
     
+    useEffect(() => {
+        if (time === 0) {
+            setMessageContent("Good Morning playername!");
+            setMessageTrigger(prev=>prev+1);  
+        } else if (time === 720) {
+            setMessageContent("Good Afternoon playername!");
+            setMessageTrigger(prev=>prev+1);
+        } else if (time === 1080) {
+            setMessageContent("Good Night playername!");
+            setMessageTrigger(prev=>prev+1);
+        }
+    }, [time]);
+
+    
+
+    useEffect(()=>{
+        setShowMessage(true);
+        const timeoutId = setTimeout(() => {
+            setShowMessage(false);
+        }, 3400);
+
+        return () => clearTimeout(timeoutId); 
+    },[messageTrigger])
 
     return (
         <div className="d-flex">
             {/* {isDead && <DeathBar/>}  */}
+            {showMessage && <PopUpMessage message={messageContent} />}
+            
             <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
                 <TopPanel 
                 setIsDead = {setIsDead}

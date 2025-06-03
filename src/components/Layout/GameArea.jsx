@@ -95,27 +95,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
 
     useMovementMain(setVelocity);
 
-    useEffect(() => {
-        if (time === 0) {
-            setMessageContent("Good Morning playername!");
-            setMessageTrigger(prev=>prev+1);  
-        } else if (time === 720) {
-            setMessageContent("Good Afternoon playername!");
-            setMessageTrigger(prev=>prev+1);
-        } else if (time === 1080) {
-            setMessageContent("Good Night playername!");
-            setMessageTrigger(prev=>prev+1);
-        }
-    }, [time]);
-
-    useEffect(()=>{
-        setShowMessage(true);
-        const timeoutId = setTimeout(() => {
-            setShowMessage(false);
-        }, 3400);
-
-        return () => clearTimeout(timeoutId); 
-    },[messageTrigger])
 
     useEffect(()=>{
         let animationFrameId;
@@ -230,7 +209,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 />
             ))}
 
-            {showMessage && <PopUpMessage message={messageContent} />}
 
             {LocationInfosMain.map((planet, i) => (
                 <div className='d-flex flex-column'
