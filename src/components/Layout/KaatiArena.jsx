@@ -16,7 +16,7 @@ let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocat
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosKaati,items];
 
-export default function KaatiArena({setLocation}){
+export default function KaatiArena({setLocation,direction}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -26,7 +26,7 @@ export default function KaatiArena({setLocation}){
     const[showButton, setShowButton] = useState(false);
     const { playerStats, setStats } = useStats();
     
-    useMovementMain(setVelocity);
+    useMovementMain(setVelocity,direction);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
 
     useEffect(() => {
