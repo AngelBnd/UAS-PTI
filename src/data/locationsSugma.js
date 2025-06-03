@@ -10,6 +10,7 @@ import { GuessNumberGameComponent, sugma41, sugma42 } from "../locationFunctions
 import { game31,game32 } from "../locationFunctions/gamesugma3";
 import { InfoSugma } from "../locationFunctions/sugma";
 
+<<<<<<< HEAD
 //name, element, classNamee, functions, activities, widthImg, heightImg, { left, top 
 export const LocationInfosSugma = [
   new LocationInfo(
@@ -68,4 +69,64 @@ export const LocationInfosSugma = [
     "Deskripsi Rockethome"
   )
   
+=======
+//name, element, classNamee, functions, activities name, duration for each activity(7200,6000,4800,3600,), widthImg, heightImg, { left, top }
+
+export const LocationInfosSugma = [
+    new LocationInfo(
+        "Sugma1",
+        sugma1image, 
+        "sugma1",
+        [sugma1,sugma2],
+        ["eugh","augh"], 
+        [6000,4800],
+        100, 
+        100, 
+        {left : 100, top : 220},
+    ),
+    new LocationInfo(
+        "Sugma2",
+        sugma2image,
+        "sugma2",
+        [],
+        [],
+        [],
+        100, 
+        100, 
+        {left : 180, top : 580}
+    ),
+    new LocationInfo(
+        "Sugma3",
+        sugma3image,
+        "sugma3",
+        [],
+        [],
+        [],
+        100, 
+        100, 
+        {left : 980, top : 240}
+    ),
+    new LocationInfo(
+        "Sugma4",
+        sugma4image,
+        "sugma4",
+        [],
+        [],
+        [],
+        100, 
+        100, 
+        {left : 920, top : 600}
+    ),
+        new LocationInfo(
+        "Rockethome",
+        homerocket, 
+        "rockethome",
+        [goback],
+        ["Go back"],
+        [],
+        120, 
+        120, 
+        {left : 550, top : 370}
+    )
+>>>>>>> 0251a59537f8493402d35429a9a7e21920891b54
 ];
