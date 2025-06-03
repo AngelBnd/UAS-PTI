@@ -35,6 +35,7 @@ export default function SugmaArena({setLocation}){
     const [ActivityFunc, setActivityFunc] = useState(() => () => {});
     const [doingActivity, setDoingActivity] = useState(false);
     const [actiProgress, setActiProgress] = useState(0);
+    const [actiDuration, setActiDuration] = useState(0);
 
     const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -58,7 +59,7 @@ export default function SugmaArena({setLocation}){
     }, [collisionInfos.cool]);
 
     useEffect(() => {
-        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress);
+        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration);
         return()=>{
             clearInterval(intervalRef.current);
             clearTimeout(timeoutRef.current);
@@ -122,6 +123,7 @@ export default function SugmaArena({setLocation}){
                             } else {
                                 setDoingActivity(true);
                                 setActivityFunc(() => () => func(setStats));
+                                setActiDuration(collisionInfos.collidedLocation.actDuration[i]);
                             }
                         } else {
                         handlePickUpItem();

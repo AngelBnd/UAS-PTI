@@ -8,7 +8,7 @@ import homerocket from '../assets/rocketTOHOME.png';
 import { sugma1,sugma2,sugma3 } from "../locationFunctions/sugma";
 import { goback } from "../locationFunctions/rockethome";
 
-//name, element, classNamee, functions, activities, widthImg, heightImg, { left, top }
+//name, element, classNamee, functions, activities name, duration for each activity(7200,6000,4800,3600,), widthImg, heightImg, { left, top }
 
 export const LocationInfosSugma = [
     new LocationInfo(
@@ -17,6 +17,7 @@ export const LocationInfosSugma = [
         "sugma1",
         [sugma1,sugma2],
         ["eugh","augh"], 
+        [6000,4800],
         100, 
         100, 
         {left : 100, top : 220},
@@ -25,6 +26,7 @@ export const LocationInfosSugma = [
         "Sugma2",
         sugma2image,
         "sugma2",
+        [],
         [],
         [],
         100, 
@@ -37,6 +39,7 @@ export const LocationInfosSugma = [
         "sugma3",
         [],
         [],
+        [],
         100, 
         100, 
         {left : 980, top : 240}
@@ -45,6 +48,7 @@ export const LocationInfosSugma = [
         "Sugma4",
         sugma4image,
         "sugma4",
+        [],
         [],
         [],
         100, 
@@ -57,6 +61,7 @@ export const LocationInfosSugma = [
         "rockethome",
         [goback],
         ["Go back"],
+        [],
         120, 
         120, 
         {left : 550, top : 370}
