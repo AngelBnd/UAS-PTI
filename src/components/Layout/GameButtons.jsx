@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import up from '../../assets/up.png';
 import upHovered from '../../assets/up-hovered.png';
 import upPressed from '../../assets/up-pressed.png';
@@ -13,7 +13,7 @@ import downHovered from '../../assets/down-hovered.png';
 import downPressed from '../../assets/down-pressed.png';
 import './GameButtons.css';
 
-function MoveButton({ defaultImg, hoverImg, pressedImg, alt }) {
+function MoveButton({ defaultImg, hoverImg, pressedImg, alt, direction }) {
     const [src, setSrc] = useState(defaultImg);
 
     return (
@@ -23,8 +23,8 @@ function MoveButton({ defaultImg, hoverImg, pressedImg, alt }) {
                 src={src}
                 alt={alt}
                 onMouseOver={() => setSrc(hoverImg)}
-                onMouseDown={() => setSrc(pressedImg)}
-                onMouseUp={() => setSrc(hoverImg)}
+                onMouseDown={() => {setSrc(pressedImg); handleMouseDown(direction);}}
+                onMouseUp={() => {setSrc(hoverImg); handleMouseUp(direction);}}
                 onMouseOut={() => setSrc(defaultImg)}
             />
         </button>
@@ -35,18 +35,18 @@ export default function MoveControls() {
     return (
         <div id="movebuttons" className="d-flex flex-column align-items-center">
             <div>
-                <MoveButton defaultImg={up} hoverImg={upHovered} pressedImg={upPressed} alt="Up" />
+                <MoveButton defaultImg={up} hoverImg={upHovered} pressedImg={upPressed} alt="Up" direction="up" />
             </div>
             <div className="d-flex justify-content-center">
                 <div className="mx-5">
-                    <MoveButton defaultImg={left} hoverImg={leftHovered} pressedImg={leftPressed} alt="Left" />
+                    <MoveButton defaultImg={left} hoverImg={leftHovered} pressedImg={leftPressed} alt="Left" direction="left" />
                 </div>
                 <div className="mx-5">
-                    <MoveButton defaultImg={right} hoverImg={rightHovered} pressedImg={rightPressed} alt="Right" />
+                    <MoveButton defaultImg={right} hoverImg={rightHovered} pressedImg={rightPressed} alt="Right" direction="right" />
                 </div>
             </div>
             <div>
-                <MoveButton defaultImg={down} hoverImg={downHovered} pressedImg={downPressed} alt="Down" />
+                <MoveButton defaultImg={down} hoverImg={downHovered} pressedImg={downPressed} alt="Down" direction="down" />
             </div>
         </div>
     );
