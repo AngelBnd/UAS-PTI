@@ -260,7 +260,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         });
     }, []);
 
-    useMovementMain(setVelocity);
+    useMovementMain(setVelocity, direction);
 
     useEffect(() => {
         if (time === 0) {
@@ -275,8 +275,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         }
     }, [time]);
 
-    },[time])
-
+  
     useEffect(()=>{
         setShowMessage(true);
         const timeoutId = setTimeout(() => {
@@ -394,7 +393,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                         position: 'absolute',
                         transform: 'scale(2)',
                         objectFit: 'cover',
-                        zIndex: '5',
+                        zIndex: '-1',
                     }}
                 />
             ))}

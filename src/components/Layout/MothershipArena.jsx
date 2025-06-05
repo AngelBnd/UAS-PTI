@@ -29,7 +29,7 @@ export default function MothershipArena({setLocation,direction}){
     
     useMovementMain(setVelocity,direction);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
-
+    
     useEffect(() => {
         setShowButton(collisionInfos.cool);
     }, [collisionInfos.cool]);

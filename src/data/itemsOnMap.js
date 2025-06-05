@@ -26,12 +26,12 @@ import { medicineFunc } from "../utils/itemFunctions";
 // name, id, element, func, classNamee, widthImg, heightImg, { left, top }
 
 export const items = [
-    new ItemInfo("oxygen tank", 1, oxygentabung, oxygenTankFunc,"item", 100, 100, { left: 200, top: 200 }),
+    new ItemInfo("oxygen tank", 1, oxygentabung, oxygenTankFunc,"item", 100, 100, { left: 200, top: 190 }),
     new ItemInfo("medkit", 2, medkit, medkitFunc,"item", 80, 80, { left: 100, top: 100 }),
     new ItemInfo("bandage", 3, bandage, bandageFunc,"item", 80, 50, { left: 500, top: 80 }),
-    new ItemInfo("syringe", 4, syringe, medicineFunc,"item", 80, 80, { left: 360, top: 200 }),
+    new ItemInfo("syringe", 4, syringe, medicineFunc,"item", 80, 80, { left: 360, top: 290 }),
     new ItemInfo("chocolate", 5, choco, chocoFunc,"item", 60, 60, { left: 270, top: 100 }),
-    new ItemInfo("donut", 6, donut, donutFunc,"item", 60, 60, { left: 570, top: 80 }),
+    new ItemInfo("donut", 6, donut, donutFunc,"item", 60, 60, { left: 570, top: 100 }),
     new ItemInfo("coffee", 7, coffee, coffeeFunc,"item", 40, 57, { left: 650, top: 40 }),
     new ItemInfo("tea", 8, tea, teaFunc,"item", 40, 57, { left: 700, top: 40 }),
     new ItemInfo("soda", 9, soda, sodaFunc,"item", 40, 57, { left: 850, top: 60 }),
