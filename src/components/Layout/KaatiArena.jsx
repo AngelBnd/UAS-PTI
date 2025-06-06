@@ -13,8 +13,8 @@ import { useTime } from '../../utils/timeContext';
 import ActiProgressBar from './ActiProgressBar';
 import activityFunc from '../../utils/activityFunc';
 import { items } from '../../data/itemsOnMap';
-import TradeInfo from './TradeInfo';
-import GambleInfo from './GambleInfo';
+import TradeInfo from '../../TradeInfo';
+import GambleInfo from '../../GambleInfo';
 
 const fullbods = [fullBod1, fullBod2];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
