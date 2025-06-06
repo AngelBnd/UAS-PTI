@@ -9,7 +9,9 @@ import fullBod3 from '../../assets/fullbod3.png';
 import { LocationInfosMothership } from '../../data/locationsMothership';
 import { useStats } from '../../utils/statsContext';
 import handlePickUpItem from '../../utils/pickUp';
-
+import { useTime } from '../../utils/timeContext';
+import ActiProgressBar from './ActiProgressBar';
+import activityFunc from '../../utils/activityFunc';
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];
@@ -27,12 +29,41 @@ export default function MothershipArena({setLocation,direction}){
     const[showButton, setShowButton] = useState(false);
     const { playerStats, setStats } = useStats();
     
-    useMovementMain(setVelocity,direction);
+    const [activityMsg, updActivityMsg] = useState('');
+    const { time, timeSpeed, setTime, setDay } = useTime();
+    const [ActivityFunc, setActivityFunc] = useState(() => () => {});
+    const [doingActivity, setDoingActivity] = useState(false);
+    const [actiProgress, setActiProgress] = useState(0);
+    const [actiDuration, setActiDuration] = useState(0);
+    const [movementLock, setMovementLock] = useState(false);
+
+    
+    const intervalRef = useRef(null);
+    const timeoutRef = useRef(null);
+    const didMountRef = useRef(false); // this is to prevent the useeffect from the first render
+    const skipActivityRef = useRef(false);
+    
+    useMovementMain(setVelocity,direction, movementLock);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
     
     useEffect(() => {
+        if (doingActivity) setMovementLock(true);
+        else setMovementLock(false);
+    }, [doingActivity]);
+
+    useEffect(() => {
         setShowButton(collisionInfos.cool);
     }, [collisionInfos.cool]);
+
+    useEffect(() => {
+        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration,setVelocity,setMovementLock);
+        return()=>{
+            clearInterval(intervalRef.current);
+            clearTimeout(timeoutRef.current);
+
+        };
+
+    }, [ActivityFunc]);
 
     return(
         <div>
@@ -65,43 +96,87 @@ export default function MothershipArena({setLocation,direction}){
                     height :'auto',
                 }}/>
 
-                {showButton && collisionInfos.collidedLocation && collisionInfos.collidedLocation.functions?.map((func,i) => (
+            <>
+            {showButton && collisionInfos.collidedLocation && (
+                <>
+                {collisionInfos.collidedLocation.functions?.map((func, i) => (
                     <button
                     key={i}
-                        style={{
+                    style={{
                         position: 'absolute',
-                        width : '60px',
-                        height : 'auto',
-                        left : '50%',
+                        width: '50px',
+                        height: 'auto',
+                        left: '55%',
                         top: '-10%',
-                        backgroundColor : '#0D061F',
-                        color : '#ffdba2',
-                        border : 'solid 1.5px #ffdba2',
-                        padding : '1px',
-                        zIndex :'10000',
-                        fontSize : '0.3em',
-                        pointerEvents: 'auto'
-                        }}
-                        onClick={() => {
-                            if (collisionInfos.holderofindexI === 0) {
-                                if (collisionInfos.collidedLocation.name === "goback") {
-                                func(setLocation); 
-                                } else {
-                                func(setStats); 
-                                }
+                        backgroundColor: '#0D061F',
+                        color: '#ffdba2',
+                        border: 'solid 1.5px #ffdba2',
+                        padding: '1px',
+                        zIndex: '10000',
+                        fontSize: '0.3em',
+                        pointerEvents: 'auto',
+                    }}
+                    onClick={() => {
+                        if (collisionInfos.holderofindexI === 0) {
+                            if (collisionInfos.collidedLocation.name === 'goback') {
+                                func(setLocation);
                             } else {
-                                handlePickUpItem();
+                                setDoingActivity(true);
+                                setActivityFunc(() => () => func(setStats));
+                                console.log(collisionInfos.collidedLocation.actDuration[i]);
+                                setActiDuration(collisionInfos.collidedLocation.actDuration[i]);
                             }
-                            }}
-                        >
-                        {
-                        collisionInfos.holderofindexI === 1
-                            ? `Pick up ${collisionInfos.collidedItem.name}`
-                            : `${collisionInfos.collidedLocation.activities}`
+                        } else {
+                        handlePickUpItem();
                         }
+                    }}
+                    >
+                    {collisionInfos.holderofindexI === 1
+                        ? `Pick up ${collisionInfos.collidedItem.name}`
+                        : `${collisionInfos.collidedLocation.activities?.[i]}`}
                     </button>
-
                 ))}
+                
+                {doingActivity && 
+                    <div>
+                        <ActiProgressBar progressPercentage={actiProgress} />
+                    </div>
+                }
+                
+                
+                {collisionInfos.holderofindexI===0 ? (
+                    collisionInfos.collidedLocation.name != 'goback' ? (
+                        doingActivity ? (
+                            <button
+                                style={{
+                                position: 'absolute',
+                                top: '100%',
+                                left: '55%',
+                                backgroundColor: '#0D061F',
+                                color: '#ffdba2',
+                                padding: '2px 5px',
+                                fontSize: '0.3em',
+                                border: 'solid 1.5px #ffdba2',
+                                zIndex: '10006',
+                                pointerEvents: 'auto',
+                                }}
+                                onClick={() => {
+                                    if(doingActivity){
+                                        skipActivityRef.current = true
+                                    }                    
+                                }}
+                            >
+                                Skip
+                            </button>
+                        ) : <> </>
+                    ) : <> </>
+                ) : <> </>
+            }
+
+                </>
+            
+            )}
+            </>
 
             </div>
 

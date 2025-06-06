@@ -10,23 +10,23 @@ import { kaati1, kaati2 } from "../locationFunctions/kaati";
 
 export const LocationInfosKaati = [
     new LocationInfo(
-        "",
+        "trade",
         kaati2image,
         "tradingarea",
         [kaati2],
-        "Trade",
-        0,
-        200, 
+        ["Trade"],
+        [1200],
         100, 
-        {left : 330, top : 550}
+        100, 
+        {left : 430, top : 550}
     ),
     new LocationInfo(
         "gambling",
         kaati1image, 
         "gambling",
         [kaati1],
-        "Gamble with locals", 
-        7200,
+        ["Gamble with locals"], 
+        [1200],
         350, 
         100, 
         {left : 750, top : 550},

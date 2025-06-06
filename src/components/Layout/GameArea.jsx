@@ -210,7 +210,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     });
     }, 15000);
 
-
+        collisionInfos.showed = 0;
         collisionInfos.cool = 0;
         collisionInfos.collidedItem = null;
         collisionInfos.holderofindexJ = 0;
@@ -276,14 +276,14 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     }, [time]);
 
   
-    useEffect(()=>{
-        setShowMessage(true);
-        const timeoutId = setTimeout(() => {
-            setShowMessage(false);
-        }, 3400);
+    // useEffect(()=>{
+    //     setShowMessage(true);
+    //     const timeoutId = setTimeout(() => {
+    //         setShowMessage(false);
+    //     }, 3400);
 
-        return () => clearTimeout(timeoutId); 
-    },[messageTrigger])
+    //     return () => clearTimeout(timeoutId); 
+    // },[messageTrigger])
 
     useEffect(()=>{
         let animationFrameId;
