@@ -3,6 +3,6 @@ export function mothershipBed(setStats) {
         ...prev,
         energyBar : prev.energyBar + 10,
     }))
-    console.log("Sugma1 button");
+    console.log("sleep button");
 }
 

@@ -36,6 +36,7 @@ export default function SugmaArena({setLocation,direction}){
     const [doingActivity, setDoingActivity] = useState(false);
     const [actiProgress, setActiProgress] = useState(0);
     const [actiDuration, setActiDuration] = useState(0);
+    const [movementLock, setMovementLock] = useState(false);
 
     const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -43,7 +44,7 @@ export default function SugmaArena({setLocation,direction}){
     const skipActivityRef = useRef(false);
 
 
-    useMovementMain(setVelocity,direction);
+    useMovementMain(setVelocity,direction,movementLock);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
 
     useEffect(() => {
@@ -53,13 +54,17 @@ export default function SugmaArena({setLocation,direction}){
         }
     }, [activityMsg]);
 
+    useEffect(() => {
+        if (doingActivity) setMovementLock(true);
+        else setMovementLock(false);
+    }, [doingActivity]);
 
     useEffect(() => {
         setShowButton(collisionInfos.cool);
     }, [collisionInfos.cool]);
 
     useEffect(() => {
-        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration);
+        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration,setVelocity,setMovementLock);
         return()=>{
             clearInterval(intervalRef.current);
             clearTimeout(timeoutRef.current);
@@ -145,54 +150,38 @@ export default function SugmaArena({setLocation,direction}){
                 
                 {collisionInfos.holderofindexI===0 ? (
                     collisionInfos.collidedLocation.name != 'Rockethome' ? (
-                        <button
-                            style={{
-                            position: 'absolute',
-                            top: '55%',
-                            left: '55%',
-                            backgroundColor: '#0D061F',
-                            color: '#ffdba2',
-                            padding: '2px 5px',
-                            fontSize: '0.3em',
-                            border: 'solid 1.5px #ffdba2',
-                            zIndex: '10006',
-                            pointerEvents: 'auto',
-                            }}
-                            onClick={() => {
-                                if(doingActivity){
-                                    skipActivityRef.current = true
-                                }                    
-                            }}
-                        >
-                        Skip
-                        </button>
+                        doingActivity ? (
+                            <button
+                                style={{
+                                position: 'absolute',
+                                top: '55%',
+                                left: '55%',
+                                backgroundColor: '#0D061F',
+                                color: '#ffdba2',
+                                padding: '2px 5px',
+                                fontSize: '0.3em',
+                                border: 'solid 1.5px #ffdba2',
+                                zIndex: '10006',
+                                pointerEvents: 'auto',
+                                }}
+                                onClick={() => {
+                                    if(doingActivity){
+                                        skipActivityRef.current = true
+                                    }                    
+                                }}
+                            >
+                                Skip
+                            </button>
+                        ) : <> </>
                     ) : <> </>
                 ) : <> </>
-                }
+            }
 
                 
                 </>
             
             )}
             </>
-
-                {activityMsg && (
-                    <div style={{
-                        position: 'absolute',
-                        top: '60px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        backgroundColor: '#0D061F',
-                        color: '#ffdba2',
-                        padding: '3px 6px',
-                        fontSize: '0.4em',
-                        border: '1px solid #ffdba2',
-                        zIndex: '9999',
-                        whiteSpace: 'nowrap'
-                    }}>
-                        {activityMsg}
-                    </div>
-                )}
 
             </div>
 

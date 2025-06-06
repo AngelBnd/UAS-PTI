@@ -137,6 +137,10 @@ export default function GameLayout() {
                 direction = {direction}
                 resources = {resources}
                 setResources = {setResources}
+                setMessageContent={setMessageContent}
+                setMessageTrigger={setMessageTrigger}
+                setItemsInInventory={setItemsInInventory}
+                ItemsInInventory={ItemsInInventory}
                 />}
                 {Location === 'Mothership' && <MothershipArena
                 setLocation={setLocation}

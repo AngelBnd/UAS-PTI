@@ -4,10 +4,9 @@
 
 #moneyInfo img{
     transform: scale(2);
-    margin-left: -10px;
+
 }
 
 #resourcesTime{
-    /* background-color: aquamarine !important; */
+    justify-content: flex-start;
 }
-

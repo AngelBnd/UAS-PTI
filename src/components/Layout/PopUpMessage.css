@@ -1,7 +1,8 @@
 #greetingMsg{
     position: absolute;
-    left : 27%;
+    left : 25%;
     top : 21%;
+    
     width: fit-content;
     margin: auto;
     margin-top: 1rem;
@@ -11,6 +12,7 @@
     background-color:  #080917;   
     border-radius: 15px;
     z-index: 100;
+    text-align: center;
 }
 
 .greet-apply {
