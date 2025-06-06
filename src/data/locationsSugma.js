@@ -1,5 +1,4 @@
 import { LocationInfo } from "../models/LocationInfo";
-
 import sugma1image from '../assets/sugma1.png';
 import sugma2image from '../assets/sugma2.png';
 import sugma3image from '../assets/sugma3.png';
@@ -7,6 +6,9 @@ import sugma4image from '../assets/sugma4.png';
 import homerocket from '../assets/rocketTOHOME.png';
 import { sugma1,sugma2,sugma3 } from "../locationFunctions/sugma";
 import { goback } from "../locationFunctions/rockethome";
+import { GuessNumberGameComponent, sugma41, sugma42 } from "../locationFunctions/sugmagame"
+import { game31,game32 } from "../locationFunctions/gamesugma3";
+import { InfoSugma } from "../locationFunctions/sugma";
 
 //name, element, classNamee, functions, activities name, duration for each activity(7200,6000,4800,3600,), widthImg, heightImg, { left, top }
 

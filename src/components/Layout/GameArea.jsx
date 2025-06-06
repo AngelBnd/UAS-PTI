@@ -15,12 +15,11 @@ import planetbg1 from '../../assets/planetbg1.png';
 import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
-import { itemsOnMap } from '../../data/itemsOnMap';
+import { items } from '../../data/itemsOnMap';
 import Deathbar from './Deathbar'; 
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
 import { useChar } from '../../utils/charContext';
-import GameComponent from './Items';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -50,6 +49,174 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const { selectedChar, playerName } = useChar();
 
     const charFullbody = selectedChar - 1;
+
+    const maxWidth = 1000;
+    const maxHeight = 600;
+    const padding = 15;
+
+    function getRandomPositionNonOverlapping(items, maxWidth, maxHeight, padding, playerPos) {
+        const positions = [];
+        const isOverlapping = (pos1, size1, pos2, size2) => {
+        return !(
+            pos1.left + size1.width + padding < pos2.left ||
+            pos1.left > pos2.left + size2.width + padding ||
+            pos1.top + size1.height + padding < pos2.top ||
+            pos1.top > pos2.top + size2.height + padding
+        );
+    };
+
+    const maxAttempts = 500;
+
+        for (const item of items) {
+        let attempt = 0;
+        let pos;
+        do {
+            pos = {
+                left: Math.floor(Math.random() * (maxWidth - item.widthImg)),
+                top: Math.floor(Math.random() * (maxHeight - item.heightImg)),
+            };
+        attempt++;
+        } while (
+            positions.some((p, idx) =>
+            isOverlapping(
+            pos,
+                { width: item.widthImg, height: item.heightImg },
+                p,
+                { width: items[idx].widthImg, height: items[idx].heightImg }
+            )
+        ) ||
+        isOverlapping(
+            pos,
+            { width: item.widthImg, height: item.heightImg },
+            playerPos,
+            { width: 28, height: 45 }
+        )
+        && attempt < maxAttempts
+        );
+            positions.push(pos);
+        }
+        return positions;
+    }
+
+    useEffect(() => {
+    if (itemsOnMap.length > 0) return; 
+
+    const playerLeft = saveplayerLocation.current?.playerLeft || 250;
+    const playerTop = saveplayerLocation.current?.playerTop || 600;
+    const playerPos = { left: playerLeft, top: playerTop };
+
+    const positions = getRandomPositionNonOverlapping(items, maxWidth, maxHeight, padding, playerPos);
+
+    const spawnedItems = items.map((item, i) => ({
+        ...item,
+        used: false,
+        visible : true,
+        offSets: {
+            left: positions[i].left,
+            top: positions[i].top,
+        }
+    }));
+
+    setItemsOnMap(spawnedItems);
+    }, []);
+
+
+    function getRandomValidPosition(item, playerPos) {
+    const isOverlapping = (pos1, size1, pos2, size2) => {
+    return !(
+        pos1.left + size1.width + padding < pos2.left ||
+        pos1.left > pos2.left + size2.width + padding ||
+        pos1.top + size1.height + padding < pos2.top ||
+        pos1.top > pos2.top + size2.height + padding
+        );
+    };
+
+    const planetAreas = LocationInfosMain.map(p => ({
+        pos: p.offSets,
+        size: { width: p.widthImg, height: p.heightImg }
+    }));
+
+    const maxAttempts = 500;
+    let attempt = 0;
+    let pos;
+
+    do {
+        pos = {
+        left: Math.floor(Math.random() * (maxWidth - item.widthImg)),
+        top: Math.floor(Math.random() * (maxHeight - item.heightImg)),
+        };
+        attempt++;
+    } while (
+        isOverlapping(pos, { width: item.widthImg, height: item.heightImg }, playerPos, { width: 28, height: 45 }) ||
+        planetAreas.some(p => isOverlapping(pos, { width: item.widthImg, height: item.heightImg }, p.pos, p.size))
+        && attempt < maxAttempts
+    );
+        return pos;
+    }
+
+
+    function handlePickUpItem(item, collisionInfos, itemRefs, setItemsInInventory, setItemsOnMap, ItemsInInventory) {
+        setItemsInInventory((prev) => {
+        if (prev.find(i => i.id === item.id)) return prev;
+        return [...prev, item];
+        });
+
+        setItemsOnMap(prev =>
+        prev.map((i) =>
+        i.id === item.id ? { ...i, used: true } : i
+        )
+    )
+
+    setTimeout(() => {
+    const playerLeft = parseInt(playerRef.current?.style.left || 250);
+    const playerTop = parseInt(playerRef.current?.style.top || 600);
+    const playerPos = { left: playerLeft, top: playerTop };
+
+    const newPos = getRandomValidPosition(item, playerPos);
+        setItemsOnMap(prev =>
+                prev.map((i) =>
+                i.id === item.id
+                ? { ...i, visible: false }
+                : i
+            )
+        );
+
+        requestAnimationFrame(() => {
+        const itemIndex = itemsOnMap.findIndex(i => i.id === item.id);
+        const el = itemRefs.current[itemIndex];
+
+        if (el) {
+            el.style.left = `${newPos.left + saveplayerLocation.current.cameraLeft}px`;
+            el.style.top = `${newPos.top + saveplayerLocation.current.cameraTop}px`;
+        }
+
+        requestAnimationFrame(() => {
+        setItemsOnMap(prev =>
+            prev.map((i) =>
+            i.id === item.id
+                ? {
+                    ...i,
+                        used: false,
+                        visible: true,
+                        offSets: {
+                        left: newPos.left,
+                        top: newPos.top
+                    }
+                }
+                : i
+                )
+            );
+        });
+    });
+    }, 15000);
+
+
+        collisionInfos.cool = 0;
+        collisionInfos.collidedItem = null;
+        collisionInfos.holderofindexJ = 0;
+        setShowButton(false);
+    }
+
 
     useEffect(() => {
         const camera = cameraRef.current;
@@ -93,8 +260,30 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         });
     }, []);
 
-    useMovementMain(setVelocity,direction);
+    useMovementMain(setVelocity, direction);
 
+    useEffect(() => {
+        if (time === 0) {
+            setMessageContent("Good Morning playername!");
+            setMessageTrigger(prev=>prev+1);  
+        } else if (time === 720) {
+            setMessageContent("Good Afternoon playername!");
+            setMessageTrigger(prev=>prev+1);
+        } else if (time === 1080) {
+            setMessageContent("Good Night playername!");
+            setMessageTrigger(prev=>prev+1);
+        }
+    }, [time]);
+
+  
+    useEffect(()=>{
+        setShowMessage(true);
+        const timeoutId = setTimeout(() => {
+            setShowMessage(false);
+        }, 3400);
+
+        return () => clearTimeout(timeoutId); 
+    },[messageTrigger])
 
     useEffect(()=>{
         let animationFrameId;
@@ -204,7 +393,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                         position: 'absolute',
                         transform: 'scale(2)',
                         objectFit: 'cover',
-                        zIndex: '5',
+                        zIndex: '-1',
                     }}
                 />
             ))}
@@ -234,30 +423,25 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 </div>
             ))}
 
-            {itemsOnMap.map((item, i) => (
-                <>
-                    {item !== "" && <img
-                        id={i}
-                        key={item.id}
-                        src={item.element}
-                        ref={(el) => {
-                            itemRefs.current[i] = el;
-                        }}
-                        style={{
-                            position: 'absolute',
-                        }}
-                    />}
-                </>
-            ))}
+            
 
-            <GameComponent
-                style={{
-                    position: 'absolute',
-                    left: `${cameraPos.left}px`,
-                    top: `${cameraPos.top}px`,
-                    zIndex: 10,
+            {itemsOnMap.map((item, i) => (
+                item && !item.used && (
+                <img
+                    id={i}
+                    key={item.id}
+                    src={item.element}
+                    ref={(el) => {
+                    itemRefs.current[i] = el;
                 }}
-            />
+                style={{
+                position: 'absolute',
+                width: `${item.widthImg}px`,
+                height: `${item.heightImg}px`,
+                }}
+                />
+                )
+            ))}
 
             <div id="player" className='pixel-art' ref={playerRef}
                 style={{

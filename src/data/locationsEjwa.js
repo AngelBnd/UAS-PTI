@@ -1,35 +1,34 @@
 import { LocationInfo } from "../models/LocationInfo";
 import gobackimage from '../assets/gobackmothership.png'
 import { goback } from "../locationFunctions/rockethome";
-import kaati1image from '../assets/kaati1.png'
-import kaati2image from '../assets/kaati2.png'
+import ejwa1image from '../assets/ejwa1.png'
+import ejwa2image from '../assets/ejwa2.png'
 import homerocket from '../assets/rocketTOHOME.png';
-import { kaati1, kaati2 } from "../locationFunctions/kaati";
 
 //name, element, classNamee, functions, activities name, duration for each activity, widthImg, heightImg, { left, top }
 
-export const LocationInfosKaati = [
+export const LocationInfosEjwa = [
     new LocationInfo(
         "",
-        kaati2image,
+        ejwa1image,
         "tradingarea",
-        [kaati2],
-        "Trade",
+        [],
+        "Analyze Gas Composition",
         0,
         200, 
         100, 
-        {left : 330, top : 550}
+        {left : 160, top : 480}
     ),
     new LocationInfo(
-        "gambling",
-        kaati1image, 
-        "gambling",
-        [kaati1],
-        "Gamble with locals", 
+        "",
+        ejwa2image, 
+        "searchAlien",
+        [],
+        "Search for Alien Tech", 
         7200,
-        350, 
+        200, 
         100, 
-        {left : 750, top : 550},
+        {left : 870, top : 480},
     ),
     new LocationInfo(
         "goback",
@@ -38,9 +37,9 @@ export const LocationInfosKaati = [
         [goback],
         ["Go back"],
         0,
-        300, 
-        300, 
-        {left : -150, top : 350}
+        200, 
+        200, 
+        {left : 520, top : 350}
     ),
  
 ];

@@ -9,6 +9,7 @@ import fullBod3 from '../../assets/fullbod3.png';
 import { useStats } from '../../utils/statsContext';
 import { LocationInfosKaati } from '../../data/locationsKaati';
 import handlePickUpItem from '../../utils/pickUp';
+import { useTime } from '../../utils/timeContext';
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];
@@ -16,7 +17,7 @@ let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocat
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosKaati,items];
 
-export default function KaatiArena({setLocation,direction}){
+export default function KaatiArena({setLocation,direction, resources, setResources}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -25,6 +26,14 @@ export default function KaatiArena({setLocation,direction}){
     const collidableObjectsRefs = [locationRefs, itemRefs];
     const[showButton, setShowButton] = useState(false);
     const { playerStats, setStats } = useStats();
+
+    const [activityMsg, updActivityMsg] = useState('');
+    const { time, timeSpeed, setTime, setDay } = useTime();
+    const [ActivityFunc, setActivityFunc] = useState(() => () => {});
+    const [doingActivity, setDoingActivity] = useState(false);
+    const [actiProgress, setActiProgress] = useState(0);
+    const [actiDuration, setActiDuration] = useState(0);
+
     
     useMovementMain(setVelocity,direction);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
@@ -83,13 +92,13 @@ export default function KaatiArena({setLocation,direction}){
                         }}
                         onClick={() => {
                             if (collisionInfos.holderofindexI === 0) {
-                                if (collisionInfos.collidedLocation.name === "goback") {
-                                func(setLocation); 
+                                    if (collisionInfos.collidedLocation.name === "goback") {
+                                    func(setLocation); 
+                                    } else {
+                                    func(setStats); 
+                                    }
                                 } else {
-                                func(setStats); 
-                                }
-                            } else {
-                                handlePickUpItem();
+                                    handlePickUpItem();
                             }
                             }}
                         >
@@ -130,7 +139,7 @@ export default function KaatiArena({setLocation,direction}){
             />
                 
             </div>
-            ))}
+        ))}
         </div>
     )
 }

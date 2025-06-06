@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-
-export function sugma1(setStats) {
+export function kaati1(setStats, setResources) {
     setStats((prev)=>({
         ...prev,
         hungerBar: prev.hungerBar + 3,
@@ -9,6 +7,6 @@ export function sugma1(setStats) {
     console.log("Sugma1 button");
 }
 
-export function sugma2(setStats) {
+export function kaati2(setStats, setResources) {
     console.log("Sugma2 button");
 }   
