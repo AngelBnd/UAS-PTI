@@ -2,14 +2,14 @@ import mothershipBG from '../../assets/MothershipBG.png';
 import { useMovementMain } from '../../utils/useMovementMain';
 import { useUpdateMovement } from '../../utils/useUpdateMovement';
 import './PixelArt.css'
-import { useRef, useState } from 'react';
+import { useRef, useState,useEffect } from 'react';
 import fullBod1 from '../../assets/fullbod1.png';
 import fullBod2 from '../../assets/fullbod2.png';
 import fullBod3 from '../../assets/fullbod3.png';
 import { LocationInfosMothership } from '../../data/locationsMothership';
 import { useStats } from '../../utils/statsContext';
 import handlePickUpItem from '../../utils/pickUp';
-import { useEffect } from 'react';
+
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];
@@ -17,7 +17,7 @@ let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocat
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosMothership,items];
 
-export default function MothershipArena({setLocation}){
+export default function MothershipArena({setLocation,direction}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -27,7 +27,7 @@ export default function MothershipArena({setLocation}){
     const[showButton, setShowButton] = useState(false);
     const { playerStats, setStats } = useStats();
     
-    useMovementMain(setVelocity);
+    useMovementMain(setVelocity,direction);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
 
     useEffect(() => {

@@ -19,7 +19,7 @@ let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocat
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosSugma,items];
 
-export default function SugmaArena({setLocation}){
+export default function SugmaArena({setLocation,direction}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -43,7 +43,7 @@ export default function SugmaArena({setLocation}){
     const skipActivityRef = useRef(false);
 
 
-    useMovementMain(setVelocity);
+    useMovementMain(setVelocity,direction);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
 
     useEffect(() => {
