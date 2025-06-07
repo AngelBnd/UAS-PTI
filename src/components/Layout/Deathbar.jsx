@@ -7,7 +7,6 @@ export default function DeathBar() {
       <h1 className="title">Game Over</h1>
       <p className="description">Your journey has ended. Better luck next time!</p>
       <button className="button">
-        Restart
       </button>
     </div>
   );
