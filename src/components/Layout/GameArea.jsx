@@ -16,7 +16,7 @@ import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
 import { items } from '../../data/itemsOnMap';
-import Deathbar from './Deathbar'; 
+import { Deathbar } from './Deathbar';
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
 import { useChar } from '../../utils/charContext';
@@ -43,6 +43,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const [velocity, setVelocity] = useState({x:0,y:0});
     const [showButton, setShowButton] = useState(false);
     const [cameraPos, setCameraPos] = useState({ left: 0, top: 0 });
+    const [isGameOver, setGameOver] = useState(false);
 
     const collidableObjects = [LocationInfosMain,itemsOnMap];
     const { time } = useTime();
@@ -218,6 +219,19 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         setShowButton(false);
     }
 
+// 
+    // const health = 100;
+    // const hunger = 100;
+    // const energy = 100;
+    // const oxygen = 100;
+// 
+    // const checkGameOver = () => {
+        // setGameOver(false);
+        // if (health <= 0 && hunger <= 0 && energy <= 0 && oxygen <= 0) {
+            // setGameOver(true);
+        // }
+    // };
+
 
     useEffect(() => {
         const camera = cameraRef.current;
@@ -276,15 +290,15 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         }
     }, [time]);
 
-  
-    // useEffect(()=>{
-    //     setShowMessage(true);
-    //     const timeoutId = setTimeout(() => {
-    //         setShowMessage(false);
-    //     }, 3400);
 
-    //     return () => clearTimeout(timeoutId); 
-    // },[messageTrigger])
+    useEffect(()=>{
+        setShowMessage(true);
+        const timeoutId = setTimeout(() => {
+            setShowMessage(false);
+        }, 3400);
+
+        return () => clearTimeout(timeoutId); 
+    },[messageTrigger])
 
     useEffect(()=>{
         let animationFrameId;
@@ -424,8 +438,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                 </div>
             ))}
 
-            
-
             {itemsOnMap.map((item, i) => (
                 item && !item.used && (
                 <img
@@ -526,6 +538,8 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                         })()}
                     </button>
                 )}
+
+                {/* {isGameOver ? <Deathbar onRestart={checkGameOver} /> : <p>Game is running...</p>} */}
             </div>
 
         </div>
