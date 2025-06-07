@@ -1,0 +1,114 @@
+/* Existing Media Queries */
+/* import './AAResponsiveness.css'; */
+/* body{
+    width: 100vw !important;
+    padding: 0 !important;
+    margin: 0 !important;
+} */
+
+@media (max-width: 1500px) {
+    #mainLayout{
+        position: relative !important;
+        flex-direction: column;
+        width: 100% !important;
+        margin : 0 !important;
+        padding: 0 !important;
+    }
+
+
+    .side-panel{
+        opacity: 0.7;
+        border: none !important;
+        border-top: 1px solid #ffdba2 !important; 
+        display: block; 
+        box-sizing: border-box;
+        position: fixed;
+        left: 0;
+        top : 75%;
+        flex: 1 1 100%;
+        width: 100% !important;
+        height: 200px !important;
+        left : 0;   
+        width: 100vw !important; /* forces full screen width */
+        max-width: 100vw !important;
+    }
+
+    #SidePanelContent{
+        flex-direction: row !important;
+        gap : 100px;
+        width: 100%;
+    }
+
+    #movebuttons{
+        width: 200px !important;
+    }
+
+    #ParentInventory{
+        width: 700px !important;
+    }
+
+    #inventory{
+        width: 100% !important;
+        max-width: 900px !important;
+        min-width: 200px !important;
+        height: 110px !important;
+        flex-direction: row !important;
+        
+    }
+
+    #itemInInventory{
+        width: auto !important;
+        font-size: 0.5em !important;
+        height: 80px !important;
+        text-align: center !important;
+        padding: 10px !important;
+        margin: 5px !important;
+    }
+
+    #game-area {
+        background-color: rgb(0, 0, 0);
+        height: 600px;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        top:0;
+        left: 0;
+        z-index: -1000;
+    }
+    
+    #game-area-background{
+        
+    }
+
+    .kaatiImg, .mothershipImg, .ejwaImg{
+        width: 100vw !important;
+        height: auto !important;
+        top: -20% !important; 
+        object-fit: contain !important;
+    }
+
+    #gambleInfo{
+        left: 960px !important;
+    }
+
+    #tradeInfo{
+        left: 700px !important;
+    }
+}
+
+
+@media (max-width: 1200px) {
+    
+}
+
+@media (max-width: 992px) {
+
+}
+
+@media (max-width: 768px) {
+
+}
+
+@media (max-width: 576px) {    
+    
+}

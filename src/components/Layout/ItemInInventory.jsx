@@ -1,5 +1,6 @@
 import './Inventory.css';
 import { useStats } from '../../utils/statsContext';
+import './AAResponsiveness.css';
 
 export default function ItemInInventory({item, setItemsInInventory}){
     const { playerStats, setStats } = useStats();

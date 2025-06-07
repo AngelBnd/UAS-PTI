@@ -14,6 +14,7 @@ import DeathBar from './Deathbar';
 import { items } from '../../data/itemsOnMap';
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
+import './AAResponsiveness.css';
 
 export default function GameLayout() {
     const { time } = useTime();
@@ -87,11 +88,11 @@ export default function GameLayout() {
 
 
     return (
-        <div className="d-flex">
+        <div id="mainLayout" className="d-flex w-100">
             {/* {isDead && <DeathBar/>}  */}
             {showMessage && <PopUpMessage message={messageContent} />}
             
-            <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
+            <div id ="TopPanel" style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
                 <TopPanel 
                 setIsDead = {setIsDead}
                 resources = {resources}
@@ -149,7 +150,7 @@ export default function GameLayout() {
                 
 
             </div>
-            <div style={{ flex: '1 1 18%', zIndex :'1' }}>
+            <div id ="SidePanel" style={{ flex: '1 1 18%', zIndex :'1' }}>
                 <SidePanel
                 ItemsInInventory={ItemsInInventory}
                 setItemsInInventory={setItemsInInventory}

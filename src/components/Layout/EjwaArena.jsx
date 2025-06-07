@@ -10,6 +10,7 @@ import { LocationInfosEjwa } from '../../data/locationsEjwa';
 import { useStats } from '../../utils/statsContext';
 import handlePickUpItem from '../../utils/pickUp';
 
+
 const fullbods = [fullBod1, fullBod2];
 const items = [];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -37,7 +38,7 @@ export default function EjwaArena({setLocation,direction}){
         <div>
             <img  
             src={EjwaBG}
-            className="pixel-art"
+            className="pixel-art ejwaImg"
             style={{
                 position: 'absolute',
                 objectFit: 'cover',

@@ -15,6 +15,7 @@ import activityFunc from '../../utils/activityFunc';
 import { items } from '../../data/itemsOnMap';
 import TradeInfo from './TradeInfo';
 import GambleInfo from './GambleInfo';
+import './AAResponsiveness.css';
 
 const fullbods = [fullBod1, fullBod2];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -84,10 +85,10 @@ export default function KaatiArena({setLocation,direction, resources, setResourc
         <div>
             <img  
             src={kaatiBG}
-            className="pixel-art"
+            className="pixel-art kaatiImg"
             style={{
                 position: 'absolute',
-                objectFit: 'cover',
+               
                 zIndex: '-2',
                 width: '80%',
                 height: '80%',
