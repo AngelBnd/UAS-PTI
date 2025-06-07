@@ -1,8 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-export function useMovementMain(setVelocity,direction) {
+export function useMovementMain(setVelocity,direction,movementLock) {
+  const movementLockRef = useRef(movementLock);
+
+  useEffect(() => {
+    movementLockRef.current = movementLock;
+    console.log(movementLock);
+    console.log("hello");
+  }, [movementLock]);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (movementLockRef.current) return;
       setVelocity((prev) => {
         switch (e.key) {
           case 'ArrowRight': case 'd':
@@ -20,6 +29,7 @@ export function useMovementMain(setVelocity,direction) {
     };
 
     const handleKeyUp = (e) => {
+      if (movementLockRef.current) return;
       setVelocity((prev) => {
         switch (e.key) {
           case 'ArrowRight': case 'd':
@@ -41,9 +51,14 @@ export function useMovementMain(setVelocity,direction) {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [setVelocity]);
+  }, [setVelocity,movementLock]);
 
   useEffect(()=>{
+    if (movementLockRef.current) {
+      setVelocity({ x: 0, y: 0 });
+      return;
+    }
+
     const vel = { x: 0, y: 0 };
     if (direction.left) vel.x = 2;
     if (direction.right) vel.x = -2;

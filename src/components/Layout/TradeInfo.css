@@ -1,0 +1,95 @@
+#tradeInfo{
+    position: absolute;
+    left: 550px;
+    top: 300px;
+    background-color: red;
+    height: 130px;
+
+    width: fit-content;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 14px;
+    color: #FAD493;
+    border: 1px solid #FAD493;
+    background-color:  #080917;   
+    border-radius: 15px;
+    z-index: 100;
+    text-align: center;
+
+
+    max-width: 200px;      
+    width: fit-content;
+    white-space: normal; 
+    word-wrap: break-word;
+}
+
+.trade-apply {
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: trade-animate 3.5s steps(12, jump-end);
+}
+
+@keyframes trade-animate {
+    20% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+}
+
+#gambleInfo{
+    position: absolute;
+    left: 760px;
+    top: 300px;
+    background-color: red;
+    height: 128px;
+
+    width: fit-content;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 14px;
+    color: #FAD493;
+    border: 1px solid #FAD493;
+    background-color:  #080917;   
+    border-radius: 15px;
+    z-index: 100;
+    text-align: center;
+
+
+    max-width: 200px;      
+    width: fit-content;
+    white-space: normal; 
+    word-wrap: break-word;
+}
+
+.gamble-apply {
+    opacity: 0;
+    transform: translateX(30px);
+    animation: gamble-animate 3.5s steps(12, jump-end);
+}
+
+@keyframes gamble-animate {
+    20% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+}

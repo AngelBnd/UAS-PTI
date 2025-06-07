@@ -211,7 +211,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     });
     }, 15000);
 
-
+        collisionInfos.showed = 0;
         collisionInfos.cool = 0;
         collisionInfos.collidedItem = null;
         collisionInfos.holderofindexJ = 0;
@@ -274,7 +274,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         });
     }, []);
 
-    useMovementMain(setVelocity);
+    useMovementMain(setVelocity, direction);
 
     useEffect(() => {
         if (time === 0) {
@@ -288,7 +288,8 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             setMessageTrigger(prev=>prev+1);
         }
     }, [time]);
-    
+
+
     useEffect(()=>{
         setShowMessage(true);
         const timeoutId = setTimeout(() => {
@@ -406,7 +407,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                         position: 'absolute',
                         transform: 'scale(2)',
                         objectFit: 'cover',
-                        zIndex: '5',
+                        zIndex: '-1',
                     }}
                 />
             ))}

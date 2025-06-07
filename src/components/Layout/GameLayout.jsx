@@ -18,13 +18,14 @@ import { useTime } from '../../utils/timeContext';
 export default function GameLayout() {
     const { time } = useTime();
     const [Location, setLocation] = useState('MainArea');
+    const [ resources, setResources] = useState(0);
+
     const [direction, setDirection] = useState({
         up: false,
         down: false,
         left: false,
         right: false,
     });
-
 
     const savePlayerLocationRef = useRef({ playerTop: 250, playerLeft: 600, cameraTop:0, cameraLeft:0 });
     const planetPositionsRef = useRef([
@@ -84,6 +85,7 @@ export default function GameLayout() {
         return () => clearTimeout(timeoutId); 
     },[messageTrigger])
 
+
     return (
         <div className="d-flex">
             {/* {isDead && <DeathBar/>}  */}
@@ -92,6 +94,8 @@ export default function GameLayout() {
             <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
                 <TopPanel 
                 setIsDead = {setIsDead}
+                resources = {resources}
+                setResources = {setResources}
                 />
                 {Location === 'MainArea' && <GameArea 
                 setLocation={setLocation} 
@@ -109,14 +113,20 @@ export default function GameLayout() {
                 setMessageTrigger={setMessageTrigger}
                 messageTrigger={messageTrigger}
                 direction = {direction}
+                resources = {resources}
+                setResources = {setResources}
                 />}
                 {Location === 'Ejwa' && <EjwaArena 
                 setLocation={setLocation} 
                 direction = {direction}
+                resources = {resources}
+                setResources = {setResources}
                 />}
                 {Location === 'Solez' && <SolezArena 
                 setLocation={setLocation}
                 direction = {direction}
+                resources = {resources}
+                setResources = {setResources}
                 />}
                 {Location === 'Sugma' && <SugmaArena 
                 setLocation={setLocation}
@@ -125,6 +135,12 @@ export default function GameLayout() {
                 {Location === 'Kaati' && <KaatiArena 
                 setLocation={setLocation}
                 direction = {direction}
+                resources = {resources}
+                setResources = {setResources}
+                setMessageContent={setMessageContent}
+                setMessageTrigger={setMessageTrigger}
+                setItemsInInventory={setItemsInInventory}
+                ItemsInInventory={ItemsInInventory}
                 />}
                 {Location === 'Mothership' && <MothershipArena
                 setLocation={setLocation}

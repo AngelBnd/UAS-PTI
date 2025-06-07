@@ -1,6 +1,6 @@
 
 
-export default function activityFunc(timeSpeed, didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration){
+export default function activityFunc(timeSpeed, didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration,setMovementLock){
     let timeLeft = actiDuration;
     let repsLeft;
     let progressTimes = actiDuration/timeSpeed;
@@ -13,7 +13,7 @@ export default function activityFunc(timeSpeed, didMountRef,timeoutRef,intervalR
     }
 
     if (typeof ActivityFunc !== "function") return;
-       
+
     intervalRef.current = setInterval(()=>{
         if(!skipActivityRef.current){
             setTimeout(() => {
@@ -55,6 +55,7 @@ export default function activityFunc(timeSpeed, didMountRef,timeoutRef,intervalR
                 setDoingActivity(false);
                 setActivityFunc(null);
                 setActiProgress(0);
+                setMovementLock(false);
             }, 500);
             
         }
