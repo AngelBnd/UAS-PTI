@@ -278,13 +278,13 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
 
     useEffect(() => {
         if (time === 0) {
-            setMessageContent("Good Morning playername!");
+            setMessageContent("Good Morning " + playerName + "!");
             setMessageTrigger(prev=>prev+1);  
         } else if (time === 720) {
-            setMessageContent("Good Afternoon playername!");
+            setMessageContent("Good Afternoon " + playerName + "!");
             setMessageTrigger(prev=>prev+1);
         } else if (time === 1080) {
-            setMessageContent("Good Night playername!");
+            setMessageContent("Good Night " + playerName + "!");
             setMessageTrigger(prev=>prev+1);
         }
     }, [time]);
@@ -474,7 +474,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                     left : '0', 
                     zIndex : '1',
                     
-                }} id="playerimg" src={fullbods[1]}/>
+                }} id="playerimg" src={fullbods[charFullbody]}/>
 
                 {showButton && (
                     <button
