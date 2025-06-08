@@ -12,6 +12,7 @@ import { useStats } from '../../utils/statsContext';
 import { useTime } from '../../utils/timeContext';
 import activityFunc from '../../utils/activityFunc';
 import ActiProgressBar from './ActiProgressBar';
+import './AAResponsiveness.css';
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];

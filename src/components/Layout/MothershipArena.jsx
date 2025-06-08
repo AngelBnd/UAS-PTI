@@ -12,6 +12,7 @@ import handlePickUpItem from '../../utils/pickUp';
 import { useTime } from '../../utils/timeContext';
 import ActiProgressBar from './ActiProgressBar';
 import activityFunc from '../../utils/activityFunc';
+import './AAResponsiveness.css';
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];
@@ -69,7 +70,7 @@ export default function MothershipArena({setLocation,direction}){
         <div>
             <img  
             src={mothershipBG}
-            className="pixel-art"
+            className="pixel-art mothershipImg"
             style={{
                 position: 'absolute',
                 objectFit: 'cover',
