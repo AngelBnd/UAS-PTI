@@ -1,0 +1,51 @@
+.chest-container {
+    position: fixed;
+    top: 200px;
+    left: 300px;
+    width: 30%;
+    height: 42%;
+    background-color: #0D061F;
+    border: 2px solid #ffdba2;
+    padding: 12px;
+    color: #ffdba2;
+}
+
+.chest-close-button {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: #ffdba2;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.inventories-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 18px;
+}
+
+.inventory-panel {
+    flex: 1;
+    border: 1.5px solid #ffdba2;
+    padding: 10px;
+    height: 260px;
+    overflow-y: auto;
+}
+
+.inventory-panel p {
+    text-align: center;
+    margin-top: 0;
+    border-bottom: 1px solid #ffdba2;
+    padding-bottom: 5px;
+    font-size: 12px;
+}
+
+.item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}

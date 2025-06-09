@@ -20,6 +20,7 @@ import { Deathbar } from './Deathbar';
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
 import { useChar } from '../../utils/charContext';
+import { useInventory } from '../../utils/inventoryContext';
 import './AAResponsiveness.css';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
@@ -34,7 +35,7 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setItemsInInventory, ItemsInInventory, setShowMessage, showMessage, setMessageContent, messageContent, setMessageTrigger, messageTrigger,direction}) {
+export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setShowMessage, showMessage, setMessageContent, messageContent, setMessageTrigger, messageTrigger,direction}) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
@@ -49,6 +50,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const { time } = useTime();
     const collidableObjectsRefs = [planetRefs, itemRefs];
     const { selectedChar, playerName } = useChar();
+    const { itemsInInventory, setItemsInInventory } = useInventory();
 
     const charFullbody = selectedChar - 1;
 
@@ -288,7 +290,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
             setMessageContent("Good Night " + playerName + "!");
             setMessageTrigger(prev=>prev+1);
         }
-    }, [time]);
+    }, [time, playerName]);
 
 
     useEffect(()=>{
@@ -519,12 +521,12 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                             if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
                                 setLocation(collisionInfos.collidedLocation.name);
                             } else {
-                                if (ItemsInInventory.length == 6) {
+                                if (itemsInInventory.length == 6) {
                                     setMessageContent("Your inventory is full!");
                                     setMessageTrigger(prev => prev + 1);
                                     return;
                                 } else {
-                                    handlePickUpItem(collisionInfos.collidedItem, collisionInfos, itemRefs, setItemsInInventory, setItemsOnMap, ItemsInInventory);
+                                    handlePickUpItem(collisionInfos.collidedItem, collisionInfos, itemRefs, setItemsInInventory, setItemsOnMap, itemsInInventory);
                                 }
                             }
                         }}
