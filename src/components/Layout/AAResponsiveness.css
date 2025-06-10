@@ -84,7 +84,7 @@
         width: 100vw !important;
         height: auto !important;
         top: -20% !important; 
-        object-fit: contain !important;
+        object-fit: contain !;
     }
 
     #gambleInfo{

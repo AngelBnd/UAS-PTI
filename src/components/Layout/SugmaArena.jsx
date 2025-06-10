@@ -13,6 +13,7 @@ import { useTime } from '../../utils/timeContext';
 import activityFunc from '../../utils/activityFunc';
 import ActiProgressBar from './ActiProgressBar';
 import './AAResponsiveness.css';
+import { useChar } from '../../utils/charContext';
 
 const fullbods = [fullBod1, fullBod2];
 const items = [];
@@ -31,6 +32,9 @@ export default function SugmaArena({setLocation,direction}){
     const[showButton, setShowButton] = useState(false);
     const { playerStats, setStats } = useStats();
 
+    const { selectedChar, playerName } = useChar();
+    const charFullbody = selectedChar - 1;
+
     const [activityMsg, updActivityMsg] = useState('');
     const { time, timeSpeed, setTime, setDay } = useTime();
     const [ActivityFunc, setActivityFunc] = useState(() => () => {});
@@ -48,12 +52,12 @@ export default function SugmaArena({setLocation,direction}){
     useMovementMain(setVelocity,direction,movementLock);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
 
-    useEffect(() => {
-        if (activityMsg) {
-            const timer = setTimeout(() => updActivityMsg(''), 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [activityMsg]);
+    // useEffect(() => {
+    //     if (activityMsg) {
+    //         const timer = setTimeout(() => updActivityMsg(''), 2000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [activityMsg]);
 
     useEffect(() => {
         if (doingActivity) setMovementLock(true);
@@ -100,7 +104,7 @@ export default function SugmaArena({setLocation,direction}){
                 width: '50px',
                 height: '50px',
             }}>
-                <img id="playerimg" src={fullbods[1]}/>
+                <img id="playerimg" src={fullbods[charFullbody]}/>
                 
             <>
             {showButton && collisionInfos.collidedLocation && (
@@ -111,9 +115,9 @@ export default function SugmaArena({setLocation,direction}){
                     style={{
                         position: 'absolute',
                         width: '50px',
-                        height: '13px',
+                        height: 'auto',
                         left: '55%',
-                        top: `${-35 + i * 30}%`,
+                        top: `${-35 + i * 40}%`,
                         backgroundColor: '#0D061F',
                         color: '#ffdba2',
                         border: 'solid 1.5px #ffdba2',
@@ -155,7 +159,7 @@ export default function SugmaArena({setLocation,direction}){
                             <button
                                 style={{
                                 position: 'absolute',
-                                top: '55%',
+                                top: '80%',
                                 left: '55%',
                                 backgroundColor: '#0D061F',
                                 color: '#ffdba2',
@@ -176,7 +180,7 @@ export default function SugmaArena({setLocation,direction}){
                         ) : <> </>
                     ) : <> </>
                 ) : <> </>
-            }
+                }
 
                 
                 </>
