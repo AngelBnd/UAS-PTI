@@ -18,7 +18,7 @@ export const LocationInfosMothership = [
         [7200],
         350, 
         100, 
-        {left : 790, top : 520},
+        {left : 860, top : 520},
     ),
     new LocationInfo(
         "mothershipchest",
@@ -29,7 +29,9 @@ export const LocationInfosMothership = [
         0,
         200, 
         100, 
-        {left : 330, top : 550}
+        {left : 400, top : 550},
+        'chest',
+        []
     ),
     new LocationInfo(
         "goback",

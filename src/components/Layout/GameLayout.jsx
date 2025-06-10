@@ -14,11 +14,14 @@ import DeathBar from './Deathbar';
 import { items } from '../../data/itemsOnMap';
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
+import './AAResponsiveness.css';
+import { useChar } from '../../utils/charContext';
 
 export default function GameLayout() {
     const { time } = useTime();
     const [Location, setLocation] = useState('MainArea');
     const [ resources, setResources] = useState(0);
+    const { selectedChar, playerName } = useChar();
 
     const [direction, setDirection] = useState({
         up: false,
@@ -63,16 +66,16 @@ export default function GameLayout() {
     
     useEffect(() => {
         if (time === 0) {
-            setMessageContent("Good Morning playername!");
+            setMessageContent("Good Morning " + playerName + "!");
             setMessageTrigger(prev=>prev+1);  
         } else if (time === 720) {
-            setMessageContent("Good Afternoon playername!");
+            setMessageContent("Good Afternoon " + playerName + "!");
             setMessageTrigger(prev=>prev+1);
         } else if (time === 1080) {
-            setMessageContent("Good Night playername!");
+            setMessageContent("Good Night " + playerName + "!");
             setMessageTrigger(prev=>prev+1);
         }
-    }, [time]);
+    }, [time, playerName]);
 
     
 
@@ -87,11 +90,11 @@ export default function GameLayout() {
 
 
     return (
-        <div className="d-flex">
+        <div id="mainLayout" className="d-flex w-100">
             {/* {isDead && <DeathBar/>}  */}
             {showMessage && <PopUpMessage message={messageContent} />}
             
-            <div style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
+            <div id ="TopPanel" style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
                 <TopPanel 
                 setIsDead = {setIsDead}
                 resources = {resources}
@@ -121,12 +124,16 @@ export default function GameLayout() {
                 direction = {direction}
                 resources = {resources}
                 setResources = {setResources}
+                setMessageContent={setMessageContent}
+                setMessageTrigger={setMessageTrigger}
                 />}
                 {Location === 'Solez' && <SolezArena 
                 setLocation={setLocation}
                 direction = {direction}
                 resources = {resources}
                 setResources = {setResources}
+                setMessageContent={setMessageContent}
+                setMessageTrigger={setMessageTrigger}
                 />}
                 {Location === 'Sugma' && <SugmaArena 
                 setLocation={setLocation}
@@ -149,7 +156,7 @@ export default function GameLayout() {
                 
 
             </div>
-            <div style={{ flex: '1 1 18%', zIndex :'1' }}>
+            <div id ="SidePanel" style={{ flex: '1 1 18%', zIndex :'1' }}>
                 <SidePanel
                 ItemsInInventory={ItemsInInventory}
                 setItemsInInventory={setItemsInInventory}

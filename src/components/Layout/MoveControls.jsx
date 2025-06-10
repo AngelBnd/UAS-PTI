@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import up from '../../assets/up.png';
 import upHovered from '../../assets/up-hovered.png';
 import upPressed from '../../assets/up-pressed.png';
@@ -12,6 +12,7 @@ import down from '../../assets/down.png';
 import downHovered from '../../assets/down-hovered.png';
 import downPressed from '../../assets/down-pressed.png';
 import './GameButtons.css';
+import './AAResponsiveness.css';
 
 function MoveButton({ defaultImg, hoverImg, pressedImg, alt, onMouseDown, onMouseUp }) {
     const [src, setSrc] = useState(defaultImg);

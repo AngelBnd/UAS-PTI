@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './TradeInfo.css';
+import './AAResponsiveness.css';
 
 export default function GambleInfo(){
     return(

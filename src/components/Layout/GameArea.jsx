@@ -20,6 +20,8 @@ import { Deathbar } from './Deathbar';
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
 import { useChar } from '../../utils/charContext';
+import { useInventory } from '../../utils/inventoryContext';
+import './AAResponsiveness.css';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -33,7 +35,7 @@ const bgObjectsSpeed = [
     {x: 1.1, y:1.1}
 ]
 
-export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setItemsInInventory, ItemsInInventory, setShowMessage, showMessage, setMessageContent, messageContent, setMessageTrigger, messageTrigger,direction}) {
+export default function GameArea({ setLocation, saveplayerLocation, saveplanetLocation, saveBGObjectLocation, itemsOnMap, setItemsOnMap, setShowMessage, showMessage, setMessageContent, messageContent, setMessageTrigger, messageTrigger,direction}) {
     const planetRefs = useRef([]);
     const bgObjectsRefs = useRef([]);
     const itemRefs = useRef([]);
@@ -48,6 +50,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
     const { time } = useTime();
     const collidableObjectsRefs = [planetRefs, itemRefs];
     const { selectedChar, playerName } = useChar();
+    const { itemsInInventory, setItemsInInventory } = useInventory();
 
     const charFullbody = selectedChar - 1;
 
@@ -276,27 +279,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
 
     useMovementMain(setVelocity, direction);
 
-    useEffect(() => {
-        if (time === 0) {
-            setMessageContent("Good Morning playername!");
-            setMessageTrigger(prev=>prev+1);  
-        } else if (time === 720) {
-            setMessageContent("Good Afternoon playername!");
-            setMessageTrigger(prev=>prev+1);
-        } else if (time === 1080) {
-            setMessageContent("Good Night playername!");
-            setMessageTrigger(prev=>prev+1);
-        }
-    }, [time]);
-
-    useEffect(()=>{
-        setShowMessage(true);
-        const timeoutId = setTimeout(() => {
-            setShowMessage(false);
-        }, 3400);
-
-        return () => clearTimeout(timeoutId); 
-    },[messageTrigger])
 
     useEffect(()=>{
         let animationFrameId;
@@ -473,7 +455,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                     left : '0', 
                     zIndex : '1',
                     
-                }} id="playerimg" src={fullbods[1]}/>
+                }} id="playerimg" src={fullbods[charFullbody]}/>
 
                 {showButton && (
                     <button
@@ -517,12 +499,12 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                             if (collisionInfos.holderofindexI === 0 && collisionInfos.collidedLocation) {
                                 setLocation(collisionInfos.collidedLocation.name);
                             } else {
-                                if (ItemsInInventory.length == 6) {
+                                if (itemsInInventory.length == 6) {
                                     setMessageContent("Your inventory is full!");
                                     setMessageTrigger(prev => prev + 1);
                                     return;
                                 } else {
-                                    handlePickUpItem(collisionInfos.collidedItem, collisionInfos, itemRefs, setItemsInInventory, setItemsOnMap, ItemsInInventory);
+                                    handlePickUpItem(collisionInfos.collidedItem, collisionInfos, itemRefs, setItemsInInventory, setItemsOnMap, itemsInInventory);
                                 }
                             }
                         }}

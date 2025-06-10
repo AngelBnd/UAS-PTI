@@ -15,8 +15,10 @@ import activityFunc from '../../utils/activityFunc';
 import { items } from '../../data/itemsOnMap';
 import TradeInfo from './TradeInfo';
 import GambleInfo from './GambleInfo';
+import './AAResponsiveness.css';
+import { useChar } from '../../utils/charContext';
 
-const fullbods = [fullBod1, fullBod2];
+const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosKaati,items];
@@ -41,6 +43,9 @@ export default function KaatiArena({setLocation,direction, resources, setResourc
     const [actiProgress, setActiProgress] = useState(0);
     const [actiDuration, setActiDuration] = useState(0);
     const [movementLock, setMovementLock] = useState(false);
+
+    const { selectedChar, playerName } = useChar();
+    const charFullbody = selectedChar - 1;
 
     const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -84,10 +89,10 @@ export default function KaatiArena({setLocation,direction, resources, setResourc
         <div>
             <img  
             src={kaatiBG}
-            className="pixel-art"
+            className="pixel-art kaatiImg"
             style={{
                 position: 'absolute',
-                objectFit: 'cover',
+               
                 zIndex: '-2',
                 width: '80%',
                 height: '80%',
@@ -104,7 +109,7 @@ export default function KaatiArena({setLocation,direction, resources, setResourc
                 width: '50px',
                 height: '70px',
             }}>
-                <img id="playerimg" src={fullbods[1]}
+                <img id="playerimg" src={fullbods[charFullbody]}
                 style={{
                     width :'50px',
                     height :'auto',

@@ -12,15 +12,16 @@ import { LocationInfosSolez } from '../../data/locationsSolez';
 import activityFunc from '../../utils/activityFunc';
 import handlePickUpItem from '../../utils/pickUp';
 import ActiProgressBar from './ActiProgressBar';
+import { useChar } from '../../utils/charContext';
 
 
-const fullbods = [fullBod1, fullBod2];
+const fullbods = [fullBod1, fullBod2, fullBod3];
 const items = [];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosSolez,items];
 
-export default function SolezArena({setLocation,direction}){
+export default function SolezArena({setLocation,direction,setResources,resources,setMessageContent,setMessageTrigger}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -37,6 +38,10 @@ export default function SolezArena({setLocation,direction}){
     const [doingActivity, setDoingActivity] = useState(false);
     const [actiProgress, setActiProgress] = useState(0);
     const [actiDuration, setActiDuration] = useState(0);
+     const [movementLock, setMovementLock] = useState(false);
+     
+    const { selectedChar, playerName } = useChar();
+    const charFullbody = selectedChar - 1;
 
     const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -44,7 +49,7 @@ export default function SolezArena({setLocation,direction}){
     const skipActivityRef = useRef(false);
 
 
-    useMovementMain(setVelocity,direction);
+    useMovementMain(setVelocity,direction,movementLock);
     useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos);
 
     useEffect(() => {
@@ -52,7 +57,12 @@ export default function SolezArena({setLocation,direction}){
     }, [collisionInfos.cool]);
 
     useEffect(() => {
-        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration);
+        if (doingActivity) setMovementLock(true);
+        else setMovementLock(false);
+    }, [doingActivity]);
+
+    useEffect(() => {
+        activityFunc(timeSpeed,didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration,setVelocity,setMovementLock);
         return()=>{
             clearInterval(intervalRef.current);
             clearTimeout(timeoutRef.current);
@@ -85,7 +95,7 @@ export default function SolezArena({setLocation,direction}){
                 width: '50px',
                 height: '50px',
             }}>
-                <img id="playerimg" src={fullbods[1]}/>
+                <img id="playerimg" src={fullbods[charFullbody]}/>
                 
             <>
             {showButton && collisionInfos.collidedLocation && (
@@ -95,10 +105,10 @@ export default function SolezArena({setLocation,direction}){
                     key={i}
                     style={{
                         position: 'absolute',
-                        width: '50px',
-                        height: '13px',
+                        width: '70px',
+                        height: 'auto',
                         left: '55%',
-                        top: `${-35 + i * 30}%`,
+                        top: `${-50 + i * 40}%`,
                         backgroundColor: '#0D061F',
                         color: '#ffdba2',
                         border: 'solid 1.5px #ffdba2',
@@ -113,7 +123,7 @@ export default function SolezArena({setLocation,direction}){
                                 func(setLocation);
                             } else {
                                 setDoingActivity(true);
-                                setActivityFunc(() => () => func(setStats));
+                                setActivityFunc(() => () => func(setStats,setResources,resources,setMessageContent,setMessageTrigger));
                                 setActiDuration(collisionInfos.collidedLocation.actDuration[i]);
                             }
                         } else {
@@ -136,27 +146,29 @@ export default function SolezArena({setLocation,direction}){
                 
                 {collisionInfos.holderofindexI===0 ? (
                     collisionInfos.collidedLocation.name != 'Rockethome' ? (
-                        <button
-                            style={{
-                            position: 'absolute',
-                            top: '55%',
-                            left: '55%',
-                            backgroundColor: '#0D061F',
-                            color: '#ffdba2',
-                            padding: '2px 5px',
-                            fontSize: '0.3em',
-                            border: 'solid 1.5px #ffdba2',
-                            zIndex: '10006',
-                            pointerEvents: 'auto',
-                            }}
-                            onClick={() => {
-                                if(doingActivity){
-                                    skipActivityRef.current = true
-                                }                    
-                            }}
-                        >
-                        Skip
-                        </button>
+                        doingActivity ? (
+                            <button
+                                style={{
+                                position: 'absolute',
+                                top: '80%',
+                                left: '55%',
+                                backgroundColor: '#0D061F',
+                                color: '#ffdba2',
+                                padding: '2px 5px',
+                                fontSize: '0.3em',
+                                border: 'solid 1.5px #ffdba2',
+                                zIndex: '10006',
+                                pointerEvents: 'auto',
+                                }}
+                                onClick={() => {
+                                    if(doingActivity){
+                                        skipActivityRef.current = true
+                                    }                    
+                                }}
+                            >
+                                Skip
+                            </button>
+                        ) : <> </>
                     ) : <> </>
                 ) : <> </>
                 }

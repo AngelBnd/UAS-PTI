@@ -83,6 +83,6 @@ export function kaati2(setStats,setResources,resources,setMessageContent,setMess
     }
 
     while (ItemsInInventory.some(item => item.id === boughtItem.id)) boughtItem.id++;
-
+    setResources((prev)=>prev-howMuchTheItem)
     setItemsInInventory(prev => [...prev, boughtItem ]);
 } // TRADE

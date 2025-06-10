@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { isColliding } from './collision';
 
-export function useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos){
+export function useUpdateMovement(setVelocity, playerRef, velocity, mothership, collidableObjects, collidableObjectsRefs, collisionInfos, setCollisionInfos = () => {}){
     useEffect(()=>{
         let animationFrameId;
 
@@ -33,15 +33,21 @@ export function useUpdateMovement(setVelocity, playerRef, velocity, mothership, 
             }
 
             isColliding(playerRef, collidableObjects, collidableObjectsRefs, collisionInfos);
-            
             // if(collisionInfos.cool) setShowButton(true);
             // else setShowButton(false);
 
+            setCollisionInfos(prevState => ({
+                ...prevState,
+                cool: collisionInfos.cool,
+                collidedLocation: collisionInfos.collidedLocation,
+                collidedItem: collisionInfos.collidedItem,
+                holderofindexI: collisionInfos.holderofindexI
+            }));
 
             animationFrameId = requestAnimationFrame(update);
         };
         animationFrameId = requestAnimationFrame(update);
 
         return()=> cancelAnimationFrame(animationFrameId);
-    },[velocity]);
+    },[velocity, collidableObjects]);
 }
