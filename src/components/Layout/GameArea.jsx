@@ -289,7 +289,6 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         }
     }, [time]);
 
-
     useEffect(()=>{
         setShowMessage(true);
         const timeoutId = setTimeout(() => {
