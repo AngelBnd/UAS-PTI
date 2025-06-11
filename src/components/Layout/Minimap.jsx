@@ -1,11 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { useChar } from "../../utils/charContext";
+
 import mothershipImg from '../../assets/mothership.png';
 import planet1Img from '../../assets/planet1.png';
 import planet2Img from '../../assets/planet2.png';
 import planet3Img from '../../assets/planet3.png';
 import planet4Img from '../../assets/planet4.png';
+
 import medkitImg from '../../assets/medkit.png';
+import aircanImg from '../../assets/aircan.png';
+import chocoImg from '../../assets/choco.png';
+import coffeeImg from '../../assets/coffee.png';
+import donutImg from '../../assets/donut.png';
+
 import playerDotImg from '../../assets/playerdot.png';
 import minimapBg from '../../assets/playerareabg.png';
 
@@ -15,6 +22,14 @@ const planetImages = {
   Solez: planet3Img,
   Sugma: planet4Img,
   Mothership: mothershipImg
+};
+
+const itemImages = {
+  medkit: medkitImg,
+  aircan: aircanImg,
+  choco: chocoImg,
+  coffee: coffeeImg,
+  donut: donutImg
 };
 
 const Minimap = ({ currentLocation }) => {
@@ -36,15 +51,15 @@ const Minimap = ({ currentLocation }) => {
   return (
     <div
       style={{
-        width: 220,
-        height: 110,
+        width: 200,
+        height: 100,
         position: 'relative',
+        overflow: 'hidden',
+        border: '2px solid white',
+        borderRadius: 8,
         backgroundImage: `url(${minimapBg})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        border: '2px solid #ffdba2',
-        borderRadius: 8,
-        overflow: 'hidden'
+        backgroundPosition: 'center'
       }}
     >
       {/* Planets */}
@@ -55,8 +70,8 @@ const Minimap = ({ currentLocation }) => {
           alt={planet.name}
           style={{
             position: 'absolute',
-            width: 16,
-            height: 16,
+            width: 14,
+            height: 14,
             left: `${planet.x}%`,
             top: `${planet.y}%`,
             transform: 'translate(-50%, -50%)'
@@ -64,24 +79,26 @@ const Minimap = ({ currentLocation }) => {
         />
       ))}
 
-      {/* Medkit Items */}
-      {items
-        .filter((item) => item.type === 'medkit')
-        .map((item) => (
+      {/* Items */}
+      {items.map((item) => {
+        const imgSrc = itemImages[item.type];
+        if (!imgSrc) return null;
+        return (
           <img
             key={item.id}
-            src={medkitImg}
-            alt="medkit"
+            src={imgSrc}
+            alt={item.type}
             style={{
               position: 'absolute',
-              width: 10,
-              height: 10,
+              width: 12,
+              height: 12,
               left: `${item.x}%`,
               top: `${item.y}%`,
               transform: 'translate(-50%, -50%)'
             }}
           />
-        ))}
+        );
+      })}
 
       {/* Player dot */}
       {currentLocation === 'MainArea' && (
@@ -91,8 +108,8 @@ const Minimap = ({ currentLocation }) => {
           alt="player"
           style={{
             position: 'absolute',
-            width: 8,
-            height: 8,
+            width: 19,
+            height: 19,
             transform: 'translate(-50%, -50%)'
           }}
         />
