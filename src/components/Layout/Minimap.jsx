@@ -6,6 +6,8 @@ import planet2Img from '../../assets/planet2.png';
 import planet3Img from '../../assets/planet3.png';
 import planet4Img from '../../assets/planet4.png';
 import medkitImg from '../../assets/medkit.png';
+import playerDotImg from '../../assets/playerdot.png';
+import minimapBg from '../../assets/playerareabg.png';
 
 const planetImages = {
   Ejwa: planet1Img,
@@ -34,13 +36,15 @@ const Minimap = ({ currentLocation }) => {
   return (
     <div
       style={{
-        width: 200,
-        height: 100,
-        border: '2px solid white',
+        width: 220,
+        height: 110,
         position: 'relative',
-        backgroundColor: '#222',
-        overflow: 'hidden',
-        borderRadius: 8
+        backgroundImage: `url(${minimapBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        border: '2px solid #ffdba2',
+        borderRadius: 8,
+        overflow: 'hidden'
       }}
     >
       {/* Planets */}
@@ -51,8 +55,8 @@ const Minimap = ({ currentLocation }) => {
           alt={planet.name}
           style={{
             position: 'absolute',
-            width: 12,
-            height: 12,
+            width: 16,
+            height: 16,
             left: `${planet.x}%`,
             top: `${planet.y}%`,
             transform: 'translate(-50%, -50%)'
@@ -79,16 +83,16 @@ const Minimap = ({ currentLocation }) => {
           />
         ))}
 
-      {/* Player dot hanya jika di MainArea */}
+      {/* Player dot */}
       {currentLocation === 'MainArea' && (
-        <div
+        <img
           ref={playerDotRef}
+          src={playerDotImg}
+          alt="player"
           style={{
             position: 'absolute',
-            width: 6,
-            height: 6,
-            borderRadius: '50%',
-            backgroundColor: 'red',
+            width: 8,
+            height: 8,
             transform: 'translate(-50%, -50%)'
           }}
         />
