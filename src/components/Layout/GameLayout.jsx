@@ -16,6 +16,7 @@ import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
 import './AAResponsiveness.css';
 import { useChar } from '../../utils/charContext';
+import Minimap from './Minimap';
 
 export default function GameLayout() {
     const { time } = useTime();
@@ -164,6 +165,7 @@ export default function GameLayout() {
                 setMessageContent={setMessageContent}
                 setDirection={setDirection}
                 />
+                <Minimap currentLocation={Location} />
             </div>
         </div>
     )
