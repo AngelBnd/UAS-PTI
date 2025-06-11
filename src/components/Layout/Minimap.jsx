@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useChar } from '../../context/charContext';
+import { useChar } from "../../utils/charContext";
 import mothershipImg from '../../assets/mothership.png';
 import planet1Img from '../../assets/planet1.png';
 import planet2Img from '../../assets/planet2.png';
