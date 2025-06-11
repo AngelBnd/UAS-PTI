@@ -21,7 +21,6 @@ import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import Deathbar from './Deathbar';
 import PopUpMessage from './PopUpMessage';
-import Minimap from './Minimap';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0, showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -48,7 +47,11 @@ export default function GameArea({
   messageContent,
   setMessageTrigger,
   messageTrigger,
-  direction
+  direction,
+  setCameraPosExternal,
+  setPlayerRef,
+  setPlanetRefs,
+  setItemRefs
 }) {
   const planetRefs = useRef([]);
   const bgObjectsRefs = useRef([]);
@@ -69,6 +72,12 @@ export default function GameArea({
   const collidableObjectsRefs = [planetRefs, itemRefs];
 
   useMovementMain(setVelocity, direction);
+
+  useEffect(() => {
+    setPlayerRef(playerRef);
+    setPlanetRefs(planetRefs.current);
+    setItemRefs(itemRefs.current);
+  }, [setPlayerRef, setPlanetRefs, setItemRefs]);
 
   useEffect(() => {
     let animationFrameId;
@@ -121,7 +130,9 @@ export default function GameArea({
         if (canMovePlayerY) player.style.top = newPlayerTop + 'px';
       }
 
-      setCameraPos({ left: newCameraLeft, top: newCameraTop });
+      const pos = { left: newCameraLeft, top: newCameraTop };
+      setCameraPos(pos);
+      setCameraPosExternal(pos);
 
       planetRefs.current.forEach((planet, i) => {
         if (planet) {
@@ -231,14 +242,6 @@ export default function GameArea({
           height: '45px',
           zIndex: 10
         }}
-      />
-
-      <Minimap
-        cameraPos={cameraPos}
-        playerRef={playerRef}
-        planetRefs={planetRefs}
-        itemRefs={itemRefs}
-        itemsOnMap={itemsOnMap}
       />
 
       <PopUpMessage
