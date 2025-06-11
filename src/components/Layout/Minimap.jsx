@@ -1,145 +1,97 @@
-import React from 'react';
-import { useChar } from '../../utils/charContext';
-import styled from 'styled-components';
-
-import playerDot from '../../assets/playerdot.png';
-import planet1 from '../../assets/planet1.png';
-import planet2 from '../../assets/planet2.png';
-import planet3 from '../../assets/planet3.png';
-import planet4 from '../../assets/planet4.png';
-import mothership from '../../assets/mothership.png';
-import colaImg from '../../assets/cola.png';
+import React, { useEffect, useRef } from 'react';
+import { useChar } from '../../context/charContext';
+import mothershipImg from '../../assets/mothership.png';
+import planet1Img from '../../assets/planet1.png';
+import planet2Img from '../../assets/planet2.png';
+import planet3Img from '../../assets/planet3.png';
+import planet4Img from '../../assets/planet4.png';
 import medkitImg from '../../assets/medkit.png';
 
-const MinimapContainer = styled.div`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 250px;
-  height: 250px;
-  background-color: rgba(0, 0, 0, 0.7);
-  border: 3px solid #ffdba2;
-  border-radius: 10px;
-  padding: 10px;
-  z-index: 1000;
-  box-shadow: 0 0 10px rgba(255, 219, 162, 0.5);
-`;
+const planetImages = {
+  Ejwa: planet1Img,
+  Kaati: planet2Img,
+  Solez: planet3Img,
+  Sugma: planet4Img,
+  Mothership: mothershipImg
+};
 
-const MapArea = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(18, 18, 18, 0.3);
-  background-size: cover;
-  border-radius: 5px;
-`;
+const Minimap = () => {
+  const { playerPositionRef, planets, items } = useChar();
+  const playerDotRef = useRef(null);
 
-const PlayerMarker = styled.div`
-  position: absolute;
-  width: 0.5cm;
-  height: 0.5cm;
-  background-image: url(${playerDot});
-  background-size: contain;
-  background-repeat: no-repeat;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-`;
-
-const PlanetMarker = styled.div`
-  position: absolute;
-  width: 0.8cm;
-  height: 0.8cm;
-  background-size: contain;
-  background-repeat: no-repeat;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-`;
-
-const ItemMarker = styled.div`
-  position: absolute;
-  width: 0.5cm;
-  height: 0.5cm;
-  background-size: contain;
-  background-repeat: no-repeat;
-  transform: translate(-50%, -50%);
-  z-index: 6;
-`;
-
-const Minimap = ({ currentLocation }) => {
-  const { playerPosition, planets, items } = useChar();
-
-  const planetImages = {
-    'Ejwa': planet1,
-    'Kaati': planet2,
-    'Solez': planet3,
-    'Sugma': planet4,
-    'Mothership': mothership
-  };
-
-  const itemImages = {
-    'cola': colaImg,
-    'medkit': medkitImg
-  };
+  useEffect(() => {
+    const updateMinimap = () => {
+      if (playerDotRef.current && playerPositionRef.current) {
+        playerDotRef.current.style.left = `${(playerPositionRef.current.x / 1200) * 100}%`;
+        playerDotRef.current.style.top = `${(playerPositionRef.current.y / 600) * 100}%`;
+      }
+    };
+    updateMinimap();
+    const interval = setInterval(updateMinimap, 100);
+    return () => clearInterval(interval);
+  }, [playerPositionRef]);
 
   return (
-    <MinimapContainer>
-      <h3 style={{
-        fontSize: '12px',
-        color: '#ffdba2',
-        margin: '0 0 8px 0',
-        textAlign: 'center',
-        textShadow: '0 0 5px #ffdba2'
-      }}>
-        SPACE MINIMAP - {currentLocation.toUpperCase()}
-      </h3>
+    <div
+      style={{
+        width: 200,
+        height: 100,
+        border: '2px solid white',
+        position: 'relative',
+        backgroundColor: '#222',
+        overflow: 'hidden',
+        borderRadius: 8
+      }}
+    >
+      {/* Player dot */}
+      <div
+        ref={playerDotRef}
+        style={{
+          position: 'absolute',
+          width: 6,
+          height: 6,
+          borderRadius: '50%',
+          backgroundColor: 'red',
+          transform: 'translate(-50%, -50%)'
+        }}
+      />
 
-      <MapArea>
-        <PlayerMarker style={{
-          left: `${playerPosition.x}%`,
-          top: `${playerPosition.y}%`
-        }} />
+      {/* Planets */}
+      {planets.map((planet) => (
+        <img
+          key={planet.id}
+          src={planetImages[planet.name]}
+          alt={planet.name}
+          style={{
+            position: 'absolute',
+            width: 12,
+            height: 12,
+            left: `${planet.x}%`,
+            top: `${planet.y}%`,
+            transform: 'translate(-50%, -50%)'
+          }}
+        />
+      ))}
 
-        {planets.map(planet => (
-          <PlanetMarker
-            key={`planet-${planet.id}`}
+      {/* Items (hanya medkit) */}
+      {items
+        .filter((item) => item.type === 'medkit')
+        .map((item) => (
+          <img
+            key={item.id}
+            src={medkitImg}
+            alt="medkit"
             style={{
-              left: `${planet.x}%`,
-              top: `${planet.y}%`,
-              backgroundImage: `url(${planetImages[planet.name] || planet1})`
-            }}
-          />
-        ))}
-
-        {items.map(item => (
-          <ItemMarker
-            key={`item-${item.id}`}
-            style={{
+              position: 'absolute',
+              width: 10,
+              height: 10,
               left: `${item.x}%`,
               top: `${item.y}%`,
-              backgroundImage: `url(${itemImages[item.type] || colaImg})`
+              transform: 'translate(-50%, -50%)'
             }}
           />
         ))}
-      </MapArea>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        fontSize: '8px',
-        color: '#ffdba2',
-        marginTop: '8px',
-        padding: '0 5px'
-      }}>
-        <div>
-          <img src={playerDot} alt="Player" style={{ width: '10px', marginRight: '5px' }} />
-          <span>Player</span>
-        </div>
-        <div>
-          <img src={mothership} alt="Mothership" style={{ width: '10px', marginRight: '5px' }} />
-          <span>Mothership</span>
-        </div>
-      </div>
-    </MinimapContainer>
+    </div>
   );
 };
 
