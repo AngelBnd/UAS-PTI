@@ -3,14 +3,12 @@ import { useState, useRef, useEffect } from 'react';
 import GameArea from './GameArea';
 import TopPanel from './TopPanel';
 import SidePanel from './SidePanel';
-import handleLocationChange from '../../utils/handleLocationChange';
 import EjwaArena from './EjwaArena';
 import SolezArena from './SolezArena';
 import SugmaArena from './SugmaArena';
 import KaatiArena from './KaatiArena';
 import MothershipArena from './MothershipArena';
 import { LocationInfosMain } from '../../data/locationsMain';
-import DeathBar from './Deathbar';
 import { items } from '../../data/itemsOnMap';
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
@@ -63,7 +61,7 @@ export default function GameLayout() {
     const[showMessage, setShowMessage] = useState(false);
     const[messageContent, setMessageContent] = useState("");
     const [messageTrigger, setMessageTrigger] = useState(0);
-    const[isDead,setIsDead] = useState(false);
+    const [, setIsDead] = useState(false);
     
     useEffect(() => {
         if (time === 0) {
@@ -90,83 +88,52 @@ export default function GameLayout() {
     },[messageTrigger])
 
 
-    return (
-        <div id="mainLayout" className="d-flex w-100">
-            {/* {isDead && <DeathBar/>}  */}
-            {showMessage && <PopUpMessage message={messageContent} />}
-            
-            <div id ="TopPanel" style={{ flex: '1 1 85%', zIndex :'0', overflow : 'hidden' }}>
-                <TopPanel 
-                setIsDead = {setIsDead}
-                resources = {resources}
-                setResources = {setResources}
-                />
-                {Location === 'MainArea' && <GameArea 
-                setLocation={setLocation} 
-                saveplayerLocation={savePlayerLocationRef} 
-                saveplanetLocation={planetPositionsRef} 
-                saveBGObjectLocation={bgObjectsPositionsRef} 
-                itemsOnMap={itemsOnMap}
-                setItemsOnMap={setItemsOnMap}
-                ItemsInInventory={ItemsInInventory}
-                setItemsInInventory={setItemsInInventory}
-                setShowMessage={setShowMessage}
-                showMessage={showMessage}
-                setMessageContent={setMessageContent}
-                messageContent={messageContent}
-                setMessageTrigger={setMessageTrigger}
-                messageTrigger={messageTrigger}
-                direction = {direction}
-                resources = {resources}
-                setResources = {setResources}
-                />}
-                {Location === 'Ejwa' && <EjwaArena 
-                setLocation={setLocation} 
-                direction = {direction}
-                resources = {resources}
-                setResources = {setResources}
-                setMessageContent={setMessageContent}
-                setMessageTrigger={setMessageTrigger}
-                />}
-                {Location === 'Solez' && <SolezArena 
-                setLocation={setLocation}
-                direction = {direction}
-                resources = {resources}
-                setResources = {setResources}
-                setMessageContent={setMessageContent}
-                setMessageTrigger={setMessageTrigger}
-                />}
-                {Location === 'Sugma' && <SugmaArena 
-                setLocation={setLocation}
-                direction = {direction}
-                />}
-                {Location === 'Kaati' && <KaatiArena 
-                setLocation={setLocation}
-                direction = {direction}
-                resources = {resources}
-                setResources = {setResources}
-                setMessageContent={setMessageContent}
-                setMessageTrigger={setMessageTrigger}
-                setItemsInInventory={setItemsInInventory}
-                ItemsInInventory={ItemsInInventory}
-                />}
-                {Location === 'Mothership' && <MothershipArena
-                setLocation={setLocation}
-                direction = {direction}
-                 />}
-                
+ return (
+    <div id="mainLayout" className="d-flex w-100">
+      {showMessage && <PopUpMessage message={messageContent} />}
+      
+      <div id="TopPanel" style={{ flex: '1 1 85%', zIndex: '0', overflow: 'hidden' }}>
+        <TopPanel
+          setIsDead={setIsDead}
+          resources={resources}
+          setResources={setResources}
+        />
+        {Location === 'MainArea' && <GameArea
+          setLocation={setLocation}
+          saveplayerLocation={savePlayerLocationRef}
+          saveplanetLocation={planetPositionsRef}
+          saveBGObjectLocation={bgObjectsPositionsRef}
+          itemsOnMap={itemsOnMap}
+          setItemsOnMap={setItemsOnMap}
+          ItemsInInventory={ItemsInInventory}
+          setItemsInInventory={setItemsInInventory}
+          setShowMessage={setShowMessage}
+          showMessage={showMessage}
+          setMessageContent={setMessageContent}
+          messageContent={messageContent}
+          setMessageTrigger={setMessageTrigger}
+          messageTrigger={messageTrigger}
+          direction={direction}
+          resources={resources}
+          setResources={setResources}
+        />}
+        {Location === 'Ejwa' && <EjwaArena setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} />}
+        {Location === 'Solez' && <SolezArena setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} />}
+        {Location === 'Sugma' && <SugmaArena setLocation={setLocation} direction={direction} />}
+        {Location === 'Kaati' && <KaatiArena setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} setItemsInInventory={setItemsInInventory} ItemsInInventory={ItemsInInventory} />}
+        {Location === 'Mothership' && <MothershipArena setLocation={setLocation} direction={direction} />}
+      </div>
 
-            </div>
-            <div id ="SidePanel" style={{ flex: '1 1 18%', zIndex :'1' }}>
-                <SidePanel
-                ItemsInInventory={ItemsInInventory}
-                setItemsInInventory={setItemsInInventory}
-                setShowMessage={setShowMessage}
-                setMessageContent={setMessageContent}
-                setDirection={setDirection}
-                />
-                <Minimap currentLocation={Location} />
-            </div>
-        </div>
-    )
+      <div id="SidePanel" style={{ flex: '1 1 18%', zIndex: '1' }}>
+        <SidePanel
+          ItemsInInventory={ItemsInInventory}
+          setItemsInInventory={setItemsInInventory}
+          setShowMessage={setShowMessage}
+          setMessageContent={setMessageContent}
+          setDirection={setDirection}
+        />
+        <Minimap currentLocation={Location} />
+      </div>
+    </div>
+  );
 }

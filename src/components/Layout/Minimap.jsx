@@ -15,7 +15,7 @@ const planetImages = {
   Mothership: mothershipImg
 };
 
-const Minimap = () => {
+const Minimap = ({ currentLocation }) => {
   const { playerPositionRef, planets, items } = useChar();
   const playerDotRef = useRef(null);
 
@@ -43,19 +43,6 @@ const Minimap = () => {
         borderRadius: 8
       }}
     >
-      {/* Player dot */}
-      <div
-        ref={playerDotRef}
-        style={{
-          position: 'absolute',
-          width: 6,
-          height: 6,
-          borderRadius: '50%',
-          backgroundColor: 'red',
-          transform: 'translate(-50%, -50%)'
-        }}
-      />
-
       {/* Planets */}
       {planets.map((planet) => (
         <img
@@ -73,7 +60,7 @@ const Minimap = () => {
         />
       ))}
 
-      {/* Items (hanya medkit) */}
+      {/* Medkit Items */}
       {items
         .filter((item) => item.type === 'medkit')
         .map((item) => (
@@ -91,6 +78,21 @@ const Minimap = () => {
             }}
           />
         ))}
+
+      {/* Player dot hanya jika di MainArea */}
+      {currentLocation === 'MainArea' && (
+        <div
+          ref={playerDotRef}
+          style={{
+            position: 'absolute',
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            backgroundColor: 'red',
+            transform: 'translate(-50%, -50%)'
+          }}
+        />
+      )}
     </div>
   );
 };
