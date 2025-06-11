@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useChar } from "../../utils/charContext";
 
 import mothershipImg from '../../assets/mothership.png';
@@ -33,20 +33,57 @@ const itemImages = {
 };
 
 const Minimap = ({ currentLocation }) => {
-  const { playerPositionRef, planets, items } = useChar();
-  const playerDotRef = useRef(null);
+  const {
+    playerRef,
+    planetRefs,
+    itemRefs
+  } = useChar();
+
+  const [positions, setPositions] = useState({
+    player: { x: 0, y: 0 },
+    planets: [],
+    items: []
+  });
 
   useEffect(() => {
-    const updateMinimap = () => {
-      if (playerDotRef.current && playerPositionRef.current) {
-        playerDotRef.current.style.left = `${(playerPositionRef.current.x / 1200) * 100}%`;
-        playerDotRef.current.style.top = `${(playerPositionRef.current.y / 600) * 100}%`;
-      }
+    const updatePositions = () => {
+      const getScaledPos = (ref) => {
+        if (!ref?.current) return null;
+        const rect = ref.current.getBoundingClientRect();
+        return {
+          x: (rect.left / 1200) * 200,
+          y: (rect.top / 600) * 100
+        };
+      };
+
+      const newPlayer = getScaledPos(playerRef);
+      const newPlanets = planetRefs
+        .map((p) => ({
+          id: p.id,
+          name: p.name,
+          pos: getScaledPos(p.ref)
+        }))
+        .filter(p => p.pos);
+
+      const newItems = itemRefs
+        .map((i) => ({
+          id: i.id,
+          type: i.type,
+          pos: getScaledPos(i.ref)
+        }))
+        .filter(i => i.pos);
+
+      setPositions({
+        player: newPlayer || { x: 0, y: 0 },
+        planets: newPlanets,
+        items: newItems
+      });
     };
-    updateMinimap();
-    const interval = setInterval(updateMinimap, 100);
+
+    updatePositions();
+    const interval = setInterval(updatePositions, 100);
     return () => clearInterval(interval);
-  }, [playerPositionRef]);
+  }, [playerRef, planetRefs, itemRefs]);
 
   return (
     <div
@@ -54,16 +91,15 @@ const Minimap = ({ currentLocation }) => {
         width: 200,
         height: 100,
         position: 'relative',
-        overflow: 'hidden',
         border: '2px solid white',
-        borderRadius: 8,
         backgroundImage: `url(${minimapBg})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        borderRadius: 8,
+        overflow: 'hidden'
       }}
     >
       {/* Planets */}
-      {planets.map((planet) => (
+      {positions.planets.map((planet) => (
         <img
           key={planet.id}
           src={planetImages[planet.name]}
@@ -72,44 +108,46 @@ const Minimap = ({ currentLocation }) => {
             position: 'absolute',
             width: 14,
             height: 14,
-            left: `${planet.x}%`,
-            top: `${planet.y}%`,
+            left: planet.pos.x,
+            top: planet.pos.y,
             transform: 'translate(-50%, -50%)'
           }}
         />
       ))}
 
       {/* Items */}
-      {items.map((item) => {
-        const imgSrc = itemImages[item.type];
-        if (!imgSrc) return null;
+      {positions.items.map((item) => {
+        const img = itemImages[item.type];
+        if (!img) return null;
+
         return (
           <img
             key={item.id}
-            src={imgSrc}
+            src={img}
             alt={item.type}
             style={{
               position: 'absolute',
-              width: 12,
-              height: 12,
-              left: `${item.x}%`,
-              top: `${item.y}%`,
+              width: 10,
+              height: 10,
+              left: item.pos.x,
+              top: item.pos.y,
               transform: 'translate(-50%, -50%)'
             }}
           />
         );
       })}
 
-      {/* Player dot */}
-      {currentLocation === 'MainArea' && (
+      {/* Player */}
+      {currentLocation === 'MainArea' && positions.player && (
         <img
-          ref={playerDotRef}
           src={playerDotImg}
           alt="player"
           style={{
             position: 'absolute',
-            width: 19,
-            height: 19,
+            width: 7,
+            height: 7,
+            left: positions.player.x,
+            top: positions.player.y,
             transform: 'translate(-50%, -50%)'
           }}
         />
