@@ -23,9 +23,13 @@ export const CharacterProvider = ({ children }) => {
     ]);
 
     const [items, setItems] = useState([
-        { id: 1, x: 40, y: 50, type: "cola" },
-        { id: 2, x: 60, y: 30, type: "medkit" }
-    ]);
+  { id: 1, x: 40, y: 50, type: "cola" }, // kalau nggak dipakai bisa dihapus
+  { id: 2, x: 60, y: 30, type: "medkit" },
+  { id: 3, x: 50, y: 40, type: "aircan" },
+  { id: 4, x: 70, y: 60, type: "choco" },
+  { id: 5, x: 20, y: 30, type: "coffee" },
+  { id: 6, x: 80, y: 45, type: "donut" },
+]);
 
     const updatePlayerPosition = (pixelPos) => {
         const percentagePos = {
