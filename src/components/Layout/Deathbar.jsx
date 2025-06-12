@@ -10,16 +10,17 @@ export default function DeathBar({absoluteResources, resourcesSpent, locationsVi
     navigate('/'); 
   };
 
-    const statValues = Object.values(playerStats); 
+  
+  const statValues = Object.values(playerStats); 
 
-    const avg = statValues.reduce((a, b) => a + b, 0) / statValues.length;
+  const avg = statValues.reduce((a, b) => a + b, 0) / statValues.length;
 
-    const variance = statValues.reduce(
-      (sum, stat) => sum + (stat - avg) ** 2,
-      0
-    ) / statValues.length;
+  const variance = statValues.reduce(
+    (sum, stat) => sum + (stat - avg) ** 2,
+    0
+  ) / statValues.length;
 
-    const balanceStatScore = Math.max(0,1000 - variance);    
+  const balanceStatScore = Math.max(0,1000 - variance);    
 
   let totalScore = (absoluteResources*5) + (activitiesDone*10) + (itemsCollected*10) + (itemsUsed*10) + (locationsVisited.length*100) + balanceStatScore; 
   
