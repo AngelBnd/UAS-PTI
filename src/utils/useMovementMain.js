@@ -1,12 +1,36 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useChar } from './charContext';
+
+ const charMovement = [
+  {
+    id: 1,
+    movementSpeed: 1.7
+  },
+  {
+    id: 2,
+    movementSpeed: 2
+  },
+  {
+    id: 3,
+    movementSpeed: 2.7
+  },
+ ]
 
 export function useMovementMain(setVelocity,direction,movementLock) {
   const movementLockRef = useRef(movementLock);
+  const { selectedChar } = useChar();
+  const [speed, setSpeed] = useState(2.0);
+  
+  useEffect(() => {
+    const currentChar = charMovement[selectedChar - 1] || charMovement[0];
+    const newSpeed = currentChar.movementSpeed || 2.0;
+
+    console.log(newSpeed);
+    setSpeed(newSpeed);
+  }, [selectedChar]);
 
   useEffect(() => {
     movementLockRef.current = movementLock;
-    console.log(movementLock);
-    console.log("hello");
   }, [movementLock]);
 
   useEffect(() => {
@@ -15,13 +39,13 @@ export function useMovementMain(setVelocity,direction,movementLock) {
       setVelocity((prev) => {
         switch (e.key) {
           case 'ArrowRight': case 'd':
-            return { ...prev, x: -2 };
+            return { ...prev, x: -speed };
           case 'ArrowLeft': case 'a':
-            return { ...prev, x: 2 };
+            return { ...prev, x: speed };
           case 'ArrowUp': case 'w':
-            return { ...prev, y: 2 };
+            return { ...prev, y: speed };
           case 'ArrowDown': case 's':
-            return { ...prev, y: -2 };
+            return { ...prev, y: -speed };
           default:
             return prev;
         }
@@ -51,7 +75,7 @@ export function useMovementMain(setVelocity,direction,movementLock) {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [setVelocity,movementLock]);
+  }, [setVelocity,movementLock, speed]);
 
   useEffect(()=>{
     if (movementLockRef.current) {
@@ -60,10 +84,10 @@ export function useMovementMain(setVelocity,direction,movementLock) {
     }
 
     const vel = { x: 0, y: 0 };
-    if (direction.left) vel.x = 2;
-    if (direction.right) vel.x = -2;
-    if (direction.up) vel.y = 2;
-    if (direction.down) vel.y = -2;
+    if (direction.left) vel.x = speed;
+    if (direction.right) vel.x = -speed;
+    if (direction.up) vel.y = speed;
+    if (direction.down) vel.y = -speed;
     setVelocity(vel);
-  },[direction,setVelocity])
+  },[direction, setVelocity, speed])
 }

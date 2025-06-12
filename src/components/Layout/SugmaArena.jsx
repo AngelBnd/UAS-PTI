@@ -22,7 +22,7 @@ let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocat
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosSugma,items];
 
-export default function SugmaArena({setLocation,direction}){
+export default function SugmaArena({setActivitiesDone,setLocation,direction}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -126,12 +126,14 @@ export default function SugmaArena({setLocation,direction}){
                         zIndex: '10000',
                         fontSize: '0.3em',
                         pointerEvents: 'auto',
+                        
                     }}
                     onClick={() => {
                         if (collisionInfos.holderofindexI === 0) {
                             if (collisionInfos.collidedLocation.name === 'Rockethome') {
                                 func(setLocation);
                             } else {
+                                setActivitiesDone(prev=>prev+1);
                                 setDoingActivity(true);
                                 setActivityFunc(() => () => func(setStats));
                                 setActiDuration(collisionInfos.collidedLocation.actDuration[i]);

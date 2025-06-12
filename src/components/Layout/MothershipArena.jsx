@@ -17,11 +17,12 @@ import { useInventory } from '../../utils/inventoryContext';
 import { useMothership } from '../../utils/mothershipContext';
 import './AAResponsiveness.css';
 import ChestUI from './Chest';
+import './ActivityAnimate.css';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 const items = [];
 
-export default function MothershipArena({setLocation,direction}) {
+export default function MothershipArena({setActivitiesDone,setLocation,direction}) {
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -114,7 +115,7 @@ export default function MothershipArena({setLocation,direction}) {
                 width: '50px',
                 height: '70px',
             }}>
-            <img id="playerimg" src={fullbods[charFullbody]}
+            <img id="playerimg" className={`${doingActivity ? 'is-oscillating' : ''}`} src={fullbods[charFullbody]}
                 style={{
                     width: '50px',
                     height: 'auto',
@@ -171,6 +172,7 @@ export default function MothershipArena({setLocation,direction}) {
                                         if (collisionInfos.collidedLocation.name === 'goback') {
                                             func(setLocation);
                                         } else {
+                                            setActivitiesDone(prev=>prev+1);
                                             setDoingActivity(true);
                                             setActivityFunc(() => () => func(setStats));
                                             setActiDuration(collisionInfos.collidedLocation.actDuration[i]);

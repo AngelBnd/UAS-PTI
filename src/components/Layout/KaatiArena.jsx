@@ -17,6 +17,7 @@ import TradeInfo from './TradeInfo';
 import GambleInfo from './GambleInfo';
 import './AAResponsiveness.css';
 import { useChar } from '../../utils/charContext';
+import './ActivityAnimate.css';
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -24,7 +25,7 @@ const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLo
 const collidableObjects = [LocationInfosKaati,items];
 let whatItemToSell, howMuchTheItem;
 
-export default function KaatiArena({setLocation,direction, resources, setResources,setMessageContent,setMessageTrigger,setItemsInInventory,ItemsInInventory}){
+export default function KaatiArena({setActivitiesDone,setLocation,direction, resources, setResources,setMessageContent,setMessageTrigger,setItemsInInventory,itemsInInventory}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -109,7 +110,7 @@ export default function KaatiArena({setLocation,direction, resources, setResourc
                 width: '50px',
                 height: '70px',
             }}>
-                <img id="playerimg" src={fullbods[charFullbody]}
+                <img id="playerimg" className={`${doingActivity ? 'is-oscillating' : ''}`} src={fullbods[charFullbody]}
                 style={{
                     width :'50px',
                     height :'auto',
@@ -141,8 +142,9 @@ export default function KaatiArena({setLocation,direction, resources, setResourc
                             if (collisionInfos.collidedLocation.name === 'goback') {
                                 func(setLocation);
                             } else {
+                                setActivitiesDone(prev=>prev+1);
                                 setDoingActivity(true);
-                                setActivityFunc(() => () => func(setStats,setResources,resources,setMessageContent,setMessageTrigger,setItemsInInventory,ItemsInInventory,whatItemToSell,howMuchTheItem));
+                                setActivityFunc(() => () => func(setStats,setResources,resources,setMessageContent,setMessageTrigger,setItemsInInventory,itemsInInventory,whatItemToSell,howMuchTheItem));
                                 console.log(collisionInfos.collidedLocation.actDuration[i]);
                                 setActiDuration(collisionInfos.collidedLocation.actDuration[i]);
                             }

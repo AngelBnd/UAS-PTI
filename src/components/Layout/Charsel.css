@@ -1,15 +1,3 @@
-@keyframes typing {
-    from {
-        width: 0;
-    }
-}
-
-@keyframes cursor {
-    50% {
-        border-color: transparent;
-    }
-}
-
 #blackScreen {
     height: 100vh;
     width: 100%;
@@ -37,14 +25,8 @@
     color: #F7F7FF;
     white-space: nowrap;
     overflow: hidden;
-    border-right: 5px solid;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
-}
-
-.charsel-text:active {
-    animation: typing 1.7s steps(30),
-    cursor .4s step-end infinite alternate;
 }
 
 .main-info {
