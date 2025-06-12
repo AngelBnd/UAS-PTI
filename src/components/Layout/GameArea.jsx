@@ -24,6 +24,7 @@ import { useInventory } from '../../utils/inventoryContext';
 import './AAResponsiveness.css';
 import Minimap from './Minimap';
 
+
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0, showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
 const collisionInfos = { cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem };

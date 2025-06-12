@@ -2,7 +2,7 @@ import React from 'react';
 import './Deathbar.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function DeathBar({absoluteResources, resourcesSpent, locationsVisited, activitiesDone, itemsUsed, itemsCollected }) {
+export default function DeathBar({absoluteResources, resourcesSpent, locationsVisited, activitiesDone, itemsUsed, itemsCollected, playerStats}) {
 
   const navigate = useNavigate();
 
@@ -10,7 +10,18 @@ export default function DeathBar({absoluteResources, resourcesSpent, locationsVi
     navigate('/'); 
   };
 
-  let totalScore = (absoluteResources*5) + (activitiesDone*10) + (itemsCollected*10) + (itemsUsed*10) + (locationsVisited.length*100); 
+    const statValues = Object.values(playerStats); 
+
+    const avg = statValues.reduce((a, b) => a + b, 0) / statValues.length;
+
+    const variance = statValues.reduce(
+      (sum, stat) => sum + (stat - avg) ** 2,
+      0
+    ) / statValues.length;
+
+    const balanceStatScore = Math.max(0,1000 - variance);    
+
+  let totalScore = (absoluteResources*5) + (activitiesDone*10) + (itemsCollected*10) + (itemsUsed*10) + (locationsVisited.length*100) + balanceStatScore; 
   
   return (
     <div className="gameOver">

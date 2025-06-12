@@ -17,12 +17,14 @@ import { useChar } from '../../utils/charContext';
 import Minimap from './Minimap';
 import DeathBar from './Deathbar';
 import { useInventory } from '../../utils/inventoryContext';
+import { useStats } from '../../utils/statsContext';
 
 export default function GameLayout() {
     const { time } = useTime();
     const [Location, setLocation] = useState('MainArea');
     const [ resources, setResources] = useState(0);
     const { selectedChar, playerName } = useChar();
+    const { playerStats, setStats } = useStats();
     
     // buat skore
     const [absoluteResources, setAbsoluteResources] = useState(0);
@@ -161,6 +163,7 @@ export default function GameLayout() {
         activitiesDone={activitiesDone}
         itemsUsed={itemsUsed}
         itemsCollected={itemsCollected}
+        playerStats={playerStats}
       />}
       <div id="TopPanel" style={{ flex: '1 1 85%', zIndex: '0', overflow: 'hidden' }}>
         <TopPanel
