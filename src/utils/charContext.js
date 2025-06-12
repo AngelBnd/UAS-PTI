@@ -7,6 +7,33 @@ export const useChar = () => useContext(CharacterContext);
 export const CharacterProvider = ({ children }) => {
     const [selectedChar, updateSelectedChar] = useState(1);
     const [playerName, setPlayerName] = useState('');
+
+    // const charStats = [
+    //     {
+    //         id: 1,
+    //         degradationRates: {
+    //             hunger: ,
+    //             oxygen: ,
+    //             energy: ,
+    //         }
+    //     },
+    //     {
+    //         id: 1,
+    //         degradationRates: {
+    //             hunger: ,
+    //             oxygen: ,
+    //             energy: ,
+    //         }
+    //     },
+    //     {
+    //         id: 1,
+    //         degradationRates: {
+    //             hunger: ,
+    //             oxygen: ,
+    //             energy: ,
+    //         }
+    //     }
+    // ]
     
     const [playerPosition, setPlayerPosition] = useState({ x: 50, y: 50 });
     

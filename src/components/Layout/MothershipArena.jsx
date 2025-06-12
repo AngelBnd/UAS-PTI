@@ -14,6 +14,7 @@ import ActiProgressBar from './ActiProgressBar';
 import activityFunc from '../../utils/activityFunc';
 import { useChar } from '../../utils/charContext';
 import { useInventory } from '../../utils/inventoryContext';
+import { useMothership } from '../../utils/mothershipContext';
 import './AAResponsiveness.css';
 import ChestUI from './Chest';
 
@@ -31,6 +32,7 @@ export default function MothershipArena({setLocation,direction}) {
     const { playerStats, setStats } = useStats();
     const { selectedChar, playerName } = useChar();
     const { itemsInInventory, setItemsInInventory } = useInventory();
+    const { mothershipLocations, setMothershipLocations } = useMothership();
 
     const charFullbody = selectedChar - 1;
 
@@ -48,7 +50,7 @@ export default function MothershipArena({setLocation,direction}) {
         collidedLocation: null,
         collidedItem: null,
     });
-    const collidableObjects = [locations, items];
+    const collidableObjects = [mothershipLocations, items];
 
     const [activityMsg, updActivityMsg] = useState('');
     const { time, timeSpeed, setTime, setDay } = useTime();
@@ -224,15 +226,15 @@ export default function MothershipArena({setLocation,direction}) {
                 playerInventory={itemsInInventory}
                 setPlayerInventory={handleSetPlayerInventory}
                 activeChestId={chestID}
-                allLocations={locations}
-                setAllLocations={setLocations}
+                allLocations={mothershipLocations}
+                setAllLocations={setMothershipLocations}
                 setIsChestOpen={setChestOpen}
                 setMovementLock={setMovementLock}
             />
         )}
 
-        {locations.map((location, i) => (
-            <div className='d-flex flex-column'
+        {mothershipLocations.map((location, i) => (
+            <div className='d-flex flex-column' key={location.name || i}
                 style={{
                     position: 'absolute',
                     left: `${location.offSets.left}px`,

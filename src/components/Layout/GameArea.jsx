@@ -16,12 +16,14 @@ import planetbg2 from '../../assets/planetbg2.png';
 import planetbg3 from '../../assets/planetbg3.png';
 import { LocationInfosMain } from '../../data/locationsMain';
 import { items } from '../../data/itemsOnMap';
-import { Deathbar } from './Deathbar';
+import Deathbar from './Deathbar';
 import PopUpMessage from './PopUpMessage';
 import { useTime } from '../../utils/timeContext';
 import { useChar } from '../../utils/charContext';
 import { useInventory } from '../../utils/inventoryContext';
 import './AAResponsiveness.css';
+import FloatingObject from './Animations';
+
 
 const fullbods = [fullBod1, fullBod2, fullBod3];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
@@ -221,18 +223,17 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
         setShowButton(false);
     }
 
-// 
-    // const health = 100;
-    // const hunger = 100;
-    // const energy = 100;
-    // const oxygen = 100;
-// 
-    // const checkGameOver = () => {
-        // setGameOver(false);
-        // if (health <= 0 && hunger <= 0 && energy <= 0 && oxygen <= 0) {
-            // setGameOver(true);
-        // }
-    // };
+    const health = 100;
+    const hunger = 100;
+    const energy = 100;
+    const oxygen = 100;
+
+    const checkGameOver = () => {
+        setGameOver(false);
+        if (health <= 0 && hunger <= 0 && energy <= 0 && oxygen <= 0) {
+            setGameOver(true);
+        }
+    };
 
 
     useEffect(() => {
@@ -395,44 +396,48 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
 
 
             {LocationInfosMain.map((planet, i) => (
-                <div className='d-flex flex-column'
-                    ref={(el) => (planetRefs.current[i] = el)}
-                    style={{
-                        position: 'absolute',
-                        zIndex: '7',
-                        width: `${planet.widthImg * 0.9}px`,
-                        height: `${planet.heightImg * 0.9}px`,
-                        backgroundColor: 'red',
-                    }}>
-                    <img
-                        key={i}
-                        src={planet.element}
-                        className={`pixel-art ${planet.classNamee}`}
+                <FloatingObject key={planet.name || i}>
+                    <div className='d-flex flex-column'
+                        ref={(el) => (planetRefs.current[i] = el)}
                         style={{
-                            position: 'relative',
-                            width: `${planet.widthImg}px`,
-                            height: `${planet.heightImg}px`,
-                            zIndex: '1',
-                        }}
-                    />
-                </div>
+                            position: 'absolute',
+                            zIndex: '7',
+                            width: `${planet.widthImg * 0.9}px`,
+                            height: `${planet.heightImg * 0.9}px`,
+                        }}>
+                        <img
+                            key={i}
+                            src={planet.element}
+                            className={`pixel-art ${planet.classNamee}`}
+                            style={{
+                                position: 'relative',
+                                width: `${planet.widthImg}px`,
+                                height: `${planet.heightImg}px`,
+                                zIndex: '1',
+                            }}
+                        />
+                    </div>
+                </FloatingObject>
             ))}
+
 
             {itemsOnMap.map((item, i) => (
                 item && !item.used && (
-                <img
-                    id={i}
-                    key={item.id}
-                    src={item.element}
-                    ref={(el) => {
-                    itemRefs.current[i] = el;
-                }}
-                style={{
-                position: 'absolute',
-                width: `${item.widthImg}px`,
-                height: `${item.heightImg}px`,
-                }}
-                />
+                    <FloatingObject key={item.id}>
+                        <img
+                            id={i}
+                            key={item.id}
+                            src={item.element}
+                            ref={(el) => {
+                            itemRefs.current[i] = el;
+                        }}
+                        style={{
+                        position: 'absolute',
+                        width: `${item.widthImg}px`,
+                        height: `${item.heightImg}px`,
+                        }}
+                        />
+                    </FloatingObject>
                 )
             ))}
 
@@ -444,9 +449,9 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                     height: '45px',
                     overflow: 'visible',
                     pointerEvents: 'none',
-                    backgroundColor: 'red',
                 }}>
 
+                <FloatingObject>
                 <img
                 onClick={()=>{}}
                 style={{
@@ -456,6 +461,7 @@ export default function GameArea({ setLocation, saveplayerLocation, saveplanetLo
                     zIndex : '1',
                     
                 }} id="playerimg" src={fullbods[charFullbody]}/>
+                </FloatingObject>
 
                 {showButton && (
                     <button

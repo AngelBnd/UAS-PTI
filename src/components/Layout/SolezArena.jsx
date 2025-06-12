@@ -38,7 +38,7 @@ export default function SolezArena({setLocation,direction,setResources,resources
     const [doingActivity, setDoingActivity] = useState(false);
     const [actiProgress, setActiProgress] = useState(0);
     const [actiDuration, setActiDuration] = useState(0);
-     const [movementLock, setMovementLock] = useState(false);
+    const [movementLock, setMovementLock] = useState(false);
      
     const { selectedChar, playerName } = useChar();
     const charFullbody = selectedChar - 1;

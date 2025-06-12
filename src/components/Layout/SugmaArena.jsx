@@ -14,8 +14,9 @@ import activityFunc from '../../utils/activityFunc';
 import ActiProgressBar from './ActiProgressBar';
 import './AAResponsiveness.css';
 import { useChar } from '../../utils/charContext';
+import './ActivityAnimate.css';
 
-const fullbods = [fullBod1, fullBod2];
+const fullbods = [fullBod1, fullBod2, fullBod3];
 const items = [];
 let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocation, collidedItem;
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
@@ -96,7 +97,7 @@ export default function SugmaArena({setLocation,direction}){
             }}
             />
 
-            <div id="player" className='pixel-art' ref={playerRef}
+            <div id="player" className="pixel-art" ref={playerRef}
             style ={{
                 position: 'absolute',
                 top: '445px',
@@ -104,7 +105,7 @@ export default function SugmaArena({setLocation,direction}){
                 width: '50px',
                 height: '50px',
             }}>
-                <img id="playerimg" src={fullbods[charFullbody]}/>
+                <img id="playerimg" className={`${doingActivity ? 'is-oscillating' : ''}`} src={fullbods[charFullbody]}/>
                 
             <>
             {showButton && collisionInfos.collidedLocation && (

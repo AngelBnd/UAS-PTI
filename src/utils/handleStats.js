@@ -6,5 +6,4 @@ export function handleStats(setStats, time) {
         oxygenBar: Math.max(prev.oxygenBar - 1, 0),
         energyBar: Math.max(prev.energyBar - 1, 0),
     }));
-
 }

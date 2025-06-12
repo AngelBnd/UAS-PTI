@@ -1,5 +1,3 @@
-
-
 export default function activityFunc(timeSpeed, didMountRef,timeoutRef,intervalRef,ActivityFunc,setActivityFunc,setDoingActivity,setTime,setDay,skipActivityRef,setStats,setActiProgress,actiDuration,setMovementLock){
     let timeLeft = actiDuration;
     let repsLeft;

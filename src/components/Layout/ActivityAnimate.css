@@ -1,0 +1,22 @@
+@keyframes oscillate {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+.is-oscillating {
+  animation: oscillate 0.2s linear infinite;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  will-change: transform;
+  backface-visibility: hidden;
+  width: relative;
+  height: relative;
+}

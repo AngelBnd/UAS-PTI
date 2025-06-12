@@ -13,20 +13,24 @@ import { TimeProvider } from './utils/timeContext';
 import { StatsProvider } from './utils/statsContext';
 import { CharacterProvider } from './utils/charContext';
 import { InventoryProvider } from './utils/inventoryContext'; // Converted inventory to useContext SHOULDVE BEEN IN THE FIRST PLACE AHEMMMM
+import { MothershipProvider } from './utils/mothershipContext';
 
 export function MainGameLayout() {
   return (
-    <TimeProvider> 
-      <StatsProvider initialStats={{
-        healthBar: 90,
-        oxygenBar: 50,
-        hungerBar: 20,
-        energyBar: 50,
-      }}>
-         <GameLayout/>
-      </StatsProvider>
-    </TimeProvider>
-    
+    <MothershipProvider>
+      <TimeProvider> 
+        <StatsProvider initialStats={{
+          healthBar: 90,
+          oxygenBar: 50,
+          hungerBar: 20,
+          energyBar: 50,
+        }}>
+          <InventoryProvider>
+            <GameLayout/>
+          </InventoryProvider>
+        </StatsProvider>
+      </TimeProvider>
+    </MothershipProvider>
   );
 }
 
@@ -38,19 +42,17 @@ export function Menu() {
 
 function App() {
   return (
-    <InventoryProvider>
-      <CharacterProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<TitleScreen />} />
-            <Route path="/cutscene" element={<Cutscene />} />
-            <Route path="/character-select" element={<CharacterSelection />} />
-            <Route path="/game" element={<MainGameLayout />} />
-            <Route path="/menu" element={<Menu />} />
-          </Routes>
-        </BrowserRouter>
-      </CharacterProvider>
-    </InventoryProvider>
+    <CharacterProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<TitleScreen />} />
+          <Route path="/cutscene" element={<Cutscene />} />
+          <Route path="/character-select" element={<CharacterSelection />} />
+          <Route path="/game" element={<MainGameLayout />} />
+          <Route path="/menu" element={<Menu />} />
+        </Routes>
+      </BrowserRouter>
+    </CharacterProvider>
   );
 }
 
