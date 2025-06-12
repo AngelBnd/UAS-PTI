@@ -3,6 +3,35 @@ The Last Hope adalah permainan bertahan hidup berisiko tinggi yang mengajak pema
 
 The Last Hope menantang pemain untuk bertahan hidup dalam lingkungan antariksa yang dinamis. Setiap hari dan jam ditunjukkan pada permainan, menambah tekanan waktu untuk menjaga kesehatan, oksigen, energi, dan kelaparan agar tetap stabil. Pemain bebas menjelajah area menggunakan tombol arah untuk melewati nebula, planet, dan puing-puing ruang angkasa untuk mencari sumber daya seperti kit medis, oksigen, makanan. Ketika karakter berada dekat objek atau lokasi penting, muncul tombol interaksi untuk mengambil item atau memasuki area baru. Selain itu, terdapat sistem penempatan ulang item secara acak setiap kali diambil, agar eksplorasi tetap terasa segar dan memberikan tantangan yang terus berubah. Keseluruhan mekanika ini membuat gameplay terasa seimbang antara eksplorasi strategis dan manajemen sumber daya; setiap tindakan punya konsekuensi langsung terhadap survival. Pemain harus merencanakan kapan harus eksplorasi, kapan mengisi ulang oksigen atau energy, dan kapan mengistirahatkan karakter semua dalam sesi gameplay yang mengalir dan memikat.
 
+ATURAN PERMAINAN – THE LAST HOPE
+1. Memulai Permainan
+Pemain akan disambut dengan animasi pembuka berisi teks “Click to begin your journey … the last journey.” Setelah itu, akan muncul animasi pendek yang menjelaskan latar belakang permainan. Pemain dapat memilih untuk melewati animasi tersebut dengan tombol “Skip” jika ingin langsung menuju tahap pemilihan karakter.
+
+2. Pemilihan Karakter
+Pada tahap pemilihan karakter, pemain dapat memilih satu dari beberapa karakter yang memiliki karakteristik unik. Setiap karakter memiliki kelebihan dan kekurangan tersendiri yang akan memengaruhi gaya bermain. Selain itu, pemain dapat memberikan nama personal untuk karakternya, seperti "Claudia Vidya".
+
+3. Tampilan Awal dan Inventori
+Setelah memilih karakter, pemain akan muncul di area tengah peta yang disebut Mothership. Di sini, pemain dapat mengambil item-item yang muncul secara acak. Item yang diambil akan masuk ke dalam inventori, dan dapat digunakan sesuai kebutuhan untuk membantu bertahan hidup. Setiap karakter hanya dapat membawa maksimal 6 item dalam inventori.
+
+4. Fasilitas di Mothership
+Di dalam Mothership, terdapat dua fitur utama yaitu chest dan tempat tidur. Chest berfungsi untuk menyimpan item dari inventori, sehingga pemain bisa mengatur item mana yang akan dibawa. Tempat tidur dapat digunakan untuk memulihkan energi karakter. Pemanfaatan kedua fasilitas ini sangat penting untuk strategi bertahan hidup jangka panjang.
+
+5. Planet dan Aktivitas Khusus
+
+Planet Sugma: Fokus pada pengelolaan oksigen. Pemain dapat memilih berbagai aktivitas yang menambah oksigen, namun sering kali mengurangi energi, kesehatan, atau menambah rasa lapar. Aktivitas seperti Oxygen Surge, Hyper Intake, dan Gas Meditation membantu mengelola status tubuh, tapi memerlukan perhitungan yang matang agar tidak kehabisan satu indikator vital.
+
+Planet Solez: Tempat eksplorasi berisiko tinggi namun penuh imbalan. Pemain dapat melakukan aktivitas seperti Mineral Jackpot atau Deep Core Drill untuk mendapatkan crystal. Namun, risiko kerusakan pada kesehatan dan energi cukup tinggi. Fitur seperti Safe Extraction dan Miner’s Respite memungkinkan pemain bermain aman atau memulihkan stamina dengan menukar crystal.
+
+Planet Ejwa: Dipenuhi teknologi alien kuno. Aktivitas di sini seperti Surface Scan, Core Tunnel Dive, dan Gravity Well Harvest memungkinkan pemain mengumpulkan tech fragment dengan risiko yang bervariasi. Planet ini cocok untuk pemain yang ingin mengeksplorasi dan mengumpulkan sumber daya langka.
+
+Planet Kaati: Merupakan zona perdagangan dan perjudian. Pemain bisa membeli item seperti kopi, teh, soda, donat, dan cokelat jika resource dan ruang inventori mencukupi. Pemain juga dapat mencoba berjudi dengan 50 resource untuk kesempatan menang 20–80 resource atau kehilangan semuanya. Planet ini memperkenalkan sistem ekonomi mikro dalam permainan.
+
+6. Item dan Penggunaan
+Sepanjang permainan, pemain dapat menemukan berbagai item seperti syringe dan lainnya yang bisa digunakan untuk memulihkan atau menambah status karakter seperti kesehatan, energi, dan lainnya. Item-item ini dapat ditemukan di area awal atau dibeli di planet Kaati, dan akan dirender ulang agar bisa diambil kembali oleh pemain lain.
+
+7. Kondisi Kalah dan Skor Akhir
+Permainan berakhir jika salah satu dari tiga indikator utama (oksigen, energi, atau rasa lapar) mencapai nol. Saat Game Over muncul, sistem akan menampilkan total skor berdasarkan jumlah dan jenis item serta resource yang berhasil dikumpulkan selama permainan. Pemain dapat memilih untuk memulai ulang dengan menekan tombol “Try Again,” yang akan mengembalikan mereka ke tampilan awal.
+
 Kontributor,
 - Angela Benedictin Sunny
 - Alfred Wilson Kwan
