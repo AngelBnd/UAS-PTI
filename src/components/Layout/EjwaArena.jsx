@@ -20,7 +20,7 @@ let cool = 0 , showed = 0, holderofindexJ = 0, holderofindexI = 0, collidedLocat
 const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLocation, collidedItem};
 const collidableObjects = [LocationInfosEjwa,items];
 
-export default function EjwaArena({setLocation,direction,setResources,resources,setMessageContent,setMessageTrigger}){
+export default function EjwaArena({setActivitiesDone,setLocation,direction,setResources,resources,setMessageContent,setMessageTrigger}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -123,6 +123,7 @@ export default function EjwaArena({setLocation,direction,setResources,resources,
                                 if (collisionInfos.collidedLocation.name === 'Rockethome') {
                                     func(setLocation);
                                 } else {
+                                    setActivitiesDone(prev=>prev+1);
                                     setDoingActivity(true);
                                     setActivityFunc(() => () => func(setStats,setResources,resources,setMessageContent,setMessageTrigger));
                                     setActiDuration(collisionInfos.collidedLocation.actDuration[i]);

@@ -23,9 +23,9 @@ export const CharacterProvider = ({ children }) => {
   const [planets] = useState([
     { id: 1, x: 30, y: 20, name: "Ejwa" },
     { id: 2, x: 60, y: 25, name: "Kaati" },
-    { id: 3, x: 45, y: 70, name: "Solez" },
-    { id: 4, x: 75, y: 50, name: "Sugma" },
-    { id: 5, x: 10, y: 80, name: "Mothership" }
+    { id: 3, x: 45, y: 50, name: "Solez" },
+    { id: 4, x: 55, y: 60, name: "Sugma" },
+    { id: 5, x: 35, y: 50, name: "Mothership" }
   ]);
 
   // Items data

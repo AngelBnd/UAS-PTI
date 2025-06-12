@@ -3,4 +3,9 @@ body {
   color : #ffdba2 !important;
   background-color: #121212;
   overflow: hidden;
+  cursor:url(./assets/cursor.png),auto;
+}
+
+button{
+  cursor: url(./assets/cursorclick.png),auto !important;
 }

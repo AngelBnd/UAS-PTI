@@ -468,7 +468,7 @@ export default function GameArea({
               padding: '5px',
               zIndex: '10000',
               fontSize: '0.37em',
-              pointerEvents: 'auto'
+              pointerEvents: 'auto',
             }}
             onClick={() => {
               saveplayerLocation.current.playerLeft = parseInt(playerRef.current.style.left);

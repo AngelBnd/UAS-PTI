@@ -14,7 +14,7 @@ export const LocationInfosMothership = [
         mothershipbed, 
         ["mothershipbed"],
         [mothershipBed],
-        "Sleep", 
+        ["Sleep"], 
         [7200],
         350, 
         100, 

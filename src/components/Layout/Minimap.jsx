@@ -17,11 +17,11 @@ import minimapBg from '../../assets/playerareabg.png';
 
 // Image mappings
 const planetImages = {
-  Ejwa: planet1Img,
-  Kaati: planet2Img,
-  Solez: planet3Img,
-  Sugma: planet4Img,
-  Mothership: mothershipImg
+  Ejwa: planet3Img,
+  Kaati: planet4Img,
+  Solez: mothershipImg,
+  Sugma: planet2Img,
+  Mothership: planet1Img
 };
 
 const itemImages = {
@@ -49,10 +49,8 @@ const Minimap = ({ currentLocation }) => {
       className="minimap-container"
       style={{
         width: '200px',
-        height: '150px',
-        position: 'absolute',
-        bottom: '20px',
-        right: '20px',
+        height: '120px',
+        position : 'relative',
         overflow: 'hidden',
         border: '2px solid #ffdba2',
         borderRadius: '8px',
@@ -75,14 +73,13 @@ const Minimap = ({ currentLocation }) => {
             height: '14px',
             left: `${planet.x}%`,
             top: `${planet.y}%`,
-            transform: 'translate(-50%, -50%)',
             zIndex: 2
           }}
         />
       ))}
 
-      {/* Render items */}
-      {items.map((item) => {
+   
+      {/* {items.map((item) => {
         const imgSrc = itemImages[item.type];
         if (!imgSrc) return null;
         
@@ -102,7 +99,7 @@ const Minimap = ({ currentLocation }) => {
             }}
           />
         );
-      })}
+      })} */}
 
       {/* Player indicator */}
       <img

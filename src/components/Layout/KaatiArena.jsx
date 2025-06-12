@@ -24,7 +24,7 @@ const collisionInfos = {cool, showed, holderofindexI, holderofindexJ, collidedLo
 const collidableObjects = [LocationInfosKaati,items];
 let whatItemToSell, howMuchTheItem;
 
-export default function KaatiArena({setLocation,direction, resources, setResources,setMessageContent,setMessageTrigger,setItemsInInventory,ItemsInInventory}){
+export default function KaatiArena({setActivitiesDone,setLocation,direction, resources, setResources,setMessageContent,setMessageTrigger,setItemsInInventory,itemsInInventory}){
     const[velocity, setVelocity] = useState({x:0,y:0});
     const playerRef = useRef(null);
     const locationRefs = useRef([]);
@@ -141,8 +141,9 @@ export default function KaatiArena({setLocation,direction, resources, setResourc
                             if (collisionInfos.collidedLocation.name === 'goback') {
                                 func(setLocation);
                             } else {
+                                setActivitiesDone(prev=>prev+1);
                                 setDoingActivity(true);
-                                setActivityFunc(() => () => func(setStats,setResources,resources,setMessageContent,setMessageTrigger,setItemsInInventory,ItemsInInventory,whatItemToSell,howMuchTheItem));
+                                setActivityFunc(() => () => func(setStats,setResources,resources,setMessageContent,setMessageTrigger,setItemsInInventory,itemsInInventory,whatItemToSell,howMuchTheItem));
                                 console.log(collisionInfos.collidedLocation.actDuration[i]);
                                 setActiDuration(collisionInfos.collidedLocation.actDuration[i]);
                             }

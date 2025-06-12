@@ -16,10 +16,16 @@
 }
 
 .title {
+  margin-top: -10px;
   font-size: 50px;
   color: red;
   font-family: 'Press Start 2P', cursive;
   animation: textChange 3s infinite alternate;
+}
+
+.score{
+  margin-top: -330px;
+  font-size: 24px;
 }
 
 .deadPlayerImg {
@@ -40,7 +46,7 @@
 
 .button {
   padding: 20px;
-  width: 300px;
+  width: 350px;
   height: 100px;
   cursor: pointer;
   transition: transform 0.2s;

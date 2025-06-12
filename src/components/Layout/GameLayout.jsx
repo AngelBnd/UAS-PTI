@@ -15,12 +15,25 @@ import { useTime } from '../../utils/timeContext';
 import './AAResponsiveness.css';
 import { useChar } from '../../utils/charContext';
 import Minimap from './Minimap';
+import DeathBar from './Deathbar';
+import { useInventory } from '../../utils/inventoryContext';
 
 export default function GameLayout() {
     const { time } = useTime();
     const [Location, setLocation] = useState('MainArea');
     const [ resources, setResources] = useState(0);
     const { selectedChar, playerName } = useChar();
+    
+    // buat skore
+    const [absoluteResources, setAbsoluteResources] = useState(0);
+    const [resourcesSpent, setResourcesSpent] = useState(0);
+    const [locationsVisited, setLocationsVisited] = useState([]);
+    const [activitiesDone, setActivitiesDone] = useState(0);
+    const [itemsUsed, setItemsUsed] = useState(0);
+    const [itemsCollected, setItemsCollected] = useState(0);
+    const beforeResourcesRef = useRef(0);
+    const beforeInventoryAmountRef = useRef(0);
+    const beforeLocationRef = useRef('');
 
     const [direction, setDirection] = useState({
         up: false,
@@ -57,11 +70,12 @@ export default function GameLayout() {
         offSets: { ...item.offSets } 
     }))
     );
-    const[ItemsInInventory, setItemsInInventory] = useState([]);
+
+    const { itemsInInventory, setItemsInInventory } = useInventory();
     const[showMessage, setShowMessage] = useState(false);
     const[messageContent, setMessageContent] = useState("");
     const [messageTrigger, setMessageTrigger] = useState(0);
-    const [, setIsDead] = useState(false);
+    const [isDead, setIsDead] = useState(false);
     
     useEffect(() => {
         if (time === 0) {
@@ -76,8 +90,6 @@ export default function GameLayout() {
         }
     }, [time, playerName]);
 
-    
-
     useEffect(()=>{
         setShowMessage(true);
         const timeoutId = setTimeout(() => {
@@ -87,11 +99,69 @@ export default function GameLayout() {
         return () => clearTimeout(timeoutId); 
     },[messageTrigger])
 
+    //=================SKOR===================
+    useEffect(()=>{ 
+      const diff = resources - beforeResourcesRef.current;
+
+      console.log(` rscs ${resources}`);
+      if(diff>0){
+        setAbsoluteResources((prev)=>{
+          let absRes = Math.abs(prev + diff);
+          console.log(` abs rescs ${Math.abs(absRes)}`);
+          return absRes;
+        });
+       
+      } else {
+        setResourcesSpent((prev)=>{
+          let spntRes = prev + diff;
+          return spntRes;
+        })
+      }
+      beforeResourcesRef.current = resources;
+      console.log(`bfr rscs${beforeResourcesRef.current}`)
+    },[resources])
+
+    useEffect(()=>{
+
+      console.log(`inv length${itemsInInventory.length}`)
+      const diff = itemsInInventory.length - beforeInventoryAmountRef.current;
+        
+      if (diff > 0) {
+        setItemsCollected(prev => prev + diff);
+      } else if (diff < 0) {
+        setItemsUsed(prev => prev + Math.abs(diff));
+      }
+
+      beforeInventoryAmountRef.current = itemsInInventory.length;
+
+    },[itemsInInventory.length])
+
+    useEffect(()=>{
+      if(Location==='MainArea') return;
+
+      let same = 0;
+      for(let i = 0 ; i < locationsVisited.length ; i++){
+        if(Location === locationsVisited[i]){
+          same = 1;
+          break;
+        }
+      }
+
+      if(!same) setLocationsVisited(prev=>[...prev, Location])
+    },[Location])
+//==============================================================
 
  return (
     <div id="mainLayout" className="d-flex w-100">
       {showMessage && <PopUpMessage message={messageContent} />}
-      
+      {isDead && <DeathBar
+        absoluteResources={absoluteResources}
+        resourcesSpent={resourcesSpent}
+        locationsVisited = {locationsVisited}
+        activitiesDone={activitiesDone}
+        itemsUsed={itemsUsed}
+        itemsCollected={itemsCollected}
+      />}
       <div id="TopPanel" style={{ flex: '1 1 85%', zIndex: '0', overflow: 'hidden' }}>
         <TopPanel
           setIsDead={setIsDead}
@@ -105,7 +175,7 @@ export default function GameLayout() {
           saveBGObjectLocation={bgObjectsPositionsRef}
           itemsOnMap={itemsOnMap}
           setItemsOnMap={setItemsOnMap}
-          ItemsInInventory={ItemsInInventory}
+          itemsInInventory={itemsInInventory}
           setItemsInInventory={setItemsInInventory}
           setShowMessage={setShowMessage}
           showMessage={showMessage}
@@ -116,23 +186,24 @@ export default function GameLayout() {
           direction={direction}
           resources={resources}
           setResources={setResources}
+          setActivitiesDone={setActivitiesDone}
         />}
-        {Location === 'Ejwa' && <EjwaArena setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} />}
-        {Location === 'Solez' && <SolezArena setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} />}
-        {Location === 'Sugma' && <SugmaArena setLocation={setLocation} direction={direction} />}
-        {Location === 'Kaati' && <KaatiArena setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} setItemsInInventory={setItemsInInventory} ItemsInInventory={ItemsInInventory} />}
-        {Location === 'Mothership' && <MothershipArena setLocation={setLocation} direction={direction} />}
+        {Location === 'Ejwa' && <EjwaArena setActivitiesDone={setActivitiesDone} setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} />}
+        {Location === 'Solez' && <SolezArena setActivitiesDone={setActivitiesDone} setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} />}
+        {Location === 'Sugma' && <SugmaArena setActivitiesDone={setActivitiesDone} setLocation={setLocation} direction={direction} />}
+        {Location === 'Kaati' && <KaatiArena setActivitiesDone={setActivitiesDone} setLocation={setLocation} direction={direction} resources={resources} setResources={setResources} setMessageContent={setMessageContent} setMessageTrigger={setMessageTrigger} setItemsInInventory={setItemsInInventory} itemsInInventory={itemsInInventory} />}
+        {Location === 'Mothership' && <MothershipArena setActivitiesDone={setActivitiesDone} setLocation={setLocation} direction={direction} />}
       </div>
 
       <div id="SidePanel" style={{ flex: '1 1 18%', zIndex: '1' }}>
         <SidePanel
-          ItemsInInventory={ItemsInInventory}
+          itemsInInventory={itemsInInventory}
           setItemsInInventory={setItemsInInventory}
           setShowMessage={setShowMessage}
           setMessageContent={setMessageContent}
           setDirection={setDirection}
+          currentLocation={Location}
         />
-        <Minimap currentLocation={Location} />
       </div>
     </div>
   );
