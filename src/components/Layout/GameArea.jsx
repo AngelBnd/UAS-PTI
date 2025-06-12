@@ -402,7 +402,7 @@ export default function GameArea({
             zIndex: '7',
             width: `${planet.widthImg * 0.9}px`,
             height: `${planet.heightImg * 0.9}px`,
-            backgroundColor: 'red',
+            
           }}>
           <img
             key={i}
@@ -444,7 +444,7 @@ export default function GameArea({
           height: '45px',
           overflow: 'visible',
           pointerEvents: 'none',
-          backgroundColor: 'red',
+          
         }}>
 
         <img
